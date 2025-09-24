@@ -1,0 +1,1072 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <script>
+        Promise.allSettled = ((promises) => Promise.all(
+            promises.map(p => p
+                .then(value => ({
+                    status: "fulfilled",
+                    value
+                }))
+                .catch(reason => ({
+                    status: "rejected",
+                    reason
+                }))
+            )
+        ));
+    </script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="https://altab.flowdo.net/user-uploads/favicon/6823163ef3557a2c287cd16b625019cb.png">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/all.min.css">
+
+    <!-- Remix Icons -->
+
+
+    <!-- lucide Icons Static Font -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/css/lucide.css">
+
+    <!-- Simple Line Icons -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/simple-line-icons.css">
+
+    <!-- Datepicker -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/datepicker.min.css">
+
+    <!-- TimePicker -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/bootstrap-timepicker.min.css">
+
+    <!-- Select Plugin -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/select2.min.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,200,0,0" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hint.css/2.7.0/hint.css" integrity="sha512-dIMp2xDMSfWDPg7lvq1y86iBm48LsOhOga05oKHPm0YYhSfG8fhu7xr4evU0+egi5hQ5BSQYeEmw9wiOvlrSRA==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <!-- Datatables -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/daterangepicker.css">
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/datatables/dataTables.bootstrap4.min.css">
+
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/datatables/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/datatables/buttons.bootstrap4.min.css">
+    <!-- Template CSS -->
+    <link type="text/css" rel="stylesheet" media="all" href="https://altab.flowdo.net/css/main.css?v=92469098">
+
+    <title>المشاريع</title>
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage"
+        content="https://altab.flowdo.net/user-uploads/favicon/6823163ef3557a2c287cd16b625019cb.png">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="csrf-token" content="DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap" />
+
+
+    <style>
+        :root {
+            --fc-border-color: #E8EEF3;
+            --fc-button-text-color: #99A5B5;
+            --fc-button-border-color: #99A5B5;
+            --fc-button-bg-color: #ffffff;
+            --fc-button-active-bg-color: #171f29;
+            --fc-today-bg-color: #f2f4f7;
+        }
+
+        .fc a[data-navlink] {
+            color: #99a5b5;
+        }
+
+        .ql-editor p {
+            line-height: 1.42;
+        }
+    </style>
+
+
+    <style>
+        :root {
+            /* For Logged in user take header color a app theme*/
+            /* For public pages use company specific header color example invoice,estimate public page*/
+            /* For all other pages use like auth use global setting header*/
+            --header_color: #00DD90;
+        }
+
+        .btn-primary,
+        .btn-primary.disabled:hover,
+        .btn-primary:disabled:hover {
+            background-color: var(--header_color) !important;
+            border: 1px solid var(--header_color) !important;
+        }
+
+        .text-primary {
+            color: var(--header_color) !important;
+        }
+
+        .bg-primary {
+            background: var(--header_color) !important;
+        }
+
+        .datepicker table tr td,
+        .datepicker table tr th {
+            font-size: 14px;
+        }
+
+        .project-header .project-menu .p-sub-menu.active:after,
+        .project-header .project-menu .p-sub-menu::after,
+        .qs-current,
+        .datepicker table tr td.active.active {
+            background: var(--header_color) !important;
+            text-shadow: none;
+            border-color: var(--header_color) !important;
+        }
+
+        .sidebar-brand-box .sidebar-brand-dropdown a.dropdown-item:hover,
+        .dropdown-item.active {
+            background-color: #ebebeb !important;
+            color: black;
+        }
+
+        .pagination .page-item.active .page-link,
+        .custom-control-input:checked~.custom-control-label::before {
+            background-color: var(--header_color) !important;
+            border-color: var(--header_color) !important;
+        }
+
+        .close-task-detail span {
+            border: 1px solid var(--header_color) !important;
+        }
+
+        .tabs .nav .nav-link.active,
+        .tabs .nav .nav-item:hover {
+            border-bottom: 3px solid var(--header_color) !important;
+        }
+
+        .sidebar-light .sidebar-menu li .nav-item:focus,
+        .sidebar-light .sidebar-menu li .nav-item:hover,
+        .sidebar-light .sidebar-menu li .accordionItemContent a:hover {
+            color: var(--header_color) !important;
+        }
+
+        .sidebar-light .accordionItem a.active {
+            color: var(--header_color) !important;
+            background-color: #00dd901a;
+        }
+
+        .sidebar-light .accordionItem a.active+span {
+            color: var(--header_color) !important;
+        }
+
+        .menu-item-count,
+        .unread-notifications-count,
+        .active-timer-count {
+            background-color: var(--header_color) !important;
+        }
+
+        .dropdown-item.active .text-dark-grey {
+            color: #ffffff;
+        }
+    </style>
+
+
+    <script src="https://altab.flowdo.net/vendor/jquery/jquery.min.js"></script>
+    <script src="https://altab.flowdo.net/vendor/jquery/modernizr.min.js"></script>
+
+
+    <script src="https://altab.flowdo.net/vendor/jquery/bootstrap-timepicker.min.js"></script>
+
+    <template id="push-template">
+        <swal-html>
+            <button
+                style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: transparent;
+                padding: 5px;
+                color: #d1d1d1;"
+                type="cancel">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#bfbfbf"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-x">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                </svg>
+            </button>
+            <div style="display:flex;align-items:center;min-width:200px">
+                <img style="margin-left:5px;padding:10px" width="60" height="60"
+                    src="https://altab.flowdo.net/img/flowdo_icon.png" />
+                <div style="display:flex; flex-direction:column">
+                    <span id="notification-title" style="font-size: 14px;font-weight: bold; margin-bottom: 5px;">إشعار
+                        جديد</span>
+                    <span id="notification-description" style="font-size: 12px;">تفاصيل الإشعار</span>
+                </div>
+            </div>
+        </swal-html>
+        <swal-param name="allowEscapeKey" value="false" />
+        <swal-param name="customClass" value='{ "popup": "my-popup" }' />
+        <swal-function-param name="didOpen" value="popup => console.log(popup)" />
+    </template>
+
+
+
+
+    <script>
+        const checkMiniSidebar = localStorage.getItem("mini-sidebar");
+
+        //    localStorage.setItem("currentURL","https://altab.flowdo.net/account/projects/archive");
+        var currentURL = "https://altab.flowdo.net/account/projects/archive";
+    </script>
+
+    <script>
+        lucide.createIcons()
+        window.addEventListener('load', function() {
+            lucide.createIcons();
+            console.log('Page is fully loaded, including all resources');
+        });;
+    </script>
+
+</head>
+
+
+<body id="body" class=" rtl">
+
+    <!-- Google Tag Manager (noscript) -->
+    <!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TGNTTZ8Z"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> -->
+    <!-- End Google Tag Manager (noscript) -->
+
+    <script>
+        if (checkMiniSidebar == "yes" || checkMiniSidebar == "") {
+            $('body').addClass('sidebar-toggled');
+        }
+    </script>
+
+    <!-- HEADER START -->
+    <header class="main-header clearfix bg-white" id="header">
+
+
+        <!-- NAVBAR LEFT(MOBILE MENU COLLAPSE) START-->
+        <div class="navbar-left float-right d-flex align-items-center">
+            <!-- PAGE TITLE START -->
+            <div class="page-title d-none d-lg-flex">
+                <div class="page-heading">
+                    <h2 class="mb-0 pr-3 text-dark f-18 font-weight-bold d-flex align-items-center">
+                        <span class="d-inline-block text-truncate mw-300">المشاريع</span>
+                    </h2>
+                </div>
+            </div>
+            <!-- PAGE TITLE END -->
+
+            <div class="d-block d-lg-none menu-collapse cursor-pointer position-relative" onclick="openMobileMenu()">
+                <div class="mc-wrap">
+                    <div class="mcw-line"></div>
+                    <div class="mcw-line center"></div>
+                    <div class="mcw-line"></div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- NAVBAR LEFT(MOBILE MENU COLLAPSE) END-->
+        <!-- NAVBAR RIGHT(SEARCH, ADD, NOTIFICATION, LOGOUT) START-->
+        <div class="page-header-right left d-flex align-items-center justify-content-end">
+
+            <span id="timer-clock">
+                <span class="border rounded f-14 py-2 px-2 d-none d-sm-block mr-3">
+                    <span id="active-timer" class="mr-2">00:00:14</span>
+
+                    <a href="javascript:;" class="resume-active-timer mr-1 border-right" data-toggle="tooltip"
+                        data-original-title="استئناف" data-time-id="57">
+                        <i class="fa fa-play-circle text-primary"></i>
+                    </a>
+                    <a href="javascript:;" class="stop-active-timer" data-toggle="tooltip"
+                        data-original-title="إيقاف الموقت" data-time-id="215">
+                        <i class="fa fa-stop-circle text-danger"></i>
+                    </a>
+
+                </span>
+
+
+                <script>
+                    var $worked = $("#active-timer");
+                    var activeBreak = "1";
+
+                    function updateTimerTask() {
+                        var myTime = $worked.html();
+                        var ss = myTime.split(":");
+
+                        var hours = ss[0];
+                        var mins = ss[1];
+                        var secs = ss[2];
+                        secs = parseInt(secs) + 1;
+
+                        if (secs > 59) {
+                            secs = '00';
+                            mins = parseInt(mins) + 1;
+                        }
+
+                        if (mins > 59) {
+                            secs = '00';
+                            mins = '00';
+                            hours = parseInt(hours) + 1;
+                        }
+
+                        if (hours.toString().length < 2) {
+                            hours = '0' + hours;
+                        }
+                        if (mins.toString().length < 2) {
+                            mins = '0' + mins;
+                        }
+                        if (secs.toString().length < 2) {
+                            secs = '0' + secs;
+                        }
+                        var ts = hours + ':' + mins + ':' + secs;
+
+                        $worked.html(ts);
+
+                        if (runTimeClock) {
+                            return setTimeout(updateTimerTask, 1000);
+                        }
+                    }
+
+                    if ($('#active-timer').length && activeBreak != '1') {
+                        runTimeClock = true;
+                        setTimeout(updateTimerTask, 1000);
+                    } else {
+                        runTimeClock = false;
+                    }
+                </script>
+            </span>
+
+
+
+
+
+
+            <ul>
+                <!-- Chat START -->
+                <li data-toggle="tooltip" data-placement="top" title="المحادثات" class="d-none d-sm-block">
+                    <div class="d-flex align-items-center">
+                        <a href="messages.html" class="d-block header-icon-box">
+                            <i class="bi bi-chat-right-text f-16 text-dark-grey"></i>
+                        </a>
+                    </div>
+                </li>
+                <!-- Chat END -->
+                <!-- SEARCH START -->
+                <li data-toggle="tooltip" data-placement="top" title="يبحث" class="d-none d-sm-block">
+                    <div class="d-flex align-items-center">
+                        <a href="javascript:;" class="d-block header-icon-box open-search">
+                            <i class="bi bi-search f-16 text-dark-grey"></i>
+                        </a>
+                    </div>
+                </li>
+                <!-- SEARCH END -->
+                <!-- Sticky Note START -->
+                <li data-toggle="tooltip" data-placement="top" title="الملاحظات" class="d-none d-sm-block">
+                    <div class="d-flex align-items-center">
+                        <a href="sticky-notes.html" class="d-block header-icon-box openRightModal">
+                            <i class="bi bi-sticky f-16 text-dark-grey"></i>
+                        </a>
+                    </div>
+                </li>
+                <!-- Sticky Note END -->
+
+
+                <!-- START TIMER -->
+                <li data-toggle="tooltip" data-placement="top" title="بدء المؤقت">
+                    <div class="add_box dropdown">
+                        <a class="d-block dropdown-toggle header-icon-box" type="link" id="show-active-timer"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="bi bi-stopwatch f-16 text-dark-grey"></i>
+                            <span class="badge badge-primary active-timer-count position-absolute ">1</span>
+                        </a>
+                    </div>
+                </li>
+                <!-- START TIMER END -->
+
+                <!-- ADD START -->
+                <li data-toggle="tooltip" data-placement="top" title="إضافة">
+                    <div class="add_box dropdown">
+                        <a class="d-block dropdown-toggle header-icon-box" type="link" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="bi bi-plus-circle f-16 text-dark-grey"></i>
+                        </a>
+                        <!-- DROPDOWN - INFORMATION -->
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink"
+                            tabindex="0">
+                            <a class="dropdown-item f-14 text-dark openRightModal" href="projects.create.html">
+                                <i class="bi bi-plus-square f-w-500 mr-2 f-11"></i>
+                                مشروع جديد </a>
+
+                            <a class="dropdown-item f-14 text-dark openRightModal" href="tasks.create.html">
+                                <i class="bu bi-plus-square f-w-500 mr-2 f-11"></i>
+                                إضافة مهمة </a>
+
+                            <a class="dropdown-item f-14 text-dark openRightModal" href="clients.create.html">
+                                <i class="bi bi-plus-square f-w-500 mr-2 f-11"></i>
+                                إضافة عميل </a>
+
+                            <a class="dropdown-item f-14 text-dark openRightModal" href="employees.create.html">
+                                <i class="bi bi-plus-square f-w-500 mr-2 f-11"></i>
+                                إضافة موظف </a>
+
+
+                        </div>
+                    </div>
+                </li>
+                <!-- ADD END -->
+
+                <!-- NOTIFICATIONS START -->
+                <li title="الإشعارات">
+                    <div class="notification_box dropdown">
+                        <a class="d-block dropdown-toggle header-icon-box show-user-notifications" type="link"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="bi bi-bell f-16 text-dark-grey"></i>
+                            <span
+                                class="badge badge-primary unread-notifications-count active-timer-count position-absolute">3</span>
+                        </a>
+                        <!-- DROPDOWN - INFORMATION -->
+                        <div class="dropdown-menu dropdown-menu-right notification-dropdown border-0 shadow-lg py-0 bg-additional-grey"
+                            tabindex="0">
+                            <div
+                                class="d-flex px-3 justify-content-between align-items-center border-bottom-grey py-1 bg-white">
+                                <div class="___class_+?50___">
+                                    <p class="f-14 mb-0 text-dark f-w-500">الإشعارات</p>
+                                </div>
+                                <div class="f-12 ">
+                                    <a href="javascript:;" class="text-dark-grey mark-notification-read">ضع إشارة
+                                        مقروء</a> |
+                                    <a href="https://altab.flowdo.net/account/all-notifications"
+                                        class="text-dark-grey">عرض الكل</a>
+                                </div>
+                            </div>
+                            <div id="notification-list">
+
+                            </div>
+
+                        </div>
+                    </div>
+                </li>
+                <!-- NOTIFICATIONS END -->
+                <!-- LOGOUT START -->
+
+                <!-- LOGOUT END -->
+            </ul>
+        </div>
+        <!-- NAVBAR RIGHT(SEARCH, ADD, NOTIFICATION, LOGOUT) START-->
+    </header>
+    <!-- HEADER END -->
+
+    <form id="logout-form" action="https://altab.flowdo.net/logout" method="POST" style="display: none;">
+        <input type="hidden" name="_token" value="DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap" autocomplete="off">
+    </form>
+
+    <aside class="sidebar-light">
+
+        <div class="mobile-close-sidebar-panel w-100 h-100" onclick="closeMobileMenu()" id="mobile_close_panel">
+        </div>
+        <a id="sidebarToggle" class="text-lightest sidebarToggleBtn" href="javascript:;" style="z-index: 100;"><span
+                class="material-symbols-rounded">keyboard_arrow_left</span></a>
+
+
+        <div>
+            <div class="main-sidebar d-flex flex-column align-items-center justify-content-between"
+                id="mobile_menu_collapse">
+                <!-- SIDEBAR BRAND START -->
+                <div class="mt-4 mb-3 d-flex justify-content-center">
+                    <img src="https://altab.flowdo.net/user-uploads/app-logo/713a8c95c7cd38a61fc5092dce631cac.png"
+                        height="40" width="40" style="width:40px;height:40px;border-radius:12px">
+                </div>
+                <div class="sidebar-menu  h-100 w-100" id="sideMenuScroll">
+
+                    <ul>
+                        <li class="accordionItem closeIt">
+
+                            <div class="d-flex flex-column justify-content-center align-items-center my-2">
+                                <a class="nav-item text-lightest f-15 sidebar-text-color" href="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+                                        fill="none" class="" viewBox="0 0 24 24">
+                                        <path
+                                            d="M21.5 10.9V4.1C21.5 2.6 20.86 2 19.27 2H15.23C13.64 2 13 2.6 13 4.1V10.9C13 12.4 13.64 13 15.23 13H19.27C20.86 13 21.5 12.4 21.5 10.9Z"
+                                            fill="currentColor" />
+                                        <path
+                                            d="M11 13.1V19.9C11 21.4 10.36 22 8.77 22H4.73C3.14 22 2.5 21.4 2.5 19.9V13.1C2.5 11.6 3.14 11 4.73 11H8.77C10.36 11 11 11.6 11 13.1Z"
+                                            fill="currentColor" />
+                                        <path opacity="0.4"
+                                            d="M21.5 19.9V17.1C21.5 15.6 20.86 15 19.27 15H15.23C13.64 15 13 15.6 13 17.1V19.9C13 21.4 13.64 22 15.23 22H19.27C20.86 22 21.5 21.4 21.5 19.9Z"
+                                            fill="currentColor" />
+                                        <path opacity="0.4"
+                                            d="M11 6.9V4.1C11 2.6 10.36 2 8.77 2H4.73C3.14 2 2.5 2.6 2.5 4.1V6.9C2.5 8.4 3.14 9 4.73 9H8.77C10.36 9 11 8.4 11 6.9Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </a>
+                                <span class="f-10">اللوحة</span>
+                            </div>
+                        </li>
+                        <li class="accordionItem closeIt">
+                            <div class="d-flex flex-column justify-content-center align-items-center my-2">
+                                <a class="nav-item text-lightest f-15 sidebar-text-color" href="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+                                        fill="none" class="" viewBox="0 0 24 24">
+                                        <path opacity="0.4"
+                                            d="M11.5 7.41V22H19.92C21.08 22 22.03 21.07 22.03 19.93V5.09C22.03 2.47 20.07 1.28 17.68 2.45L13.25 4.64C12.29 5.11 11.5 6.36 11.5 7.41Z"
+                                            fill="currentColor" />
+                                        <path
+                                            d="M2 15.05V19.5C2 20.88 3.12 22 4.5 22H11.5V10.42L11.03 10.52L6.99 11.42L6.51 11.53L4.47 11.99C3.98 12.09 3.53 12.26 3.14 12.51C3.14 12.52 3.13 12.52 3.13 12.52C3.03 12.59 2.93 12.67 2.84 12.76C2.38 13.22 2.08 13.89 2.01 14.87C2.01 14.93 2 14.99 2 15.05Z"
+                                            fill="currentColor" />
+                                    </svg>
+
+                                </a>
+                                <span class="f-10">العملاء</span>
+                            </div>
+                        </li>
+                        <li class="accordionItem closeIt">
+                            <div class="d-flex flex-column justify-content-center align-items-center my-2">
+                                <a class="nav-item text-lightest f-15 sidebar-text-color" href="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+                                        fill="none" class="" viewBox="0 0 24 24">
+                                        <path
+                                            d="M13.3111 14.75H5.03356C3.36523 14.75 2.30189 12.9625 3.10856 11.4958L5.24439 7.60911L7.24273 3.96995C8.07689 2.45745 10.2586 2.45745 11.0927 3.96995L13.1002 7.60911L14.0627 9.35995L15.2361 11.4958C16.0427 12.9625 14.9794 14.75 13.3111 14.75Z"
+                                            fill="currentColor" />
+                                        <path fill-opacity="0.3"
+                                            d="M21.1667 15.2083C21.1667 18.4992 18.4992 21.1667 15.2083 21.1667C11.9175 21.1667 9.25 18.4992 9.25 15.2083C9.25 15.0525 9.25917 14.9058 9.26833 14.75H13.3108C14.9792 14.75 16.0425 12.9625 15.2358 11.4958L14.0625 9.36C14.4292 9.28666 14.8142 9.25 15.2083 9.25C18.4992 9.25 21.1667 11.9175 21.1667 15.2083Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </a>
+                                <span class="f-10">المشاريع</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="sidebar-brand-box dropdown d-flex flex-column align-items-center cursor-pointer my-4 ">
+                    <li class="accordionItem closeIt">
+                        <div class="d-flex flex-column justify-content-center align-items-center my-2">
+                            <a class="nav-item text-lightest f-15 sidebar-text-color" href="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none"
+                                    class="" viewBox="0 0 24 24">
+                                    <path fill-opacity="0.3" fill="currentColor"
+                                        d="M2 12.947v-1.771c0-1.047.85-1.913 1.899-1.913 1.81 0 2.549-1.288 1.64-2.868a1.919 1.919 0 0 1 .699-2.607l1.729-.996c.79-.474 1.81-.192 2.279.603l.11.192c.9 1.58 2.379 1.58 3.288 0l.11-.192c.47-.795 1.49-1.077 2.279-.603l1.73.996a1.92 1.92 0 0 1 .699 2.607c-.91 1.58-.17 2.868 1.639 2.868 1.04 0 1.899.856 1.899 1.912v1.772c0 1.047-.85 1.912-1.9 1.912-1.808 0-2.548 1.288-1.638 2.869.52.915.21 2.083-.7 2.606l-1.729.997c-.79.473-1.81.191-2.279-.604l-.11-.191c-.9-1.58-2.379-1.58-3.288 0l-.11.19c-.47.796-1.49 1.078-2.279.605l-1.73-.997a1.919 1.919 0 0 1-.699-2.606c.91-1.58.17-2.869-1.639-2.869A1.911 1.911 0 0 1 2 12.947Z" />
+                                    <path fill="currentColor"
+                                        d="M11.995 15.332c1.794 0 3.248-1.464 3.248-3.27 0-1.807-1.454-3.272-3.248-3.272-1.794 0-3.248 1.465-3.248 3.271 0 1.807 1.454 3.271 3.248 3.271Z" />
+                                </svg>
+                            </a>
+                            <span class="f-10">إعدادات</span>
+                        </div>
+                    </li>
+                    <div class="dropdown-toggle sidebar-brand d-flex align-items-center justify-content-between  w-100"
+                        type="link" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <div class="sidebar-brand-logo"
+                            style="border: 2px solid transparent;outline: 2px solid var(--header_color);">
+                            <img src="https://altab.flowdo.net/user-uploads/avatar/ar/13.png" height="40"
+                                width="40" style="width:34px;height:35px">
+                        </div>
+                    </div>
+
+                    <div class="dropdown-menu dropdown-menu-right sidebar-brand-dropdown ml-3"
+                        aria-labelledby="dropdownMenuLink" tabindex="0">
+                        <div class="d-flex justify-content-between align-items-center profile-box">
+                            <a href="">
+                                <div class="profileInfo d-flex align-items-center mr-1 flex-wrap">
+                                    <div class="profileImg mr-2">
+                                        <img class="h-100"
+                                            src="https://altab.flowdo.net/user-uploads/avatar/ar/13.png"
+                                            alt="محمد فالح العتيبي">
+                                    </div>
+                                    <div class="ProfileData">
+                                        <h3 class="f-15 f-w-500 text-dark" data-placement="bottom"
+                                            data-toggle="tooltip" data-original-title="محمد فالح العتيبي">محمد فالح
+                                            العتيبي</h3>
+                                        <p class="mb-0 f-12 text-dark-grey"></p>
+                                    </div>
+                                </div>
+                            </a>
+
+
+
+                            <a href="https://altab.flowdo.net/account/settings/profile-settings" data-toggle="tooltip"
+                                data-original-title=" الملف الشخصي">
+                                <i class="side-icon bi bi-pencil-square"></i>
+                            </a>
+                        </div>
+
+                        <a class="dropdown-item d-flex justify-content-between align-items-center f-15 text-dark invite-member"
+                            href="javascript:;">
+                            <span>إرسال دعوة لتسجيل الدخول في بوابة مؤسسة الطيب الأفضل للتجارة</span>
+                            <i class="side-icon bi bi-person-plus"></i>
+                        </a>
+
+                        <a class="dropdown-item d-flex justify-content-between align-items-center f-15 text-dark"
+                            href="javascript:;">
+                            <label for="dark-theme-toggle">الوضع الداكن</label>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="dark-theme-toggle">
+                                <label class="custom-control-label f-14" for="dark-theme-toggle"></label>
+                            </div>
+                        </a>
+                        <a class="dropdown-item d-flex justify-content-between align-items-center f-15 text-dark"
+                            href="https://altab.flowdo.net/logout"
+                            onclick="event.preventDefault();
+                document.getElementById('logout-form').submit();">
+                            تسجيل خروج <i class="side-icon bi bi-power"></i>
+                        </a>
+
+                        <!-- WORKSUITESAAS -->
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="main-sidebar side-panel" style="z-index: 2;" id="mobile_menu_collapse2">
+
+                <!-- SIDEBAR MENU START -->
+                <div class="sidebar-menu " id="sideMenuScroll">
+                    <!-- WORKSUITESAAS -->
+                    <ul>
+                        <script>
+                            var notSettingPage = true;
+                        </script> <!-- NAV ITEM - DASHBOARD COLLAPSE MENU-->
+
+                        <!-- <span class="f-18 font-weight-bold">projects.archive</span> -->
+
+
+                        <div class="d-flex justify-content-between mb-3 mt-3"
+                            style="padding: 11px 15px 15px 15px;border-bottom: 1px solid #e8eef3; ">
+                            <span class="f-18 font-weight-bold">المشاريع</span>
+
+                            <!-- <a id="sidebarToggle" class="text-lightest" href="javascript:;"><span class="material-symbols-rounded">keyboard_arrow_left</span></a> -->
+                        </div>
+
+
+
+
+
+
+
+
+                        <!-- NAV ITEM - WORK COLLAPASE MENU -->
+                        <li class="accordionItem closeIt">
+
+                            <a class="nav-item text-lightest f-13 sidebar-text-color"
+                                href="https://altab.flowdo.net/account/projects" title="المشاريع">
+                                <span class="pl-3">المشاريع</span>
+                            </a>
+
+
+                        </li>
+                        <li class="accordionItem closeIt">
+
+                            <a class="nav-item text-lightest f-13 sidebar-text-color"
+                                href="https://altab.flowdo.net/account/tasks" title="المهام">
+                                <span class="pl-3">المهام</span>
+                            </a>
+
+
+                        </li>
+                        <li class="accordionItem closeIt">
+
+                            <a class="nav-item text-lightest f-13 sidebar-text-color"
+                                href="https://altab.flowdo.net/account/timelogs" title="السجلات الزمنية">
+                                <span class="pl-3">السجلات الزمنية</span>
+                            </a>
+
+
+                        </li>
+
+    </aside>
+    <div class="body-wrapper clearfix">
+        <section class="main-container bg-white mb-5 mb-sm-0" id="fullscreen">
+            <div class="preloader-container d-none">
+            </div>
+            <div class="filter-box shadow-none" style="position: static !important;">
+                <!-- FILTER START -->
+                <form action="" id="filter-form" class="invisible">
+                    <div class="d-lg-flex d-md-flex d-block flex-wrap filter-box shadow-none border-bottom-grey border-1 bg-white client-list-filter"
+                        style="position: static !important;">
+                        <div class="select-box d-flex py-2 pr-2 border-right-grey border-right-grey-sm-0">
+                            <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">الاسم</p>
+                            <div class="select-status">
+                                <select class="form-control select-picker" name="client_id" id="client_id"
+                                    data-live-search="true" data-size="8">
+                                    <option value="all">الكل</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div
+                            class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0">
+                            <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">الحالة</p>
+                            <div class="select-status">
+                                <select class="form-control select-picker" name="status" id="status"
+                                    data-live-search="true" data-size="8">
+                                    <option value="all">الكل</option>
+                                    <option value="not started">لم تبدأ</option>
+                                    <option value="in progress">تحت التنفيذ</option>
+                                    <option value="on hold">في الانتظار</option>
+                                    <option value="canceled">ألغيت</option>
+                                    <option value="finished">انتهى</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div
+                            class="select-box d-flex py-2 px-lg-2 px-md-2 px-0  border-right-grey border-right-grey-sm-0">
+                            <p class="mb-0 pr-2 f-14 text-dark-grey d-flex align-items-center">التقدم</p>
+                            <div class="select-status mw-120">
+                                <div class="input-group">
+
+                                    <select class="select-picker form-control" multiple name="progress[]"
+                                        id="progress" data-live-search="true" data-size="8">
+                                        <option value="0-20" selected>0% - 20%</option>
+                                        <option value="21-40" selected>21% - 40%</option>
+                                        <option value="41-60" selected>41% - 60%</option>
+                                        <option value="61-80" selected>61% - 80%</option>
+                                        <option value="81-99" selected>81% - 99%</option>
+                                        <option value="100-100">100%</option>
+                                    </select>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SEARCH BY TASK START -->
+                        <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
+                            <form class="w-100 mr-1 mr-lg-0 mr-md-1 ml-md-1 ml-0 ml-lg-0">
+                                <div class="input-group bg-grey rounded">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text border-0 bg-additional-grey">
+                                            <i class="fa fa-search f-13 text-dark-grey"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control f-14 p-1 border-additional-grey"
+                                        id="search-text-field" placeholder="ابدأ الكتابة للبحث">
+                                </div>
+                            </form>
+                        </div>
+                        <!-- SEARCH BY TASK END -->
+
+                        <!-- RESET START -->
+                        <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0">
+                            <button type="button" class="btn-secondary rounded f-14 p-2 btn-xs d-none"
+                                id="reset-filters">
+                                <i class="fa fa-times-circle mr-1"></i>
+                                بحث
+                            </button>
+                        </div>
+                        <!-- RESET END -->
+
+                        <!-- MORE FILTERS START -->
+                        <div class="ml-auto d-flex align-items-center">
+
+
+                            <div class="more-filters py-2 pl-0 pl-lg-2 pl-md-2 position-relative">
+
+                                <a onclick="openMoreFilter()" class="mb-0 d-none d-lg-block  f-14 text-dark-grey"><i
+                                        class="fa fa-filter f-13 text-dark-grey mt-1 mr-1"></i>تصفية</a>
+
+                                <a onclick="openMoreFilter()" class="mb-0 d-block d-lg-none  text-dark-grey"><i
+                                        class="fa fa-filter filter_icon mr-2"></i>تصفية</a>
+
+                                <div class="more-filter-tab" id="more_filter">
+                                    <div class="filter-inner">
+                                        <div class="sticky-top bg-white">
+                                            <h3 class="pb-3 mb-2 f-18 f-w-500 text-capitalize text-dark">تصفية</h3>
+                                            <!-- <i onclick="closeMoreFilter()" class="close-more-filter fa fa-times f-16 cursor-pointer text-lightest"></i> -->
+                                            <button type="button" class="close " onclick="closeMoreFilter()"
+                                                aria-label="Close">
+                                                <span aria-hidden="true" class="f-22 close-more-filter">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="filter-detail">
+                                            <div class="more-filter-items">
+                                                <label class="f-14 text-dark-grey mb-12 text-capitalize"
+                                                    for="usr">الفئة</label>
+                                                <div class="select-filter mb-4">
+                                                    <div class="select-others">
+                                                        <select class="form-control select-picker" name="category_id"
+                                                            id="category_id" data-live-search="true"
+                                                            data-container="body" data-size="8">
+                                                            <option selected value="all">الكل</option>
+                                                            <option value="204">مهم</option>
+                                                            <option value="205">مستشفيات</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="more-filter-items">
+                                                <label class="f-14 text-dark-grey mb-12 text-capitalize"
+                                                    for="usr">العضو</label>
+                                                <div class="select-filter mb-4">
+                                                    <div class="select-others">
+                                                        <select class="form-control select-picker" name="employee_id"
+                                                            id="employee_id" data-live-search="true"
+                                                            data-container="body" data-size="8">
+                                                            <option value="all">الكل</option>
+                                                            <option 1
+                                                                data-content="<div class='d-flex align-items-center text-left'>
+    <div class='taskEmployeeImg border-0 d-inline-block mx-1'>
+        <img class='rounded-circle' src='https://altab.flowdo.net/user-uploads/avatar/ar/13.png'>
+    </div>
+    <div>محمد فالح العتيبي &lt;span class=&quot;ml-2 badge badge-secondary pr-1&quot; style=&quot;padding-right:0.25rem !important;&quot;&gt;هذا أنت&lt;/span&gt;</div>"
+                                                                value="2614">
+                                                                محمد فالح العتيبي
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="more-filter-items">
+                                                <label class="f-14 text-dark-grey mb-12 text-capitalize"
+                                                    for="usr">القسم</label>
+                                                <div class="select-filter mb-4">
+                                                    <div class="select-others">
+                                                        <select class="form-control select-picker" name="team_id"
+                                                            id="team_id" data-live-search="true"
+                                                            data-container="body" data-size="8">
+                                                            <option value="all">الكل</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clear-all bg-white">
+                                        <button type="button"
+                                            class="btn-secondary rounded f-14 p-2 float-right my-3 mr-0"
+                                            id="reset-filters-2">
+                                            بحث
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- MORE FILTERS END -->
+                    </div>
+                </form>
+
+            </div>
+
+
+            <!-- PAGE TITLE START -->
+            <div class="page-title d-block d-lg-none">
+                <div class="page-heading">
+                    <h2 class="mb-0 pr-3 text-dark f-18 font-weight-bold d-flex align-items-center">
+                        <span class="d-inline-block text-truncate mw-300">المشاريع</span>
+                    </h2>
+                </div>
+            </div>
+            <!-- PAGE TITLE END -->
+
+            <!-- CONTENT WRAPPER START -->
+            <div class="content-wrapper">
+                <!-- Add Task Export Buttons Start -->
+                <div class="d-flex">
+                    <div id="table-actions" class="flex-grow-1 align-items-center">
+
+                    </div>
+
+                    <div class="btn-group" role="group">
+                        <a href="https://altab.flowdo.net/account/projects" class="btn btn-secondary f-14"
+                            data-toggle="tooltip" data-original-title="المشاريع"><i
+                                class="side-icon bi bi-list-ul"></i></a>
+
+                        <a href="https://altab.flowdo.net/account/projects/project-calendar"
+                            class="btn btn-secondary f-14" data-toggle="tooltip" data-original-title="التقويم"><i
+                                class="side-icon bi bi-calendar"></i></a>
+
+                        <a href="https://altab.flowdo.net/account/projects/archive"
+                            class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
+                            data-original-title="أرشيف"><i class="side-icon bi bi-archive"></i></a>
+                    </div>
+                </div>
+                <!-- Add Task Export Buttons End -->
+                <!-- Task Box Start -->
+                <div class="d-flex flex-column border-grey border-1 rounded mt-3 bg-white">
+
+                    <table class="table table-hover border-0 w-100" id="projects-table">
+                        <thead>
+                            <tr>
+                                <th title="#">#</th>
+                                <th title="الاسم">الاسم</th>
+                                <th title="فريق العمل">فريق العمل</th>
+                                <th title="تاريخ التسليم">تاريخ التسليم</th>
+                                <th title="العميل">العميل</th>
+                                <th title="الإكمال">الإكمال</th>
+                                <th title="انتهاء">انتهاء</th>
+                                <th title="الحالة">الحالة</th>
+                                <th title="الإجراء" width="150">الإجراء</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+
+                </div>
+                <!-- Task Box End -->
+            </div>
+            <!-- CONTENT WRAPPER END -->
+
+
+
+        </section>
+        <!-- MAIN CONTAINER END -->
+    </div>
+
+    <!-- BODY WRAPPER END -->
+    <!-- also the modal itself -->
+    <div id="myModalDefault" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog d-flex justify-content-center align-items-center">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modelHeading">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true"class="close material-symbols-rounded">close</span></button>
+                </div>
+                <div class="modal-body">
+                    تنزيل ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel rounded mr-3" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn-primary rounded">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- also the modal itself -->
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog d-flex justify-content-center align-items-center modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modelHeading">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true"class="close material-symbols-rounded">close</span></button>
+                </div>
+                <div class="modal-body">
+                    تنزيل ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel rounded mr-3" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn-primary rounded">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- also the modal itself -->
+    <div id="myModalXl" class="modal fade overflow-auto" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog d-flex justify-content-center align-items-center modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modelHeading">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true"class="close material-symbols-rounded">close</span></button>
+                </div>
+                <div class="modal-body bg-grey">
+                    تنزيل ...
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Detail Start -->
+    <div class="task-overlay w-100 h-100" id="close-task-detail-overlay"></div>
+    <div class="task-detail-panel bg-additional-grey" id="task-detail-1">
+        <a class="close-task-detail" id="close-task-detail" style="display: none;">
+            <span><span class="material-symbols-rounded">close</span></span>
+        </a>
+        <div class="p-4 t-d-inner-panel">
+            <h3 class="heading-h1 mb-0" id="right-modal-title"></h3>
+
+            <div id="right-modal-content" class="mt-4">
+
+            </div>
+        </div>
+    </div>
+    <!-- Task Detail End -->
+
+    <div id="myModalPopUpMain" class="modal fade overflow-auto" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog d-flex justify-content-center align-items-center modal-xl">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: 0px !important;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span style="font-size: 24px; font-weight: 100;"
+                            aria-hidden="true"class="close material-symbols-rounded">close</span></button>
+                </div>
+                <div class="modal-body bg-white">
+                    تنزيل ...
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="myModalPopUp" class="modal fade overflow-auto" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog d-flex justify-content-center align-items-center modal-md">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: 0px !important;">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span style="font-size: 24px; font-weight: 100;"
+                            aria-hidden="true"class="close material-symbols-rounded">close</span></button>
+                </div>
+                <div class="modal-body bg-white">
+                    <h3 class="text-center m-auto" style="max-width: 350px;">مرحباً بك في الإصدار الخاص من نسخة فلودو
+                    </h3>
+                    <p class="text-center mt-2">هذا الإصدار يتضمن ميزات وتحسينات متقدمة من منصة فلودو على مستوى الأدوات
+                        وتجربة الاستخدام، غير متاحة في الإصدار العام، وقد تم اختياركم خصيصاً لتجربتها، وتسعدنا ملاحظاتكم
+                        ومقترحاتكم </p>
+                    <br>
+                    <div class="d-flex p-3" style="background-color: #00dd9036; border-radius: 8px;">
+                        <img width="180" height="140"
+                            style="width: 180px; height: 140px; filter: hue-rotate(35deg);"
+                            src="https://i.ibb.co/4PRBnkm/supportdribble-removebg-preview.png" />
+                        <div>
+                            <h5>هل تحتاج للمساعدة؟</h5>
+                            <p>فريق نجاح العملاء جاهزون لمساعدتك أثناء هذه التجربة لتحقيق أقصى استفادة منها</p>
+                            <a href="mailto:support@kamel.sa" type="button" class="btn-primary rounded">اتصل
+                                الآن</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://altab.flowdo.net/js/main.js?v=2"></script>
+        <script src="https://altab.flowdo.net/js/dropbox.js"></script>
+        <script src="https://altab.flowdo.net/js/google_drive.js"></script>
+
+        <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs"
+            data-app-key="1q2bdfumra47iqs"></script>
+        <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBv1xULyRb7-Hj178eIEhkiJHSKenrwMv0&callback=showTable"
+            async></script>
+        <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery-ui-sortable@1.0.0/jquery-ui.min.js"></script>
+        <script src="scrpit.js"></script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,3052 @@
+    .features-main-section {
+        padding: 80px 0;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .features-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .features-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .features-main-title {
+        font-size: 42px;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        line-height: 1.2;
+    }
+
+    .features-main-description {
+        font-size: 18px;
+        color: #7f8c8d;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .features-grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 40px;
+        margin-top: 60px;
+    }
+
+    .features-category-card {
+        background: white;
+        border-radius: 15px;
+        padding: 35px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+    }
+
+    .features-category-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .features-category-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .features-category-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+    }
+
+    .features-category-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #2c3e50;
+    }
+
+    .features-items-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+    }
+
+    .features-item {
+        background: #f8f9fa;
+        padding: 15px 20px;
+        border-radius: 10px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+
+    .features-item:hover {
+        background: #e3f2fd;
+        border-color: #3498db;
+        transform: scale(1.02);
+    }
+
+    .features-item-text {
+        font-size: 14px;
+        color: #34495e;
+        font-weight: 500;
+        line-height: 1.4;
+    }
+
+    /* ألوان مختلفة لكل فئة */
+    .features-category-card:nth-child(1) .features-category-icon {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+    }
+
+    .features-category-card:nth-child(2) .features-category-icon {
+        background: linear-gradient(135deg, #27ae60, #229954);
+    }
+
+    .features-category-card:nth-child(3) .features-category-icon {
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+    }
+
+    .features-category-card:nth-child(4) .features-category-icon {
+        background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    }
+
+    .features-category-card:nth-child(5) .features-category-icon {
+        background: linear-gradient(135deg, #1abc9c, #16a085);
+    }
+
+    .features-category-card:nth-child(6) .features-category-icon {
+        background: linear-gradient(135deg, #34495e, #2c3e50);
+    }
+
+    .features-category-card:nth-child(7) .features-category-icon {
+        background: linear-gradient(135deg, #e67e22, #d35400);
+    }
+
+    .features-category-card:nth-child(8) .features-category-icon {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+    }
+
+    @media (max-width: 768px) {
+        .features-main-title {
+            font-size: 32px;
+        }
+
+        .features-main-description {
+            font-size: 16px;
+        }
+
+        .features-grid-container {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .features-category-card {
+            padding: 25px;
+        }
+
+        .features-items-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .features-main-section {
+            padding: 60px 0;
+        }
+
+        .features-container {
+            padding: 0 15px;
+        }
+
+        .features-main-title {
+            font-size: 28px;
+        }
+
+        .features-category-card {
+            padding: 20px;
+        }
+    }
+
+
+    /* دليل المستخدم */
+    /* تصميم فريد لصفحة المساعدة - لا يتعارض مع التصاميم الأخرى */
+    .daftra-help-wrapper * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .daftra-help-wrapper {
+        background: #f4f6f9;
+        direction: rtl;
+        line-height: 1.5;
+        color: #2d3748;
+        min-height: 100vh;
+        position: relative;
+    }
+
+    .daftra-help-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 300px;
+        background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+        border-radius: 0 0 50px 50px;
+        z-index: 1;
+    }
+
+    .daftra-help-main-container {
+        max-width: 1150px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .daftra-help-hero-section {
+        text-align: center;
+        margin-bottom: 50px;
+        color: white;
+    }
+
+    .daftra-help-main-title {
+        font-size: 38px;
+        font-weight: 900;
+        margin-bottom: 15px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        letter-spacing: -0.5px;
+    }
+
+    .daftra-help-main-subtitle {
+        font-size: 17px;
+        opacity: 0.9;
+        margin-bottom: 35px;
+        font-weight: 400;
+    }
+
+    .daftra-help-search-container {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        margin-bottom: 45px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .daftra-help-search-row {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 25px;
+        align-items: stretch;
+    }
+
+    .daftra-help-search-field {
+        flex: 1;
+        position: relative;
+    }
+
+    .daftra-help-search-input {
+        width: 100%;
+        padding: 16px 50px 16px 20px;
+        border: 3px solid #e2e8f0;
+        border-radius: 15px;
+        font-size: 16px;
+        background: #f7fafc;
+        color: #2d3748;
+        text-align: right;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-weight: 500;
+    }
+
+    .daftra-help-search-input:focus {
+        outline: none;
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        transform: translateY(-1px);
+    }
+
+    .daftra-help-search-input::placeholder {
+        color: #a0aec0;
+        text-align: right;
+    }
+
+    .daftra-help-search-icon-wrapper {
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a0aec0;
+        font-size: 18px;
+        transition: all 0.3s ease;
+    }
+
+    .daftra-help-search-input:focus+.daftra-help-search-icon-wrapper {
+        color: #667eea;
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .daftra-help-category-dropdown {
+        min-width: 200px;
+        width: initial;
+        padding: 16px 18px;
+        border: 3px solid #e2e8f0;
+        border-radius: 15px;
+        font-size: 16px;
+        background: #f7fafc;
+        color: #2d3748;
+        cursor: pointer;
+        text-align: right;
+        direction: rtl;
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .daftra-help-category-dropdown:focus {
+        outline: none;
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        transform: translateY(-1px);
+    }
+
+    .daftra-help-search-btn {
+        padding: 16px 28px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .daftra-help-search-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .daftra-help-search-btn:active {
+        transform: translateY(0);
+    }
+
+    .daftra-help-current-filter {
+        text-align: center;
+        color: #4a5568;
+        font-size: 15px;
+        font-weight: 500;
+        margin-bottom: 20px;
+    }
+
+    .daftra-help-current-filter .daftra-help-highlight {
+        color: #667eea;
+        font-weight: 700;
+    }
+
+    .daftra-help-topics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 25px;
+        margin-bottom: 50px;
+    }
+
+    .daftra-help-topic-card {
+        background: white;
+        border-radius: 18px;
+        padding: 25px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        border: 1px solid #e2e8f0;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .daftra-help-topic-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, #667eea, #764ba2);
+        transform: scaleY(0);
+        transition: all 0.3s ease;
+        transform-origin: bottom;
+    }
+
+    .daftra-help-topic-card:hover::before {
+        transform: scaleY(1);
+        transform-origin: top;
+    }
+
+    .daftra-help-topic-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.15);
+        border-color: rgba(102, 126, 234, 0.2);
+    }
+
+    .daftra-help-topic-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f7fafc;
+    }
+
+    .daftra-help-topic-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+        margin-left: 15px;
+        box-shadow: 0 6px 15px rgba(102, 126, 234, 0.3);
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+    }
+
+    .daftra-help-topic-card:hover .daftra-help-topic-icon {
+        transform: scale(1.05) rotate(5deg);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .daftra-help-topic-name {
+        font-size: 18px;
+        font-weight: 800;
+        color: #2d3748;
+        text-align: right;
+    }
+
+    .daftra-help-topic-list {
+        list-style: none;
+    }
+
+    .daftra-help-topic-list-item {
+        margin-bottom: 6px;
+        padding: 4px 0;
+    }
+
+    .daftra-help-topic-list-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .daftra-help-topic-link {
+        color: #4a5568;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: block;
+        padding: 8px 12px;
+        border-radius: 10px;
+        position: relative;
+        text-align: right;
+        direction: rtl;
+    }
+
+    .daftra-help-topic-link::before {
+        content: '→';
+        color: #667eea;
+        font-size: 12px;
+        margin-left: 8px;
+        transition: all 0.3s ease;
+        opacity: 0;
+        transform: translateX(5px);
+    }
+
+    .daftra-help-topic-link:hover {
+        color: #667eea;
+        background: rgba(102, 126, 234, 0.08);
+        transform: translateX(-5px);
+    }
+
+    .daftra-help-topic-link:hover::before {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .daftra-help-contact-section {
+        text-align: center;
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e2e8f0;
+    }
+
+    .daftra-help-contact-title {
+        font-size: 22px;
+        font-weight: 800;
+        color: #2d3748;
+        margin-bottom: 12px;
+    }
+
+    .daftra-help-contact-subtitle {
+        font-size: 15px;
+        color: #4a5568;
+        margin-bottom: 25px;
+    }
+
+    .daftra-help-contact-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 15px;
+        font-weight: 700;
+        font-size: 16px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .daftra-help-contact-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    /* نتائج البحث */
+    .daftra-help-search-results {
+        display: none;
+        margin-top: 20px;
+        padding: 20px;
+        background: #f7fafc;
+        border-radius: 15px;
+        border: 2px solid #e2e8f0;
+    }
+
+    .daftra-help-search-results.daftra-help-show {
+        display: block;
+        animation: daftraHelpFadeIn 0.4s ease-out;
+    }
+
+    .daftra-help-result-item {
+        padding: 12px;
+        margin-bottom: 8px;
+        background: white;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: right;
+    }
+
+    .daftra-help-result-item:hover {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        transform: translateX(-3px);
+    }
+
+    .daftra-help-no-results {
+        text-align: center;
+        color: #a0aec0;
+        font-style: italic;
+        padding: 25px;
+    }
+
+    /* تحسينات للشاشات الصغيرة */
+    @media (max-width: 768px) {
+        .daftra-help-main-container {
+            padding: 25px 15px;
+        }
+
+        .daftra-help-main-title {
+            font-size: 30px;
+        }
+
+        .daftra-help-search-container {
+            padding: 25px 20px;
+        }
+
+        .daftra-help-search-row {
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .daftra-help-category-dropdown {
+            min-width: auto;
+        }
+
+        .daftra-help-topics-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .daftra-help-topic-card {
+            padding: 20px;
+        }
+
+        .daftra-help-topic-header {
+            margin-bottom: 15px;
+        }
+
+        .daftra-help-topic-icon {
+            width: 42px;
+            height: 42px;
+            font-size: 18px;
+        }
+
+        .daftra-help-topic-name {
+            font-size: 16px;
+        }
+
+        .daftra-help-contact-section {
+            padding: 30px 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+
+        .daftra-help-search-input,
+        .daftra-help-category-dropdown,
+        .daftra-help-search-btn {
+            font-size: 15px;
+            padding: 14px 16px;
+        }
+
+        .daftra-help-search-input {
+            padding-right: 45px;
+        }
+
+        .daftra-help-topic-link {
+            font-size: 13px;
+        }
+    }
+
+    /* رسوم متحركة مخصصة */
+    @keyframes daftraHelpFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes daftraHelpSlideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .daftra-help-topic-card {
+        animation: daftraHelpSlideInUp 0.5s ease-out;
+    }
+
+    .daftra-help-topic-card:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .daftra-help-topic-card:nth-child(2) {
+        animation-delay: 0.15s;
+    }
+
+    .daftra-help-topic-card:nth-child(3) {
+        animation-delay: 0.2s;
+    }
+
+    .daftra-help-topic-card:nth-child(4) {
+        animation-delay: 0.25s;
+    }
+
+    .daftra-help-topic-card:nth-child(5) {
+        animation-delay: 0.3s;
+    }
+
+    .daftra-help-topic-card:nth-child(6) {
+        animation-delay: 0.35s;
+    }
+
+    .daftra-help-topic-card:nth-child(7) {
+        animation-delay: 0.4s;
+    }
+
+    .daftra-help-topic-card:nth-child(8) {
+        animation-delay: 0.45s;
+    }
+
+    /* تحسين أداء الرسوم المتحركة */
+    .daftra-help-topic-card,
+    .daftra-help-search-input,
+    .daftra-help-category-dropdown,
+    .daftra-help-search-btn,
+    .daftra-help-contact-btn {
+        will-change: transform;
+    }
+
+
+    /* قائمة البرامج  */
+
+    .programs-modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 99999;
+        display: none;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .programs-modal-container {
+        background: white;
+        border-radius: 0;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        display: flex;
+        overflow: hidden;
+        position: relative;
+        direction: rtl;
+    }
+
+    .programs-close-button {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #333;
+        z-index: 10;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .programs-close-button:hover {
+        color: #000;
+    }
+
+    .programs-main-area {
+        flex: 0 0 75%;
+        padding: 20px 30px;
+        overflow-y: auto;
+        background: #fff;
+        border-left: 1px solid #eee;
+        /* تغيير من border-right إلى border-left */
+        text-align: right;
+        /* إضافة محاذاة النص إلى اليمين */
+    }
+
+    .programs-sidebar-area {
+        flex: 0 0 25%;
+        background: #fff;
+        padding: 20px;
+        overflow-y: auto;
+        border-right: 1px solid #f5f5f5;
+        /* تغيير من border-left إلى border-right */
+        text-align: right;
+        /* إضافة محاذاة النص إلى اليمين */
+    }
+
+    .programs-section-block {
+        margin-bottom: 25px;
+        text-align: right;
+        /* إضافة محاذاة النص إلى اليمين */
+    }
+
+    .programs-section-header {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        /* تغيير لدعم RTL */
+    }
+
+    .programs-section-header a {
+        color: #333;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+
+    .programs-section-header a i {
+        color: #0056b3;
+        margin-right: 5px;
+        /* تغيير من margin-left إلى margin-right */
+        font-size: 14px;
+    }
+
+    .programs-features-layout {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 10px;
+        margin-bottom: 20px;
+        text-align: right;
+        /* إضافة محاذاة النص إلى اليمين */
+    }
+
+    .programs-feature-card {
+        background: white;
+        padding: 8px 10px;
+        border-radius: 4px;
+        border: 1px solid #eee;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-align: right;
+        /* إضافة محاذاة النص إلى اليمين */
+    }
+
+    .programs-feature-card-a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-align: right;
+        /* إضافة محاذاة النص إلى اليمين */
+    }
+
+    .programs-feature-card:hover {
+        border-color: #0056b3;
+        box-shadow: 0 2px 5px rgba(0, 86, 179, 0.1);
+    }
+
+    .programs-feature-symbol {
+        width: 20px;
+        height: 20px;
+        background: #0056b3;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 10px;
+        flex-shrink: 0;
+        margin-left: 5px;
+        /* إضافة هامش على اليسار بدلاً من اليمين */
+    }
+
+    .programs-feature-label {
+        font-size: 12px;
+        color: #333;
+        font-weight: 400;
+        line-height: 1.2;
+        text-align: right;
+        /* إضافة محاذاة النص إلى اليمين */
+    }
+
+    .programs-sidebar-block {
+        margin-bottom: 15px;
+        text-align: right;
+        /* إضافة محاذاة النص إلى اليمين */
+    }
+
+    .programs-sidebar-menu {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        text-align: right;
+        /* إضافة محاذاة النص إلى اليمين */
+    }
+
+    .programs-sidebar-menu li {
+        margin-bottom: 0;
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+    .programs-sidebar-menu a {
+        color: #333;
+        text-decoration: none;
+        font-size: 12px;
+        padding: 8px 0;
+        display: block;
+        transition: all 0.2s ease;
+        text-align: right;
+    }
+
+    .programs-sidebar-menu a:hover {
+        color: #0056b3;
+    }
+
+    .programs-additional-section {
+        margin-top: 20px;
+        text-align: right;
+        /* إضافة محاذاة النص إلى اليمين */
+    }
+
+    .programs-sidebar-header {
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+        text-align: right;
+    }
+
+    /* خط فاصل بين القسم الرئيسي والقائمة الجانبية */
+    .programs-main-area {
+        position: relative;
+    }
+
+    .programs-main-area::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        /* تغيير من right إلى left */
+        width: 1px;
+        height: 100%;
+        background: #eee;
+    }
+
+    /* تعديل شكل الأيقونات في العناوين الرئيسية */
+    .programs-section-header a i.fas.fa-arrow-right {
+        transform: rotate(0deg);
+        /* إزالة التدوير لأن السهم يجب أن يشير إلى اليمين في RTL */
+    }
+
+    /* إضافة خط أزرق فاتح في الخلفية */
+    .programs-modal-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        /* تغيير من left إلى right */
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(to left, #e6f2ff, #ffffff);
+        /* تغيير الاتجاه من right إلى left */
+        z-index: 1;
+    }
+
+    /* تعديل الخلفية الرئيسية لتكون أكثر بياضًا */
+    .programs-modal-container {
+        background: #ffffff;
+    }
+
+    /* إضافة ظل خفيف للبطاقات */
+    .programs-feature-card {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    /* تعديل حجم الأيقونات داخل البطاقات */
+    .programs-feature-symbol i {
+        font-size: 10px;
+    }
+
+    /* إضافة خلفية فاتحة للأيقونات */
+    .programs-feature-symbol {
+        background: rgba(0, 86, 179, 0.1);
+    }
+
+    .programs-feature-symbol i {
+        color: #0056b3;
+    }
+
+    @media (max-width: 768px) {
+        .programs-modal-container {
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .programs-main-area {
+            flex: 1;
+            padding: 50px 15px 15px;
+            border-left: none;
+            /* تغيير من border-right إلى border-left */
+        }
+
+        .programs-sidebar-area {
+            flex: 0 0 auto;
+            max-height: 250px;
+            padding: 15px;
+            border-top: 1px solid #eee;
+            border-right: none;
+            /* تغيير من border-left إلى border-right */
+        }
+
+        .programs-features-layout {
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .programs-close-button {
+            top: 10px;
+            right: 10px;
+            /* تغيير من left إلى right */
+            width: 25px;
+            height: 25px;
+            font-size: 16px;
+        }
+    }
+
+
+    /*  القائمة الجانبيه */
+
+
+    .daftra-account-setup {
+
+        direction: rtl;
+        text-align: right;
+    }
+
+    /* Hero Section */
+    .daftra-hero-area {
+        padding: 60px 0;
+        background: white;
+    }
+
+    .daftra-hero-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: center;
+        background: white;
+
+    }
+
+    .daftra-main-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        line-height: 1.3;
+        color: #1e293b;
+    }
+
+    .daftra-hero-desc {
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        line-height: 1.6;
+        color: #64748b;
+    }
+
+    .daftra-features-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .daftra-feature-text {
+        padding: 8px 0;
+        color: #374151;
+        font-size: 1rem;
+        line-height: 1.5;
+        position: relative;
+        padding-right: 20px;
+    }
+
+    .daftra-feature-text::before {
+        content: "•";
+        color: #059669;
+        font-weight: bold;
+        position: absolute;
+        right: 0;
+    }
+
+    .daftra-hero-image {
+        padding: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .daftra-banner-img {
+        width: 80%;
+        border-radius: 16px;
+        /* box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); */
+    }
+
+    /* Packages Section */
+    .daftra-packages-area {
+        padding: 70px 0;
+        background: white;
+    }
+
+    .daftra-section-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .daftra-section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 15px;
+    }
+
+    .daftra-section-subtitle {
+        font-size: 1.1rem;
+        color: #64748b;
+    }
+
+    .daftra-packages-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+    }
+
+    .daftra-package-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .daftra-package-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .daftra-featured-package {
+        border-color: #f59e0b;
+    }
+
+    .daftra-best-badge {
+        position: absolute;
+        top: 20px;
+        left: -30px;
+        background: linear-gradient(45deg, #f59e0b, #d97706);
+        color: white;
+        padding: 6px 40px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        transform: rotate(-45deg);
+        z-index: 10;
+    }
+
+    .daftra-package-head {
+        padding: 25px 20px;
+        text-align: center;
+    }
+
+    .daftra-package-name {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 8px;
+    }
+
+    .daftra-package-target {
+        color: #64748b;
+        font-size: 0.9rem;
+    }
+
+    .daftra-package-features {
+        padding: 25px 20px;
+        flex-grow: 1;
+    }
+
+    .daftra-feature-simple {
+        padding: 10px 0;
+        color: #374151;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .daftra-package-bottom {
+        padding: 25px 20px;
+        text-align: center;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .daftra-package-hours {
+        color: #64748b;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+
+    .daftra-package-pricing {
+        margin-bottom: 20px;
+    }
+
+    .daftra-price-amount {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    .daftra-price-unit {
+        font-size: 1rem;
+        color: #64748b;
+        margin-right: 5px;
+    }
+
+    .daftra-order-btn {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        color: white;
+        text-decoration: none;
+        padding: 12px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+    }
+
+    .daftra-order-btn:hover {
+        background: linear-gradient(135deg, #2563eb, #1e40af);
+        transform: translateY(-2px);
+        color: white;
+        text-decoration: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .daftra-hero-grid {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .daftra-main-title {
+            font-size: 1.9rem;
+        }
+
+        .daftra-featured-package {
+            transform: none;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .daftra-hero-area {
+            padding: 50px 0;
+        }
+
+        .daftra-packages-area {
+            padding: 50px 0;
+        }
+
+        .daftra-main-title {
+            font-size: 1.7rem;
+        }
+
+        .daftra-section-title {
+            font-size: 1.6rem;
+        }
+
+        .daftra-best-badge {
+            left: -20px;
+            padding: 5px 30px;
+            font-size: 0.7rem;
+        }
+
+        .daftra-banner-img {
+            width: 90%;
+        }
+
+        .daftra-hero-image {
+            padding: 20px;
+        }
+    }
+
+    /* about us */
+
+    .fawtra-about-section {
+        font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        direction: rtl;
+        text-align: right;
+        background: white;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* Hero Section */
+    .fawtra-hero-area {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px 0;
+        text-align: center;
+    }
+
+    .fawtra-main-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .fawtra-hero-subtitle {
+        font-size: 1rem;
+        margin-bottom: 30px;
+        opacity: 0.95;
+        line-height: 1.5;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .fawtra-features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .fawtra-feature-card {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        transition: transform 0.3s ease;
+    }
+
+    .fawtra-feature-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .fawtra-feature-icon {
+        font-size: 1.8rem;
+        color: #fbbf24;
+        margin-bottom: 12px;
+    }
+
+    .fawtra-feature-card h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .fawtra-feature-card p {
+        opacity: 0.9;
+        line-height: 1.4;
+        font-size: 0.9rem;
+    }
+
+    /* Company Info Section */
+    .fawtra-company-info {
+        padding: 40px 0;
+        background: #f8fafc;
+    }
+
+    .fawtra-info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        align-items: center;
+    }
+
+    .fawtra-section-title {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 15px;
+        line-height: 1.3;
+    }
+
+    .fawtra-info-desc {
+        font-size: 0.95rem;
+        color: #64748b;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    /* .fawtra-presence-list { */
+    /* space-y: 10px; */
+    /* } */
+
+    .presence-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 0;
+        color: #374151;
+        font-size: 0.9rem;
+    }
+
+    .presence-item i {
+        color: #3b82f6;
+        font-size: 0.9rem;
+        width: 16px;
+    }
+
+    .fawtra-stats-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .stat-box {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+    }
+
+    .stat-box:hover {
+        transform: translateY(-2px);
+    }
+
+    .stat-number {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #3b82f6;
+        margin-bottom: 6px;
+    }
+
+    .stat-label {
+        color: #64748b;
+        font-weight: 500;
+        font-size: 0.85rem;
+    }
+
+    /* Solutions Section */
+    .fawtra-solutions {
+        padding: 40px 0;
+        background: white;
+    }
+
+    .fawtra-solutions-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .fawtra-section-subtitle {
+        font-size: 0.95rem;
+        color: #64748b;
+        max-width: 500px;
+        margin: 0 auto;
+        line-height: 1.5;
+    }
+
+    .fawtra-solutions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+    }
+
+    .solution-card {
+        background: #f8fafc;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid #e2e8f0;
+    }
+
+    .solution-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        background: white;
+    }
+
+    .solution-icon {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+    }
+
+    .solution-icon i {
+        font-size: 1.3rem;
+        color: white;
+    }
+
+    .solution-card h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 10px;
+    }
+
+    .solution-card p {
+        color: #64748b;
+        line-height: 1.4;
+        font-size: 0.85rem;
+    }
+
+    /* Vision Section */
+    .fawtra-vision {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        color: white;
+        padding: 40px 0;
+        text-align: center;
+    }
+
+    .fawtra-vision-content {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .fawtra-vision .fawtra-section-title {
+        color: white;
+        margin-bottom: 20px;
+    }
+
+    .fawtra-vision-text {
+        font-size: 1rem;
+        line-height: 1.6;
+        opacity: 0.95;
+    }
+
+    /* Contact Section */
+    .fawtra-contact {
+        padding: 40px 0;
+        background: #f8fafc;
+    }
+
+    .fawtra-contact-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .fawtra-contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+    }
+
+    .contact-card {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+    }
+
+    .contact-card:hover {
+        transform: translateY(-2px);
+    }
+
+    .contact-icon {
+        background: linear-gradient(135deg, #10b981, #059669);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+    }
+
+    .contact-icon i {
+        font-size: 1.3rem;
+        color: white;
+    }
+
+    .contact-card h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 12px;
+    }
+
+    .contact-card p {
+        color: #64748b;
+        line-height: 1.4;
+        margin-bottom: 12px;
+        font-size: 0.9rem;
+    }
+
+    .contact-email {
+        color: #3b82f6;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 0.95rem;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .contact-email:hover {
+        text-decoration: underline;
+    }
+
+    .response-time {
+        color: #059669;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .fawtra-info-grid {
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        .fawtra-main-title {
+            font-size: 2rem;
+        }
+
+        .fawtra-features-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .fawtra-stats-container {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .stat-box {
+            padding: 12px 8px;
+        }
+
+        .stat-number {
+            font-size: 1.4rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .fawtra-hero-area {
+            padding: 30px 0;
+        }
+
+        .fawtra-company-info,
+        .fawtra-solutions,
+        .fawtra-vision,
+        .fawtra-contact {
+            padding: 30px 0;
+        }
+
+        .fawtra-main-title {
+            font-size: 1.7rem;
+        }
+
+        .fawtra-section-title {
+            font-size: 1.4rem;
+        }
+
+        .fawtra-hero-subtitle {
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .fawtra-stats-container {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .stat-box {
+            padding: 15px 12px;
+        }
+
+        .stat-number {
+            font-size: 1.6rem;
+        }
+
+        .solution-card,
+        .contact-card {
+            padding: 18px;
+        }
+
+        .fawtra-feature-card {
+            padding: 18px;
+        }
+
+        .solution-icon,
+        .contact-icon {
+            width: 45px;
+            height: 45px;
+        }
+
+        .solution-icon i,
+        .contact-icon i {
+            font-size: 1.1rem;
+        }
+
+        .fawtra-solutions-grid {
+            grid-template-columns: 1fr;
+            gap: 18px;
+        }
+
+        .fawtra-contact-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .presence-item {
+            font-size: 0.85rem;
+        }
+
+        .fawtra-vision-text {
+            font-size: 0.95rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 0 12px;
+        }
+
+        .fawtra-main-title {
+            font-size: 1.5rem;
+        }
+
+        .fawtra-section-title {
+            font-size: 1.2rem;
+        }
+
+        .fawtra-hero-subtitle {
+            font-size: 0.85rem;
+        }
+
+        .fawtra-feature-card {
+            padding: 15px;
+        }
+
+        .solution-card,
+        .contact-card {
+            padding: 15px;
+        }
+
+        .stat-box {
+            padding: 12px 8px;
+        }
+
+        .stat-number {
+            font-size: 1.3rem;
+        }
+
+        .solution-icon,
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .solution-icon i,
+        .contact-icon i {
+            font-size: 1rem;
+        }
+
+        .fawtra-hero-area,
+        .fawtra-company-info,
+        .fawtra-solutions,
+        .fawtra-vision,
+        .fawtra-contact {
+            padding: 25px 0;
+        }
+    }
+
+    /* عملائنا */
+
+    .clients-wrapper * {
+        box-sizing: border-box;
+    }
+
+    .clients-wrapper {
+
+        background: #ffffff;
+        color: #334155;
+        line-height: 1.6;
+        direction: rtl;
+    }
+
+    .clients-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* Hero Section */
+    .clients-hero {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        padding: 60px 0;
+        text-align: center;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .clients-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    }
+
+    .clients-hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .clients-hero h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 15px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .clients-hero p {
+        font-size: 1.2rem;
+        opacity: 0.95;
+        max-width: 700px;
+        margin: 0 auto 40px;
+        line-height: 1.7;
+    }
+
+    .clients-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        margin-top: 40px;
+    }
+
+    .clients-stat {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 20px;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: transform 0.3s ease;
+    }
+
+    .clients-stat:hover {
+        transform: translateY(-3px);
+    }
+
+    .clients-stat-num {
+        font-size: 2rem;
+        font-weight: 900;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .clients-stat-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+
+    /* Main Content */
+    .clients-main {
+        padding: 60px 0;
+    }
+
+    .clients-section-title {
+        text-align: center;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #1e293b;
+        position: relative;
+    }
+
+    .clients-section-title::after {
+        content: '';
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 2px;
+    }
+
+    .clients-intro {
+        text-align: center;
+        font-size: 1.1rem;
+        color: #64748b;
+        margin-bottom: 50px;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.8;
+    }
+
+    /* Filters */
+    .clients-filters {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .clients-filter-btns {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .clients-filter-btn {
+        padding: 8px 20px;
+        border: 2px solid #e2e8f0;
+        background: white;
+        color: #64748b;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+    .clients-filter-btn.active,
+    .clients-filter-btn:hover {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border-color: transparent;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    /* Cards Grid */
+    .clients-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+        margin-bottom: 50px;
+    }
+
+    .clients-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border: 1px solid #f1f5f9;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .clients-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+        transform-origin: right;
+    }
+
+    .clients-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(99, 102, 241, 0.15);
+    }
+
+    .clients-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .clients-logo {
+        width: 60px;
+        height: 60px;
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+        color: #6366f1;
+        font-size: 1.4rem;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+    .clients-card:hover .clients-logo {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border-color: transparent;
+    }
+
+    .clients-name {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 8px;
+        text-align: right;
+
+    }
+
+    .clients-industry {
+        color: #6366f1;
+        font-weight: 600;
+        margin-bottom: 12px;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-align: right;
+
+    }
+
+    .clients-desc {
+        color: #64748b;
+        line-height: 1.6;
+        margin-bottom: 15px;
+        font-size: 0.95rem;
+        text-align: right;
+    }
+
+    .clients-card-stats {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .clients-card-stat {
+        text-align: center;
+        flex: 1;
+    }
+
+    .clients-card-stat-num {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #6366f1;
+        display: block;
+    }
+
+    .clients-card-stat-label {
+        font-size: 0.75rem;
+        color: #94a3b8;
+        margin-top: 2px;
+    }
+
+    /* Success Stories */
+    .clients-stories {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        padding: 50px 0;
+        margin: 60px 0;
+        border-radius: 20px;
+    }
+
+    .clients-stories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+    }
+
+    .clients-story {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        position: relative;
+    }
+
+    .clients-story-quote {
+        font-size: 2.5rem;
+        color: #6366f1;
+        position: absolute;
+        top: 15px;
+        right: 25px;
+        opacity: 0.3;
+    }
+
+    .clients-story-text {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: #475569;
+        margin-bottom: 20px;
+        font-style: italic;
+        text-align: right;
+    }
+
+    .clients-story-author {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .clients-author-avatar {
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .clients-author-info h4 {
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 3px;
+        font-size: 0.95rem;
+        text-align: right;
+    }
+
+    .clients-author-info p {
+        color: #64748b;
+        font-size: 0.8rem;
+        text-align: right;
+
+    }
+
+    /* Industries Section */
+    .clients-industries {
+        margin: 60px 0;
+    }
+
+    .clients-industries-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 40px;
+    }
+
+    .clients-industry-card {
+        background: white;
+        border: 2px solid #f1f5f9;
+        border-radius: 12px;
+        padding: 25px;
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .clients-industry-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .clients-industry-card:hover::before {
+        opacity: 0.05;
+    }
+
+    .clients-industry-card:hover {
+        border-color: #6366f1;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);
+    }
+
+    .clients-industry-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        color: white;
+        font-size: 1.2rem;
+    }
+
+    .clients-industry-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 8px;
+    }
+
+    .clients-industry-count {
+        color: #6366f1;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+    }
+
+    .clients-industry-desc {
+        color: #64748b;
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+
+    /* CTA */
+    .clients-cta {
+        text-align: center;
+        padding: 50px 30px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        border-radius: 20px;
+        color: white;
+        margin: 60px 0;
+    }
+
+    .clients-cta h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .clients-cta p {
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        opacity: 0.95;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .clients-cta-btn {
+        display: inline-block;
+        padding: 15px 35px;
+        background: white;
+        color: #6366f1;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .clients-cta-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .clients-hero h1 {
+            font-size: 2.2rem;
+        }
+
+        .clients-stats {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .clients-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .clients-filter-btns {
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .clients-section-title {
+            font-size: 1.8rem;
+        }
+
+        .clients-container {
+            padding: 0 15px;
+        }
+    }
+
+    /* Animations */
+    .clients-fade {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease;
+    }
+
+    .clients-fade.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* الايقونات  */
+
+    /* Unique Sales Features Icons Section CSS */
+    .fotra-profit-achievements-zone {
+        padding: 70px 0;
+        background: linear-gradient(135deg, #f1f8ff 0%, #e8f4fd 100%);
+        direction: rtl;
+        text-align: right;
+    }
+
+    .fotra-container-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .fotra-main-title-container {
+        text-align: center;
+        margin-bottom: 55px;
+    }
+
+    .fotra-main-title-container h2 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.3;
+    }
+
+    .fotra-horizontal-features-display {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: stretch;
+        gap: 25px;
+        max-width: 1150px;
+        margin: 0 auto;
+    }
+
+    .fotra-individual-feature-card {
+        background: #ffffff;
+        padding: 28px 22px;
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+        text-align: center;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(99, 102, 241, 0.12);
+        position: relative;
+        overflow: hidden;
+        flex: 1;
+        min-width: 160px;
+        max-width: 185px;
+        cursor: pointer;
+    }
+
+    .fotra-individual-feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
+        transform: scaleX(0);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-origin: right;
+    }
+
+    .fotra-individual-feature-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .fotra-individual-feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(99, 102, 241, 0.18);
+        border-color: #6366f1;
+    }
+
+    .fotra-individual-feature-card:hover::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.02), rgba(139, 92, 246, 0.02));
+        pointer-events: none;
+    }
+
+    .fotra-circular-icon-container {
+        width: 55px;
+        height: 55px;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 18px;
+        transition: all 0.35s ease;
+        position: relative;
+    }
+
+    .fotra-individual-feature-card:hover .fotra-circular-icon-container {
+        transform: scale(1.12) rotate(2deg);
+        box-shadow: 0 12px 30px rgba(99, 102, 241, 0.35);
+    }
+
+    .fotra-circular-icon-container::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+        border-radius: 16px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .fotra-individual-feature-card:hover .fotra-circular-icon-container::before {
+        opacity: 0.3;
+    }
+
+    .fotra-circular-icon-container i {
+        font-size: 1.4rem;
+        color: #ffffff;
+        transition: all 0.3s ease;
+    }
+
+    .fotra-individual-feature-card:hover .fotra-circular-icon-container i {
+        transform: scale(1.05);
+    }
+
+    .fotra-individual-feature-card h3 {
+        font-size: 0.95rem;
+        font-weight: 650;
+        color: #0f172a;
+        line-height: 1.35;
+        margin: 0;
+        transition: color 0.3s ease;
+    }
+
+    .fotra-individual-feature-card:hover h3 {
+        color: #4338ca;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .fotra-profit-achievements-zone {
+            padding: 50px 0;
+        }
+
+        .fotra-horizontal-features-display {
+            flex-direction: column;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .fotra-individual-feature-card {
+            max-width: 280px;
+            width: 100%;
+            min-width: auto;
+        }
+
+        .fotra-main-title-container h2 {
+            font-size: 1.8rem;
+        }
+
+        .fotra-circular-icon-container {
+            width: 50px;
+            height: 50px;
+        }
+
+        .fotra-circular-icon-container i {
+            font-size: 1.2rem;
+        }
+
+        .fotra-container-wrapper {
+            padding: 0 15px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .fotra-profit-achievements-zone {
+            padding: 40px 0;
+        }
+
+        .fotra-main-title-container h2 {
+            font-size: 1.6rem;
+            line-height: 1.4;
+        }
+
+        .fotra-individual-feature-card {
+            padding: 25px 18px;
+            max-width: 260px;
+        }
+
+        .fotra-individual-feature-card h3 {
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Animation for scroll reveal */
+    @keyframes fotraSlideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fotra-individual-feature-card {
+        animation: fotraSlideInUp 0.6s ease-out backwards;
+    }
+
+    .fotra-individual-feature-card:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .fotra-individual-feature-card:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .fotra-individual-feature-card:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    .fotra-individual-feature-card:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+
+    .fotra-individual-feature-card:nth-child(5) {
+        animation-delay: 0.5s;
+    }
+
+    .fotra-individual-feature-card:nth-child(6) {
+        animation-delay: 0.6s;
+    }
+
+    /* Store Buttons Container */
+    .fotra-store-buttons-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 25px;
+        direction: ltr;
+    }
+
+    /* Store Download Button Base */
+    .fotra-store-download-btn {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 10px 28px;
+        border-radius: 12px;
+        text-decoration: none;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+        min-width: 180px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Google Play Button */
+    .fotra-google-play-btn {
+        background: linear-gradient(135deg, #01875f, #4285f4);
+        color: white;
+    }
+
+    .fotra-google-play-btn:hover {
+        background: linear-gradient(135deg, #016d4c, #3367d6);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(66, 133, 244, 0.3);
+    }
+
+    /* App Store Button */
+    .fotra-app-store-btn {
+        background: linear-gradient(135deg, #000000, #333333);
+        color: white;
+    }
+
+    .fotra-app-store-btn:hover {
+        background: linear-gradient(135deg, #1a1a1a, #4a4a4a);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Button Icon */
+    .fotra-store-btn-icon {
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+    }
+
+    /* Button Text Container */
+    .fotra-store-btn-text {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .fotra-store-btn-small {
+        font-size: 0.7rem;
+        opacity: 0.9;
+        line-height: 1;
+        margin-bottom: 2px;
+    }
+
+    .fotra-store-btn-large {
+        font-size: 0.95rem;
+        font-weight: 600;
+        line-height: 1;
+    }
+
+    /* Spacing Sections */
+    .fotra-spacing-section-large {
+        padding: 60px 0;
+        height: 0;
+        background: transparent;
+    }
+
+    .fotra-spacing-section-medium {
+        padding: 40px 0;
+        height: 0;
+        background: transparent;
+    }
+
+    .fotra-spacing-section-small {
+        padding: 20px 0;
+        height: 0;
+        background: transparent;
+    }
+
+    /* Hover Effects */
+    .fotra-store-download-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .fotra-store-download-btn:hover::before {
+        left: 100%;
+    }
+
+    /* Active State */
+    .fotra-store-download-btn:active {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .fotra-store-buttons-container {
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .fotra-store-download-btn {
+            width: 100%;
+            max-width: 220px;
+            justify-content: center;
+            padding: 12px 30px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .fotra-store-buttons-container {
+            margin-top: 20px;
+        }
+
+        .fotra-store-download-btn {
+            padding: 10px 25px;
+            min-width: 170px;
+            max-width: 200px;
+        }
+
+        .fotra-store-btn-icon {
+            font-size: 1.4rem;
+            width: 28px;
+            height: 28px;
+        }
+
+        .fotra-store-btn-small {
+            font-size: 0.65rem;
+        }
+
+        .fotra-store-btn-large {
+            font-size: 0.85rem;
+        }
+    }
+
+    /* Animation for entry */
+    @keyframes fotraStoreButtonSlide {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fotra-store-download-btn {
+        animation: fotraStoreButtonSlide 0.6s ease-out;
+    }
+
+    .fotra-google-play-btn {
+        animation-delay: 0.1s;
+        animation-fill-mode: both;
+    }
+
+    .fotra-app-store-btn {
+        animation-delay: 0.2s;
+        animation-fill-mode: both;
+    }
+
+    /* Pricing Section Styles */
+    .fotra-pricing-showcase-zone {
+        padding: 80px 0;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        direction: rtl;
+        text-align: right;
+
+    }
+
+    .fotra-pricing-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .fotra-pricing-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .fotra-pricing-header h2 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #1a365d;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .fotra-pricing-plans-grid {
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+    }
+
+    .fotra-pricing-plan-card {
+        background: white;
+        padding: 35px 25px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 2px solid #f1f5f9;
+        position: relative;
+        min-width: 200px;
+        max-width: 250px;
+        flex: 1;
+    }
+
+    .fotra-pricing-plan-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 50px rgba(99, 102, 241, 0.15);
+        border-color: #6366f1;
+    }
+
+    .fotra-annual-highlight {
+        border-color: #22c55e;
+        background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+        transform: scale(1.05);
+    }
+
+    .fotra-annual-highlight:hover {
+        transform: scale(1.05) translateY(-5px);
+        box-shadow: 0 25px 60px rgba(34, 197, 94, 0.2);
+    }
+
+    .fotra-plan-discount-badge {
+        position: absolute;
+        top: -15px;
+        right: 20px;
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.05);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .fotra-plan-header h3 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #1a365d;
+        margin-bottom: 20px;
+    }
+
+    .fotra-plan-price {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        margin-bottom: 15px;
+        gap: 2px;
+    }
+
+    .fotra-currency {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #64748b;
+    }
+
+    .fotra-amount {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #1a365d;
+        line-height: 1;
+    }
+
+    .fotra-period {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #64748b;
+    }
+
+    .fotra-plan-details {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin-bottom: 20px;
+        font-weight: 500;
+    }
+
+    .fotra-plan-label {
+        margin-top: 20px;
+    }
+
+    .fotra-recommended {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-block;
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .fotra-pricing-cta {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .fotra-start-trial-btn {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: white;
+        border: none;
+        padding: 18px 40px;
+        border-radius: 25px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .fotra-start-trial-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(34, 197, 94, 0.4);
+        background: linear-gradient(135deg, #16a34a, #15803d);
+    }
+
+    .fotra-trial-info {
+        background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+        padding: 40px 30px;
+        border-radius: 20px;
+        text-align: center;
+        border: 1px solid #bbf7d0;
+        box-shadow: 0 8px 25px rgba(34, 197, 94, 0.1);
+    }
+
+    .fotra-trial-info h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #166534;
+        margin-bottom: 20px;
+    }
+
+    .fotra-trial-info p {
+        color: #166534;
+        line-height: 1.6;
+        margin-bottom: 15px;
+        font-size: 1rem;
+    }
+
+    .fotra-trial-info p:first-of-type {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #15803d;
+    }
+
+    .fotra-trial-info p:last-child {
+        max-width: 800px;
+        margin: 0 auto;
+        color: #065f46;
+        font-size: 0.95rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .fotra-pricing-showcase-zone {
+            padding: 60px 0;
+        }
+
+        .fotra-pricing-header h2 {
+            font-size: 2rem;
+        }
+
+        .fotra-pricing-plans-grid {
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .fotra-pricing-plan-card {
+            min-width: 280px;
+            max-width: 320px;
+        }
+
+        .fotra-annual-highlight {
+            transform: scale(1);
+        }
+
+        .fotra-annual-highlight:hover {
+            transform: translateY(-5px);
+        }
+
+        .fotra-amount {
+            font-size: 2.5rem;
+        }
+
+        .fotra-trial-info {
+            padding: 30px 20px;
+        }
+
+        .fotra-trial-info h3 {
+            font-size: 1.6rem;
+        }
+
+        .fotra-start-trial-btn {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .fotra-pricing-plan-card {
+            min-width: 260px;
+            max-width: 300px;
+            padding: 25px 20px;
+        }
+
+        .fotra-plan-discount-badge {
+            font-size: 0.7rem;
+            padding: 6px 12px;
+        }
+
+        .fotra-amount {
+            font-size: 2.2rem;
+        }
+
+        .fotra-trial-info h3 {
+            font-size: 1.4rem;
+        }
+
+        .fotra-trial-info p {
+            font-size: 0.9rem;
+        }
+    }
+
+    .invoice-features-list-unique {
+        list-style: disc !important;
+        padding-right: 20px !important;
+        padding-left: 0 !important;
+        margin: 8px 0 !important;
+        text-align: right !important;
+        direction: rtl !important;
+        list-style-position: inside !important;
+        display: block !important;
+        width: 100% !important;
+    }
+
+    .invoice-features-list-unique li {
+        margin-bottom: 4px !important;
+        color: #475569 !important;
+        line-height: 1.3 !important;
+        font-size: 13px !important;
+        font-weight: bold !important;
+        text-align: right !important;
+        direction: rtl !important;
+        text-indent: 0 !important;
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+        display: list-item !important;
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+    }

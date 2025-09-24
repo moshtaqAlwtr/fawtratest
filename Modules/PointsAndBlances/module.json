@@ -1,0 +1,11 @@
+{
+    "name": "PointsAndBlances",
+    "alias": "pointsandblances",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\PointsAndBlances\\Providers\\PointsAndBlancesServiceProvider"
+    ],
+    "files": []
+}

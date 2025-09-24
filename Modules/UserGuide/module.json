@@ -1,0 +1,11 @@
+{
+    "name": "UserGuide",
+    "alias": "userguide",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\UserGuide\\Providers\\UserGuideServiceProvider"
+    ],
+    "files": []
+}

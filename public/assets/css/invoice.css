@@ -1,0 +1,242 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container-fluid {
+    padding: 15px;
+}
+
+/* تنسيق الجداول */
+.custom-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    overflow-x: auto; /* Allow horizontal scrolling */
+}
+
+.custom-table thead tr {
+    background: linear-gradient(to right, #f8f9fa, #ffffff);
+}
+
+.custom-table th {
+    font-weight: 600;
+    padding: 1rem;
+    border-bottom: 2px solid #e9ecef;
+    color: #495057;
+}
+
+.custom-table td {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+.invoice-row {
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.invoice-row:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.02);
+}
+
+.invoice-number {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    background: #f8f9fa;
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+}
+
+.client-name strong {
+    color: #2c3e50;
+}
+
+.amount {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.currency {
+    color: #6c757d;
+    font-weight: normal;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    border-radius: 6px;
+}
+
+.date-info {
+    font-size: 0.9rem;
+    color: #495057;
+}
+
+.creator-info {
+    font-size: 0.85rem;
+}
+
+.client-info, .amount-info {
+    padding: 0.5rem 0;
+}
+
+.tax-info, .address-info {
+    font-size: 0.85rem;
+}
+
+/* تحسين مظهر البادج */
+.badge {
+    font-weight: 500;
+    padding: 0.5em 1em;
+    border-radius: 6px;
+}
+
+/* تحسين الأيقونات */
+.fas {
+    width: 16px;
+    text-align: center;
+}
+
+/* تنسيقات خاصة للبطاقات */
+.card-header button.active {
+    border: 2px solid #007bff;
+    font-weight: bold;
+}
+
+.card-header button {
+    transition: all 0.3s ease;
+}
+
+.card-header button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Media Queries للتجاوب مع الشاشات الصغيرة */
+@media (max-width: 768px) {
+    .content-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .content-header-title {
+        font-size: 1.5rem;
+    }
+
+    .btn {
+        width: 100%; /* Full-width buttons on small screens */
+        margin-bottom: 10px;
+    }
+
+    .card {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .custom-table {
+        display: block;
+    }
+
+    .custom-table thead,
+    .custom-table tbody,
+    .custom-table th,
+    .custom-table td,
+    .custom-table tr {
+        display: block; /* Make table elements block for stacking */
+    }
+
+    .custom-table td {
+        text-align: left; /* Align text to the left */
+    }
+
+    .invoice-row {
+        flex-direction: column; /* Stack elements vertically */
+    }
+
+    .invoice-number {
+        font-size: 1rem;
+    }
+
+    .amount {
+        font-size: 1rem;
+    }
+
+    .status-badge {
+        padding: 0.4rem 0.8rem;
+    }
+
+    .form-check {
+        margin-bottom: 10px;
+    }
+
+    .form-control {
+        width: 100%;
+    }
+
+    .dropdown-menu {
+        position: static;
+        display: block;
+        width: 100%;
+        min-width: 200px;
+    }
+
+    .table th, .table td {
+        white-space: nowrap; /* منع التفاف النص */
+    }
+}
+
+/* Media Queries للشاشات الجوال (موبايل) */
+@media (max-width: 576px) {
+    .content-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+
+    .invoice-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .invoice-number,
+    .amount-info {
+        text-align: left;
+    }
+
+    .client-info {
+        margin-bottom: 10px;
+    }
+
+    .table th, .table td {
+        font-size: 0.7rem; /* حجم خط أصغر للجوال */
+    }
+}
+
+/* Media Queries للشاشات المتوسطة (التابلت) */
+@media (min-width: 577px) and (max-width: 992px) {
+    .content-header h2 {
+        font-size: 2rem;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+}
+
+/* Media Queries للشاشات الكبيرة (أجهزة الكمبيوتر) */
+@media (min-width: 993px) {
+    .card-body {
+        padding: 20px;
+    }
+}

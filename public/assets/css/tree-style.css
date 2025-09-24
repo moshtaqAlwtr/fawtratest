@@ -1,0 +1,430 @@
+.app-container {
+display: flex;
+height: 100vh;
+color: black;
+/* font-family: Arial, sans-serif; */
+background-color: #f8f9fa;
+margin: 0;
+z-index: 1;
+}
+
+/* Sidebar Styling */
+.card {
+width: 350px;
+background-color: #f8f9fa;
+padding: 20px;
+color: black;
+overflow-y: auto;
+display: flex;
+flex-direction: column;
+position: relative;
+z-index: 1;
+}
+
+.card ul {
+list-style: none;
+padding: 0;
+margin: 0;
+width: 100%;
+position: relative;
+}
+
+.card li {
+margin: 5px 0;
+position: relative;
+width: 100%;
+}
+
+.card li.has-submenu {
+margin-bottom: 15px;
+}
+
+.card a {
+display: flex;
+align-items: center;
+text-decoration: none;
+color: #000; /* الخط أسود */
+padding: 10px;
+border-radius: 5px;
+transition: background-color 0.3s;
+width: 100%;
+}
+
+.card a:hover {
+background-color: #495057;
+}
+
+.card a i {
+margin-right: 10px;
+font-size: 16px;
+}
+
+.card a i.fas {
+margin-left: 20px;
+font-size: 16px;
+color: #fad103; /* لون primary */
+}
+
+.card a:hover i.fas {
+color: #ffffff; /* لون الأيقونة يصبح أبيض عند التحويم */
+}
+
+.card a i.fas.fa-file,
+.card a i.fas.fa-file-alt {
+color: #fad103; /* لون primary */
+}
+
+.card a i.fas.fa-folder,
+.card a i.fas.fa-folder-open {
+color: #fad103; /* لون primary */
+}
+
+/* Dropdown Menu */
+.card .dropdown-menu {
+display: none;
+width: 100%;
+position: relative;
+background-color: #f8f9fa;
+padding-right: 20px;
+margin-top: 5px;
+z-index: 1;
+max-height: calc(100vh - 200px);
+overflow-y: auto;
+}
+
+.card .dropdown-menu.visible {
+display: block;
+}
+
+.card li.has-submenu > .dropdown-menu {
+margin-top: 5px;
+border-right: 2px solid #e9ecef;
+}
+
+/* Main Content Styling */
+.main-content {
+flex: 1;
+padding: 20px;
+background-color: #ffffff;
+overflow-y: auto;
+box-shadow: -5px 0 5px -5px #ccc;
+}
+
+/* Header Style */
+.main-content h1 {
+font-size: 24px;
+color: #000; /* تغيير لون النص إلى الأسود */
+}
+
+.header {
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+z-index: 1000;
+background-color: #fff;
+}
+
+.accounts-list {
+padding: 20px;
+}
+
+.account-item {
+background: #fff;
+border-radius: 8px;
+margin-bottom: 10px;
+box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+transition: all 0.3s ease;
+}
+
+.account-item:hover {
+box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.account-details {
+display: flex;
+align-items: center;
+padding: 15px;
+justify-content: space-between;
+}
+
+.account-name {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.account-number {
+color: #666;
+font-size: 0.9em;
+}
+
+.account-info {
+text-align: left;
+margin-left: 20px;
+}
+
+.account-balance {
+font-weight: bold;
+font-size: 1.1em;
+color: #333;
+}
+
+.account-type {
+color: #666;
+font-size: 0.9em;
+}
+
+.account-actions {
+color: #666;
+}
+
+.add-account-footer {
+position: fixed;
+bottom: 30px;
+left: 50%;
+transform: translateX(-50%);
+z-index: 1000;
+}
+
+/* تنسيقات النموذج */
+.modal {
+background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-dialog {
+max-width: 600px;
+margin: 1.75rem auto;
+}
+
+.modal-content {
+border: none;
+border-radius: 8px;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+padding: 1rem 1.5rem;
+background: #fff;
+}
+
+.modal-title {
+font-size: 1.25rem;
+font-weight: 600;
+}
+
+.close {
+font-size: 1.5rem;
+color: #6c757d;
+opacity: 1;
+padding: 1rem;
+margin: -1rem;
+}
+
+.modal-body {
+padding: 1.5rem;
+}
+
+.form-label {
+font-weight: 500;
+margin-bottom: 0.5rem;
+color: #495057;
+}
+
+.form-control {
+border: 1px solid #ced4da;
+border-radius: 4px;
+padding: 0.5rem 0.75rem;
+}
+
+.form-control:focus {
+border-color: #80bdff;
+box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-check {
+padding-right: 1.5rem;
+}
+
+.btn-success {
+background-color: #28a745;
+border-color: #28a745;
+padding: 0.5rem 2rem;
+}
+
+.btn-success:hover {
+background-color: #218838;
+border-color: #1e7e34;
+}
+
+.gap-4 {
+gap: 1.5rem;
+}
+
+/* تنسيقات شجرة الحسابات */
+.accounts-tree {
+padding: 20px;
+}
+
+.account-item {
+background: #fff;
+border-radius: 8px;
+margin-bottom: 15px;
+box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.account-header {
+padding: 15px 20px;
+border-bottom: 1px solid #eee;
+}
+
+.account-info {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.account-info i {
+color: #fad103;
+font-size: 1.2rem;
+}
+
+.account-name {
+font-weight: 500;
+color: #2c2c2c;
+}
+
+.account-type {
+color: #666;
+font-size: 0.9rem;
+}
+
+.account-number {
+color: #888;
+font-size: 0.85rem;
+}
+
+.account-balance {
+font-weight: 500;
+color: #2c2c2c;
+}
+
+.sub-account-item {
+margin-right: 30px;
+border-right: 2px solid #eee;
+margin-top: 10px;
+}
+
+.sub-account-item .account-header {
+border-bottom: none;
+padding: 10px 20px;
+}
+
+.add-account-link {
+padding: 10px 20px;
+}
+
+.add-sub-account {
+display: flex;
+align-items: center;
+color: #fad103;
+text-decoration: none;
+gap: 8px;
+font-size: 0.9rem;
+}
+
+.add-sub-account:hover {
+color: #fad103;
+text-decoration: none;
+}
+
+/* تنسيقات الحسابات */
+.accounts-list {
+padding: 20px;
+}
+
+.account-item {
+background: #fff;
+border-radius: 8px;
+margin-bottom: 10px;
+}
+
+.account-details {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 15px;
+border-bottom: 1px solid #eee;
+}
+
+.account-name {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.account-name i {
+color: #fad103;
+}
+
+.account-number {
+color: #666;
+font-size: 0.9rem;
+}
+
+.account-info {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+
+.account-balance {
+font-weight: 500;
+}
+
+.account-type {
+color: #666;
+font-size: 0.9rem;
+}
+
+/* تنسيقات الأبناء المباشرين */
+.direct-children {
+margin-right: 30px;
+padding: 10px 0;
+border-right: 2px solid #eee;
+}
+
+.direct-children .account-item {
+background: #f8f9fa;
+}
+
+/* تنسيقات القائمة المنسدلة */
+.dropdown-menu {
+min-width: 160px;
+border: none;
+box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.dropdown-item {
+padding: 8px 15px;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.dropdown-item:hover {
+background: #f8f9fa;
+}
+
+.btn-group .btn {
+padding: 5px 10px;
+}
+
+/* تنسيقات الألوان */
+.text-success {
+color: #28a745;
+}
+
+.text-danger {
+color: #dc3545;
+}

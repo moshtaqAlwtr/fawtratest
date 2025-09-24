@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/reservations",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Reservations\\": "app/",
+            "Modules\\Reservations\\Database\\Factories\\": "database/factories/",
+            "Modules\\Reservations\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Reservations\\Tests\\": "tests/"
+        }
+    }
+}

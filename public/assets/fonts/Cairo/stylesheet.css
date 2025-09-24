@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Cairo';
+    src: url('Cairo-Regular.woff2') format('woff2'),
+        url('Cairo-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

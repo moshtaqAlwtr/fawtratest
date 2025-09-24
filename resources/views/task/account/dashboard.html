@@ -1,0 +1,1652 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+
+
+
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="https://altab.flowdo.net/user-uploads/favicon/6823163ef3557a2c287cd16b625019cb.png">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/all.min.css">
+
+    <!-- Remix Icons -->
+
+
+    <!-- lucide Icons Static Font -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/css/lucide.css">
+
+    <!-- Simple Line Icons -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/simple-line-icons.css">
+
+    <!-- Datepicker -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/datepicker.min.css">
+
+    <!-- TimePicker -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/bootstrap-timepicker.min.css">
+
+    <!-- Select Plugin -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/select2.min.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,200,0,0" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hint.css/2.7.0/hint.css" integrity="sha512-dIMp2xDMSfWDPg7lvq1y86iBm48LsOhOga05oKHPm0YYhSfG8fhu7xr4evU0+egi5hQ5BSQYeEmw9wiOvlrSRA==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+
+    <!-- Template CSS -->
+    <link type="text/css" rel="stylesheet" media="all" href="https://altab.flowdo.net/css/main.css?v=92469098">
+
+    <title>لوحة البيانات</title>
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage"
+        content="https://altab.flowdo.net/user-uploads/favicon/6823163ef3557a2c287cd16b625019cb.png">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="csrf-token" content="DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap" />
+
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/full-calendar/main.min.css">
+    <style>
+        .h-200 {
+            max-height: 340px;
+            overflow-y: auto;
+        }
+
+        .dashboard-settings {
+            width: 600px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-settings {
+                width: 300px;
+            }
+        }
+
+        .fc-list-event-graphic {
+            display: none;
+        }
+
+        .fc .fc-list-event:hover td {
+            background-color: #fff !important;
+            color: #000 !important;
+        }
+
+        .left-3 {
+            margin-right: -22px;
+        }
+
+        .clockin-right {
+            margin-right: -10px;
+        }
+
+        .week-pagination li {
+            margin-right: 5px;
+            z-index: 1;
+        }
+
+        .week-pagination li a {
+            border-radius: 50%;
+            padding: 2px 6px !important;
+            font-size: 11px !important;
+        }
+
+        .week-pagination li.page-item:first-child .page-link {
+            border-top-left-radius: 50%;
+            border-bottom-left-radius: 50%;
+        }
+
+        .week-pagination li.page-item:last-child .page-link {
+            border-top-right-radius: 50%;
+            border-bottom-right-radius: 50%;
+        }
+    </style>
+
+    <style>
+        :root {
+            --fc-border-color: #E8EEF3;
+            --fc-button-text-color: #99A5B5;
+            --fc-button-border-color: #99A5B5;
+            --fc-button-bg-color: #ffffff;
+            --fc-button-active-bg-color: #171f29;
+            --fc-today-bg-color: #f2f4f7;
+        }
+
+        .fc a[data-navlink] {
+            color: #99a5b5;
+        }
+
+        .ql-editor p {
+            line-height: 1.42;
+        }
+    </style>
+
+
+    <style>
+        :root {
+            /* For Logged in user take header color a app theme*/
+            /* For public pages use company specific header color example invoice,estimate public page*/
+            /* For all other pages use like auth use global setting header*/
+            --header_color: #00DD90;
+        }
+
+        .btn-primary,
+        .btn-primary.disabled:hover,
+        .btn-primary:disabled:hover {
+            background-color: var(--header_color) !important;
+            border: 1px solid var(--header_color) !important;
+        }
+
+        .text-primary {
+            color: var(--header_color) !important;
+        }
+
+        .bg-primary {
+            background: var(--header_color) !important;
+        }
+
+        .datepicker table tr td,
+        .datepicker table tr th {
+            font-size: 14px;
+        }
+
+        .project-header .project-menu .p-sub-menu.active:after,
+        .project-header .project-menu .p-sub-menu::after,
+        .qs-current,
+        .datepicker table tr td.active.active {
+            background: var(--header_color) !important;
+            text-shadow: none;
+            border-color: var(--header_color) !important;
+        }
+
+        .sidebar-brand-box .sidebar-brand-dropdown a.dropdown-item:hover,
+        .dropdown-item.active {
+            background-color: #ebebeb !important;
+            color: black;
+        }
+
+        .pagination .page-item.active .page-link,
+        .custom-control-input:checked~.custom-control-label::before {
+            background-color: var(--header_color) !important;
+            border-color: var(--header_color) !important;
+        }
+
+        .close-task-detail span {
+            border: 1px solid var(--header_color) !important;
+        }
+
+        .tabs .nav .nav-link.active,
+        .tabs .nav .nav-item:hover {
+            border-bottom: 3px solid var(--header_color) !important;
+        }
+
+        .sidebar-light .sidebar-menu li .nav-item:focus,
+        .sidebar-light .sidebar-menu li .nav-item:hover,
+        .sidebar-light .sidebar-menu li .accordionItemContent a:hover {
+            color: var(--header_color) !important;
+        }
+
+        .sidebar-light .accordionItem a.active {
+            color: var(--header_color) !important;
+            background-color: #00dd901a;
+        }
+
+        .sidebar-light .accordionItem a.active+span {
+            color: var(--header_color) !important;
+        }
+
+        .menu-item-count,
+        .unread-notifications-count,
+        .active-timer-count {
+            background-color: var(--header_color) !important;
+        }
+
+        .dropdown-item.active .text-dark-grey {
+            color: #ffffff;
+        }
+    </style>
+
+
+    <script src="https://altab.flowdo.net/vendor/jquery/jquery.min.js"></script>
+    <script src="https://altab.flowdo.net/vendor/jquery/modernizr.min.js"></script>
+
+
+    <script src="https://altab.flowdo.net/vendor/jquery/bootstrap-timepicker.min.js"></script>
+
+    <template id="push-template">
+        <swal-html>
+            <button
+                style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: transparent;
+                padding: 5px;
+                color: #d1d1d1;"
+                type="cancel">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#bfbfbf"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-x">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                </svg>
+            </button>
+            <div style="display:flex;align-items:center;min-width:200px">
+                <img style="margin-left:5px;padding:10px" width="60" height="60"
+                    src="https://altab.flowdo.net/img/flowdo_icon.png" />
+                <div style="display:flex; flex-direction:column">
+                    <span id="notification-title" style="font-size: 14px;font-weight: bold; margin-bottom: 5px;">إشعار
+                        جديد</span>
+                    <span id="notification-description" style="font-size: 12px;">تفاصيل الإشعار</span>
+                </div>
+            </div>
+        </swal-html>
+        <swal-param name="allowEscapeKey" value="false" />
+        <swal-param name="customClass" value='{ "popup": "my-popup" }' />
+        <swal-function-param name="didOpen" value="popup => console.log(popup)" />
+    </template>
+
+
+
+
+    <script>
+        const checkMiniSidebar = localStorage.getItem("mini-sidebar");
+
+        //    localStorage.setItem("currentURL","https://altab.flowdo.net/account/dashboard");
+        var currentURL = "https://altab.flowdo.net/account/dashboard";
+    </script>
+
+    <script>
+        lucide.createIcons()
+        window.addEventListener('load', function() {
+            lucide.createIcons();
+            console.log('Page is fully loaded, including all resources');
+        });;
+    </script>
+
+</head>
+
+
+<body id="body" class=" rtl">
+
+    <!-- Google Tag Manager (noscript) -->
+    <!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TGNTTZ8Z"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> -->
+    <!-- End Google Tag Manager (noscript) -->
+
+    <script>
+        if (checkMiniSidebar == "yes" || checkMiniSidebar == "") {
+            $('body').addClass('sidebar-toggled');
+        }
+    </script>
+
+    <!-- HEADER START -->
+    <header class="main-header clearfix bg-white" id="header">
+
+
+        <!-- NAVBAR LEFT(MOBILE MENU COLLAPSE) START-->
+        <div class="navbar-left float-right d-flex align-items-center">
+            <!-- PAGE TITLE START -->
+            <div class="page-title d-none d-lg-flex">
+                <div class="page-heading">
+                    <h2 class="mb-0 pr-3 text-dark f-18 font-weight-bold d-flex align-items-center">
+                        <span class="d-inline-block text-truncate mw-300">لوحة البيانات</span>
+                    </h2>
+                </div>
+            </div>
+            <!-- PAGE TITLE END -->
+
+            <div class="d-block d-lg-none menu-collapse cursor-pointer position-relative" onclick="openMobileMenu()">
+                <div class="mc-wrap">
+                    <div class="mcw-line"></div>
+                    <div class="mcw-line center"></div>
+                    <div class="mcw-line"></div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- NAVBAR LEFT(MOBILE MENU COLLAPSE) END-->
+        <!-- NAVBAR RIGHT(SEARCH, ADD, NOTIFICATION, LOGOUT) START-->
+        <div class="page-header-right left d-flex align-items-center justify-content-end">
+
+            <span id="timer-clock">
+            </span>
+
+
+
+
+
+
+            <ul>
+                <!-- Chat START -->
+                <li data-toggle="tooltip" data-placement="top" title="المحادثات" class="d-none d-sm-block">
+                    <div class="d-flex align-items-center">
+                        <a href="messages.html" class="d-block header-icon-box">
+                            <i class="bi bi-chat-right-text f-16 text-dark-grey"></i>
+                        </a>
+                    </div>
+                </li>
+                <!-- Chat END -->
+                <!-- SEARCH START -->
+                <li data-toggle="tooltip" data-placement="top" title="يبحث" class="d-none d-sm-block">
+                    <div class="d-flex align-items-center">
+                        <a href="javascript:;" class="d-block header-icon-box open-search">
+                            <i class="bi bi-search f-16 text-dark-grey"></i>
+                        </a>
+                    </div>
+                </li>
+                <!-- SEARCH END -->
+                <!-- Sticky Note START -->
+                <li data-toggle="tooltip" data-placement="top" title="الملاحظات" class="d-none d-sm-block">
+                    <div class="d-flex align-items-center">
+                        <a href="sticky-notes.html" class="d-block header-icon-box openRightModal">
+                            <i class="bi bi-sticky f-16 text-dark-grey"></i>
+                        </a>
+                    </div>
+                </li>
+                <!-- Sticky Note END -->
+
+
+                <!-- START TIMER -->
+                <li data-toggle="tooltip" data-placement="top" title="بدء المؤقت">
+                    <div class="add_box dropdown">
+                        <a class="d-block dropdown-toggle header-icon-box" type="link" id="show-active-timer"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="bi bi-stopwatch f-16 text-dark-grey"></i>
+                            <span class="badge badge-primary active-timer-count position-absolute d-none">0</span>
+                        </a>
+                        <!-- DROPDOWN - INFORMATION -->
+                        <div class="dropdown-menu dropdown-menu-right" id="active-timer-list"
+                            aria-labelledby="dropdownMenuLink" tabindex="0">
+                            <a class="dropdown-item text-primary f-w-500" href="javascript:;" id="start-timer-modal">
+                                <i class="bi bi-play mr-2"></i>
+                                بدء المؤقت </a>
+                        </div>
+                    </div>
+                </li>
+                <!-- START TIMER END -->
+
+                <!-- ADD START -->
+                <li data-toggle="tooltip" data-placement="top" title="إضافة">
+                    <div class="add_box dropdown">
+                        <a class="d-block dropdown-toggle header-icon-box" type="link" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="bi bi-plus-circle f-16 text-dark-grey"></i>
+                        </a>
+                        <!-- DROPDOWN - INFORMATION -->
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink"
+                            tabindex="0">
+                            <a class="dropdown-item f-14 text-dark openRightModal" href="projects.create.html">
+                                <i class="bi bi-plus-square f-w-500 mr-2 f-11"></i>
+                                مشروع جديد </a>
+
+                            <a class="dropdown-item f-14 text-dark openRightModal" href="tasks.create.html">
+                                <i class="bu bi-plus-square f-w-500 mr-2 f-11"></i>
+                                إضافة مهمة </a>
+
+                            <a class="dropdown-item f-14 text-dark openRightModal" href="client.create.html">
+                                <i class="bi bi-plus-square f-w-500 mr-2 f-11"></i>
+                                إضافة عميل </a>
+
+                            <a class="dropdown-item f-14 text-dark openRightModal" href="employees.create.html">
+                                <i class="bi bi-plus-square f-w-500 mr-2 f-11"></i>
+                                إضافة موظف </a>
+
+
+                        </div>
+                    </div>
+                </li>
+                <!-- ADD END -->
+
+                <!-- NOTIFICATIONS START -->
+                <li title="الإشعارات">
+                    <div class="notification_box dropdown">
+                        <a class="d-block dropdown-toggle header-icon-box show-user-notifications" type="link"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="bi bi-bell f-16 text-dark-grey"></i>
+                            <span
+                                class="badge badge-primary unread-notifications-count active-timer-count position-absolute">3</span>
+                        </a>
+                        <!-- DROPDOWN - INFORMATION -->
+                        <div class="dropdown-menu dropdown-menu-right notification-dropdown border-0 shadow-lg py-0 bg-additional-grey"
+                            tabindex="0">
+                            <div
+                                class="d-flex px-3 justify-content-between align-items-center border-bottom-grey py-1 bg-white">
+                                <div class="___class_+?50___">
+                                    <p class="f-14 mb-0 text-dark f-w-500">الإشعارات</p>
+                                </div>
+                                <div class="f-12 ">
+                                    <a href="javascript:;" class="text-dark-grey mark-notification-read">ضع إشارة
+                                        مقروء</a> |
+                                    <a href="https://altab.flowdo.net/account/all-notifications"
+                                        class="text-dark-grey">عرض الكل</a>
+                                </div>
+                            </div>
+                            <div id="notification-list">
+
+                            </div>
+
+                        </div>
+                    </div>
+                </li>
+                <!-- NOTIFICATIONS END -->
+                <!-- LOGOUT START -->
+
+                <!-- LOGOUT END -->
+            </ul>
+        </div>
+        <!-- NAVBAR RIGHT(SEARCH, ADD, NOTIFICATION, LOGOUT) START-->
+    </header>
+    <!-- HEADER END -->
+
+    <form id="logout-form" action="https://altab.flowdo.net/logout" method="POST" style="display: none;">
+        <input type="hidden" name="_token" value="DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap" autocomplete="off">
+    </form>
+    <aside class="sidebar-light">
+        <!-- MOBILE CLOSE SIDEBAR PANEL START -->
+        <div class="mobile-close-sidebar-panel w-100 h-100" onclick="closeMobileMenu()" id="mobile_close_panel">
+        </div>
+        <!-- MOBILE CLOSE SIDEBAR PANEL END -->
+
+        <a id="sidebarToggle" class="text-lightest sidebarToggleBtn" href="javascript:;" style="z-index: 100;"><span
+                class="material-symbols-rounded">keyboard_arrow_left</span></a>
+
+        <!-- MAIN SIDEBAR START -->
+        <div>
+            <div class="main-sidebar d-flex flex-column align-items-center justify-content-between"
+                id="mobile_menu_collapse">
+                <!-- SIDEBAR BRAND START -->
+                <div class="mt-4 mb-3 d-flex justify-content-center">
+                    <img src="https://altab.flowdo.net/user-uploads/app-logo/713a8c95c7cd38a61fc5092dce631cac.png"
+                        height="40" width="40" style="width:40px;height:40px;border-radius:12px">
+                    <!-- <span class="avatar-dot"></span> -->
+                </div>
+                <!-- SIDEBAR BRAND END -->
+
+                <!-- SIDEBAR MENU START -->
+                <div class="sidebar-menu  h-100 w-100" id="sideMenuScroll">
+                    <!-- WORKSUITESAAS -->
+                    <ul>
+                        <!-- NAV ITEM - DASHBOARD COLLAPSE MENU-->
+                        <li class="accordionItem closeIt">
+
+                            <div class="d-flex flex-column justify-content-center align-items-center my-2">
+                                <a class="nav-item text-lightest f-15 sidebar-text-color" href="dashboard.html">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+                                        fill="none" class="" viewBox="0 0 24 24">
+                                        <path
+                                            d="M21.5 10.9V4.1C21.5 2.6 20.86 2 19.27 2H15.23C13.64 2 13 2.6 13 4.1V10.9C13 12.4 13.64 13 15.23 13H19.27C20.86 13 21.5 12.4 21.5 10.9Z"
+                                            fill="currentColor" />
+                                        <path
+                                            d="M11 13.1V19.9C11 21.4 10.36 22 8.77 22H4.73C3.14 22 2.5 21.4 2.5 19.9V13.1C2.5 11.6 3.14 11 4.73 11H8.77C10.36 11 11 11.6 11 13.1Z"
+                                            fill="currentColor" />
+                                        <path opacity="0.4"
+                                            d="M21.5 19.9V17.1C21.5 15.6 20.86 15 19.27 15H15.23C13.64 15 13 15.6 13 17.1V19.9C13 21.4 13.64 22 15.23 22H19.27C20.86 22 21.5 21.4 21.5 19.9Z"
+                                            fill="currentColor" />
+                                        <path opacity="0.4"
+                                            d="M11 6.9V4.1C11 2.6 10.36 2 8.77 2H4.73C3.14 2 2.5 2.6 2.5 4.1V6.9C2.5 8.4 3.14 9 4.73 9H8.77C10.36 9 11 8.4 11 6.9Z"
+                                            fill="currentColor" />
+                                    </svg>
+
+                                </a>
+                                <span class="f-10">اللوحة</span>
+                            </div>
+
+
+                        </li>
+
+                        <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
+                        <li class="accordionItem closeIt">
+
+                            <div class="d-flex flex-column justify-content-center align-items-center my-2">
+                                <a class="nav-item text-lightest f-15 sidebar-text-color" href="clients.html">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+                                        fill="none" class="" viewBox="0 0 24 24">
+                                        <path opacity="0.4"
+                                            d="M11.5 7.41V22H19.92C21.08 22 22.03 21.07 22.03 19.93V5.09C22.03 2.47 20.07 1.28 17.68 2.45L13.25 4.64C12.29 5.11 11.5 6.36 11.5 7.41Z"
+                                            fill="currentColor" />
+                                        <path
+                                            d="M2 15.05V19.5C2 20.88 3.12 22 4.5 22H11.5V10.42L11.03 10.52L6.99 11.42L6.51 11.53L4.47 11.99C3.98 12.09 3.53 12.26 3.14 12.51C3.14 12.52 3.13 12.52 3.13 12.52C3.03 12.59 2.93 12.67 2.84 12.76C2.38 13.22 2.08 13.89 2.01 14.87C2.01 14.93 2 14.99 2 15.05Z"
+                                            fill="currentColor" />
+                                    </svg>
+
+                                </a>
+                                <span class="f-10">العملاء</span>
+                            </div>
+
+
+                        </li>
+
+
+
+                        <!--         <li class="accordionItem closeIt">
+
+            <div class="d-flex flex-column justify-content-center align-items-center my-2">
+        <a class="nav-item text-lightest f-15 sidebar-text-color" href="https://altab.flowdo.net/account/clients" >
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none"
+                     class="" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd"
+                      d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z" />
+                <path
+                    d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z" />
+                </svg>
+
+        </a>
+        <span class="f-10">العملاء</span>
+        </div>
+
+
+</li>
+     -->
+
+                        <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
+                        <!-- NAV ITEM - HR COLLAPASE MENU -->
+
+                        <!-- NAV ITEM - WORK COLLAPASE MENU -->
+                        <li class="accordionItem closeIt">
+
+                            <div class="d-flex flex-column justify-content-center align-items-center my-2">
+                                <a class="nav-item text-lightest f-15 sidebar-text-color" href="projects.html">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+                                        fill="none" class="" viewBox="0 0 24 24">
+                                        <path
+                                            d="M13.3111 14.75H5.03356C3.36523 14.75 2.30189 12.9625 3.10856 11.4958L5.24439 7.60911L7.24273 3.96995C8.07689 2.45745 10.2586 2.45745 11.0927 3.96995L13.1002 7.60911L14.0627 9.35995L15.2361 11.4958C16.0427 12.9625 14.9794 14.75 13.3111 14.75Z"
+                                            fill="currentColor" />
+                                        <path fill-opacity="0.3"
+                                            d="M21.1667 15.2083C21.1667 18.4992 18.4992 21.1667 15.2083 21.1667C11.9175 21.1667 9.25 18.4992 9.25 15.2083C9.25 15.0525 9.25917 14.9058 9.26833 14.75H13.3108C14.9792 14.75 16.0425 12.9625 15.2358 11.4958L14.0625 9.36C14.4292 9.28666 14.8142 9.25 15.2083 9.25C18.4992 9.25 21.1667 11.9175 21.1667 15.2083Z"
+                                            fill="currentColor" />
+                                    </svg>
+
+                                </a>
+                                <span class="f-10">المشاريع</span>
+                            </div>
+
+
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="sidebar-brand-box dropdown d-flex flex-column align-items-center cursor-pointer my-4 ">
+                    <li class="accordionItem closeIt">
+
+                        <div class="d-flex flex-column justify-content-center align-items-center my-2">
+                            <a class="nav-item text-lightest f-15 sidebar-text-color"
+                                href="settings/company-settings.html">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none"
+                                    class="" viewBox="0 0 24 24">
+                                    <path fill-opacity="0.3" fill="currentColor"
+                                        d="M2 12.947v-1.771c0-1.047.85-1.913 1.899-1.913 1.81 0 2.549-1.288 1.64-2.868a1.919 1.919 0 0 1 .699-2.607l1.729-.996c.79-.474 1.81-.192 2.279.603l.11.192c.9 1.58 2.379 1.58 3.288 0l.11-.192c.47-.795 1.49-1.077 2.279-.603l1.73.996a1.92 1.92 0 0 1 .699 2.607c-.91 1.58-.17 2.868 1.639 2.868 1.04 0 1.899.856 1.899 1.912v1.772c0 1.047-.85 1.912-1.9 1.912-1.808 0-2.548 1.288-1.638 2.869.52.915.21 2.083-.7 2.606l-1.729.997c-.79.473-1.81.191-2.279-.604l-.11-.191c-.9-1.58-2.379-1.58-3.288 0l-.11.19c-.47.796-1.49 1.078-2.279.605l-1.73-.997a1.919 1.919 0 0 1-.699-2.606c.91-1.58.17-2.869-1.639-2.869A1.911 1.911 0 0 1 2 12.947Z" />
+                                    <path fill="currentColor"
+                                        d="M11.995 15.332c1.794 0 3.248-1.464 3.248-3.27 0-1.807-1.454-3.272-3.248-3.272-1.794 0-3.248 1.465-3.248 3.271 0 1.807 1.454 3.271 3.248 3.271Z" />
+                                </svg>
+
+                            </a>
+                            <span class="f-10">إعدادات</span>
+                        </div>
+                    </li>
+                    <div class="dropdown-toggle sidebar-brand d-flex align-items-center justify-content-between  w-100"
+                        type="link" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <div class="sidebar-brand-logo"
+                            style="border: 2px solid transparent;outline: 2px solid var(--header_color);">
+                            <img src="https://altab.flowdo.net/user-uploads/avatar/ar/13.png" height="40"
+                                width="40" style="width:34px;height:35px">
+
+                        </div>
+                    </div>
+                    <div class="dropdown-menu dropdown-menu-right sidebar-brand-dropdown ml-3"
+                        aria-labelledby="dropdownMenuLink" tabindex="0">
+                        <div class="d-flex justify-content-between align-items-center profile-box">
+                            <a href="employees.html">
+                                <div class="profileInfo d-flex align-items-center mr-1 flex-wrap">
+                                    <div class="profileImg mr-2">
+                                        <img class="h-100"
+                                            src="https://altab.flowdo.net/user-uploads/avatar/ar/13.png"
+                                            alt="محمد فالح العتيبي">
+                                    </div>
+                                    <div class="ProfileData">
+                                        <h3 class="f-15 f-w-500 text-dark" data-placement="bottom"
+                                            data-toggle="tooltip" data-original-title="محمد فالح العتيبي">محمد فالح
+                                            العتيبي</h3>
+                                        <p class="mb-0 f-12 text-dark-grey"></p>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="settings/profile-settings.html" data-toggle="tooltip"
+                                data-original-title=" الملف الشخصي">
+                                <i class="side-icon bi bi-pencil-square"></i>
+                            </a>
+                        </div>
+                        <a class="dropdown-item d-flex justify-content-between align-items-center f-15 text-dark invite-member"
+                            href="javascript:;">
+                            <span>إرسال دعوة لتسجيل الدخول في بوابة مؤسسة الطيب الأفضل للتجارة</span>
+                            <i class="side-icon bi bi-person-plus"></i>
+                        </a>
+                        <a class="dropdown-item d-flex justify-content-between align-items-center f-15 text-dark"
+                            href="javascript:;">
+                            <label for="dark-theme-toggle">الوضع الداكن</label>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="dark-theme-toggle">
+                                <label class="custom-control-label f-14" for="dark-theme-toggle"></label>
+                            </div>
+                        </a>
+                        <a class="dropdown-item d-flex justify-content-between align-items-center f-15 text-dark"
+                            href="https://altab.flowdo.net/logout"
+                            onclick="event.preventDefault();
+                document.getElementById('logout-form').submit();">
+                            تسجيل خروج <i class="side-icon bi bi-power"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="main-sidebar side-panel" style="z-index: 2;" id="mobile_menu_collapse2">
+                <div class="sidebar-menu " id="sideMenuScroll">
+                    <ul>
+                        <script>
+                            var notSettingPage = true;
+                        </script>
+                        <div class="d-flex justify-content-between mb-3 mt-3"
+                            style="padding: 11px 15px 15px 15px;border-bottom: 1px solid #e8eef3; ">
+                            <span class="f-18 font-weight-bold">لوحة البيانات</span>
+                        </div>
+                        <li class="accordionItem closeIt module-dashboard">
+                            <a class="nav-item text-lightest f-13 sidebar-text-color" href="dashboard.html"
+                                title="لوحة البيانات الخاصة">
+                                <span class="pl-3">لوحة البيانات الخاصة</span>
+                            </a>
+                        </li>
+                        <li class="accordionItem closeIt module-dashboard">
+
+                            <a class="nav-item text-lightest f-13 sidebar-text-color" href="dashboard-advanced.html"
+                                title="لوحة البيانات المتقدمة">
+                                <span class="pl-3">لوحة البيانات المتقدمة</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="body-wrapper clearfix">
+            <section class="main-container bg-white mb-5 mb-sm-0" id="fullscreen">
+
+                <div class="preloader-container d-none">
+
+
+                </div>
+                <div class="page-title d-block d-lg-none">
+                    <div class="page-heading">
+                        <h2 class="mb-0 pr-3 text-dark f-18 font-weight-bold d-flex align-items-center">
+                            <span class="d-inline-block text-truncate mw-300">لوحة البيانات</span>
+                        </h2>
+                    </div>
+                </div>
+                <div class="px-4 py-2 border-top-0 emp-dashboard">
+                <div class="d-lg-flex d-md-flex d-block py-2 pb-2 align-items-center">
+                        <div class="ph-item">
+                            <h3 class="heading-h3 mb-0 f-21 text-capitalize font-weight-bold">مرحباً محمد فالح العتيبي
+                            </h3>
+                        </div>
+                        <!-- WELOCOME NAME END -->
+
+                        <!-- CLOCK IN CLOCK OUT START -->
+                        <div class="ml-auto d-flex flex-row-reverse clock-in-out mb-3 mb-lg-0 mb-md-0 m mt-4 mt-lg-0 mt-md-0 justify-content-between ph-item"
+                            style="direction: ltr;">
+                            <p
+                                class="mb-0 px-4 text-lg-right text-md-right f-18 font-weight-bold text-dark-grey d-grid align-items-center">
+                                <input type="hidden" id="current-latitude" name="current_latitude">
+                                <input type="hidden" id="current-longitude" name="current_longitude">
+
+                                <span id="dashboard-clock">09:28 م</span><span
+                                    class="f-10 font-weight-normal">الاثنين</span>
+
+                            </p>
+
+                            <span class="bg-white p-20 rounded b-shadow-4">لا يمكنك تسجيل الحضور</span>
+
+
+
+                            <div class="private-dash-settings d-flex align-self-center">
+                                <form method="POST" id="privateDashboardWidgetForm" autocomplete="off">
+                                    <input type="search" class="autocomplete-password"
+                                        style="opacity: 0;position: absolute;">
+                                    <input type="password" class="autocomplete-password"
+                                        style="opacity: 0;position: absolute;">
+                                    <input type="email" name="f_email" class="autocomplete-password" readonly
+                                        style="opacity: 0;position: absolute;">
+                                    <input type="text" name="f_slack_username" class="autocomplete-password"
+                                        readonly style="opacity: 0;position: absolute;">
+
+
+
+                                    <input type="hidden" id="redirect_url" name="redirect_url" value="">
+
+                                    <input type="hidden" name="_token"
+                                        value="DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap" autocomplete="off">
+
+                                    <div class="dropdown keep-open">
+                                        <a class="d-flex align-items-center justify-content-center dropdown-toggle pr-4 text-dark left-3"
+                                            type="link" id="dropdownMenuLink" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <!-- <i class="fa fa-cog" data-original-title="تخصيص لوحة البيانات" data-toggle="tooltip"></i> -->
+                                            <i class="material-symbols-rounded"
+                                                data-original-title="تخصيص لوحة البيانات"
+                                                data-toggle="tooltip">tune</i>
+                                        </a>
+                                        <!-- Dropdown - User Information -->
+                                        <ul class="dropdown-menu dropdown-menu-right dashboard-settings p-20"
+                                            aria-labelledby="dropdownMenuLink" tabindex="0">
+                                            <li class="border-bottom mb-3">
+                                                <h4 class="heading-h3">تخصيص لوحة البيانات</h4>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="profile" name="profile" value="true" checked
+                                                        type="checkbox">
+                                                    <label for="profile">الملف التعريفي </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="shift_schedule" name="shift_schedule" value="true"
+                                                        checked type="checkbox">
+                                                    <label for="shift_schedule">جدول الدوام </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="birthday" name="birthday" value="true" checked
+                                                        type="checkbox">
+                                                    <label for="birthday">أيام الميلاد </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="notices" name="notices" value="true" checked
+                                                        type="checkbox">
+                                                    <label for="notices">التعميمات </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="tasks" name="tasks" value="true" checked
+                                                        type="checkbox">
+                                                    <label for="tasks">المهام </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="projects" name="projects" value="true" checked
+                                                        type="checkbox">
+                                                    <label for="projects">المشاريع </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="my_task" name="my_task" value="true" checked
+                                                        type="checkbox">
+                                                    <label for="my_task">مهامي </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="my_calender" name="my_calender" value="true" checked
+                                                        type="checkbox">
+                                                    <label for="my_calender">تقويمي </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="week_timelog" name="week_timelog" value="true"
+                                                        checked type="checkbox">
+                                                    <label for="week_timelog">أيام العمل </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="leave" name="leave" value="true" checked
+                                                        type="checkbox">
+                                                    <label for="leave">إجازات اليوم </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="lead" name="lead" value="true" checked
+                                                        type="checkbox">
+                                                    <label for="lead">العملاء المحتملون </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="work_from_home" name="work_from_home" value="true"
+                                                        checked type="checkbox">
+                                                    <label for="work_from_home">يعملون من المنزل </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="appreciation" name="appreciation" value="true"
+                                                        checked type="checkbox">
+                                                    <label for="appreciation">الجوائز </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="work_anniversary" name="work_anniversary"
+                                                        value="true" checked type="checkbox">
+                                                    <label for="work_anniversary">مدة الخدمة </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="ticket" name="ticket" value="true" checked
+                                                        type="checkbox">
+                                                    <label for="ticket">تذاكر الدعم </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="notice_period_duration" name="notice_period_duration"
+                                                        value="true" checked type="checkbox">
+                                                    <label for="notice_period_duration">موظفون في فترة الإخطار </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="probation_date" name="probation_date" value="true"
+                                                        checked type="checkbox">
+                                                    <label for="probation_date">موظفون في فترة الاختبار </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="contract_date" name="contract_date" value="true"
+                                                        checked type="checkbox">
+                                                    <label for="contract_date">العقود </label>
+                                                </div>
+                                            </li>
+
+                                            <li class="mb-2 float-left w-50 ">
+                                                <div class="checkbox checkbox-info ">
+                                                    <input id="internship_date" name="internship_date" value="true"
+                                                        checked type="checkbox">
+                                                    <label for="internship_date">تدريب الموظفين </label>
+                                                </div>
+                                            </li>
+                                            <li class="mb-2 float-left w-50 height-35"></li>
+                                            <li class="float-none w-100">
+                                                <button type="button" class="btn-primary rounded f-14 p-2"
+                                                    id="save-dashboard-widget">
+                                                    <i class="fa fa-check mr-1"></i>
+                                                    حفظ
+                                                </button>
+
+                                                <input type="search" class="autocomplete-password"
+                                                    style="opacity: 0;position: absolute;">
+                                                <input type="password" class="autocomplete-password"
+                                                    style="opacity: 0;position: absolute;">
+                                                <input type="email" name="f_email" class="autocomplete-password"
+                                                    readonly style="opacity: 0;position: absolute;">
+                                                <input type="text" name="f_slack_username"
+                                                    class="autocomplete-password" readonly
+                                                    style="opacity: 0;position: absolute;">
+
+
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- CLOCK IN CLOCK OUT END -->
+                    </div>
+                    <!-- WELOCOME END -->
+                    <!-- EMPLOYEE DASHBOARD DETAIL START -->
+                    <div class="row emp-dash-detail">
+                        <!-- EMP DASHBOARD INFO NOTICES START -->
+                        <div class="col-xl-5 col-lg-12 col-md-12 e-d-info-notices">
+                            <div class="row">
+                                <!-- EMP DASHBOARD INFO START -->
+                                <div class="col-md-12">
+                                    <div class="card border-grey border-1 mb-3 e-d-info ph-item">
+                                        <a href="https://altab.flowdo.net/account/employees/2614">
+                                            <div class="card-horizontal align-items-center">
+                                                <div class="card-img">
+                                                    <img class=""
+                                                        src=" https://altab.flowdo.net/user-uploads/avatar/ar/13.png"
+                                                        alt="Card image">
+                                                </div>
+                                                <div class="card-body border-0 pl-0">
+                                                    <h4 class="card-title text-dark f-18 f-w-500 mb-0">محمد فالح
+                                                        العتيبي
+                                                    </h4>
+                                                    <p class="f-14 font-weight-normal text-dark-grey mb-2">
+                                                        --</p>
+                                                    <p class="card-text f-12 text-lightest"> الرقم الوظيفي :
+                                                        EMP-1</p>
+                                                </div>
+                                            </div>
+                                        </a>
+
+
+
+                                        <div class="card-footer bg-white border-top-grey py-3">
+                                            <div class="d-flex flex-wrap justify-content-between">
+                                                <span>
+                                                    <label class="f-12 text-dark-grey mb-12 text-capitalize"
+                                                        for="usr">
+                                                        مهامي </label>
+                                                    <p class="mb-0 f-18 f-w-500">
+                                                        <a href="https://altab.flowdo.net/account/tasks?assignee=me"
+                                                            class="text-dark">
+                                                            1
+                                                        </a>
+                                                    </p>
+                                                </span>
+                                                <span>
+                                                    <label class="f-12 text-dark-grey mb-12 text-capitalize"
+                                                        for="usr">
+                                                        مشاريعي </label>
+                                                    <p class="mb-0 f-18 f-w-500">
+                                                        <a href="https://altab.flowdo.net/account/projects?assignee=me&amp;status=all"
+                                                            class="text-dark">1</a>
+                                                    </p>
+                                                </span>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <!-- EMP DASHBOARD INFO END -->
+
+
+
+
+                                <!-- EMP DASHBOARD BIRTHDAY START -->
+                                <div class="col-sm-12">
+                                    <div class="card bg-white border-grey border-1 ph-item e-d-info mb-3">
+
+                                        <div
+                                            class="card-header bg-white border-bottom text-capitalize d-flex justify-content-between pt-4">
+                                            <h4 class="f-18 f-w-500 mb-0">أيام الميلاد</h4>
+
+
+
+                                        </div>
+
+                                        <div class="card-body p-0 h-200">
+                                            <table class="table" id="example">
+                                                <tbody>
+                                                    <tr>
+                                                        <td colspan="3" class="shadow-none">
+                                                            <div
+                                                                class="align-items-center d-flex flex-column text-lightest p-20 w-100">
+                                                                <i class="fa fa-birthday-cake f-21 w-100"></i>
+
+                                                                <div class="f-15 mt-4">
+                                                                    - لا تتوفر بيانات لعرضها -
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- EMP DASHBOARD BIRTHDAY END -->
+
+                                <!-- EMP DASHBOARD APPRECIATION START -->
+                                <div class="col-sm-12">
+                                    <div class="card bg-white border-grey border-1 ph-item e-d-info mb-3">
+
+                                        <div
+                                            class="card-header bg-white border-bottom text-capitalize d-flex justify-content-between pt-4">
+                                            <h4 class="f-18 f-w-500 mb-0">جوائز الموظفين</h4>
+
+
+
+                                        </div>
+
+                                        <div class="card-body p-0 h-200">
+                                            <table class="table appreciation-table" id="example">
+                                                <tbody>
+                                                    <tr>
+                                                        <td colspan="3" class="shadow-none">
+                                                            <div
+                                                                class="align-items-center d-flex flex-column text-lightest p-20 w-100">
+                                                                <i class="fa fa-award f-21 w-100"></i>
+
+                                                                <div class="f-15 mt-4">
+                                                                    - لا تتوفر بيانات لعرضها -
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="card bg-white border-grey border-1 ph-item e-d-info mb-3">
+
+                                        <div
+                                            class="card-header bg-white border-bottom text-capitalize d-flex justify-content-between pt-4">
+                                            <h4 class="f-18 f-w-500 mb-0">إجازات اليوم</h4>
+                                        </div>
+                                        <div class="card-body p-0 h-200">
+                                            <table class="table" id="example">
+                                                <tbody>
+                                                    <tr>
+                                                        <td colspan="3" class="shadow-none">
+                                                            <div
+                                                                class="align-items-center d-flex flex-column text-lightest p-20 w-100">
+                                                                <i class="fa fa-plane-departure f-21 w-100"></i>
+
+                                                                <div class="f-15 mt-4">
+                                                                    - لا تتوفر بيانات لعرضها -
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="card bg-white border-grey border-1 ph-item e-d-info">
+                                        <div
+                                            class="card-header bg-white border-bottom text-capitalize d-flex justify-content-between pt-4">
+                                            <h4 class="f-18 f-w-500 mb-0">ذكرى انضمام الموظفين</h4>
+                                        </div>
+                                        <div class="card-body p-0 h-200">
+                                            <table class="table" id="example">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="pl-20">
+                                                            <div class="media align-items-center mw-250">
+
+                                                                <a href="https://altab.flowdo.net/account/employees/2614"
+                                                                    class="position-relative ">
+                                                                    <img src="https://altab.flowdo.net/user-uploads/avatar/ar/13.png"
+                                                                        class="mr-2 taskEmployeeImg rounded-circle"
+                                                                        alt="محمد فالح العتيبي"
+                                                                        title="محمد فالح العتيبي &lt;span class=&quot;ml-2 badge badge-secondary pr-1&quot; style=&quot;padding-right:0.25rem !important;&quot;&gt;هذا أنت&lt;/span&gt;">
+                                                                </a>
+                                                                <div class="media-body active">
+
+                                                                    <h5 class="mb-0 f-12">
+                                                                        <a href="https://altab.flowdo.net/account/employees/2614"
+                                                                            class="text-darkest-grey ">محمد فالح
+                                                                            العتيبي <span
+                                                                                class="ml-2 badge badge-secondary pr-1"
+                                                                                style="padding-right:0.25rem !important;">هذا
+                                                                                أنت</span></a>
+                                                                    </h5>
+                                                                    <p class="mb-0 f-12 text-dark-grey">
+
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="pr-20" align="right">
+                                                            <span class="badge badge-secondary p-2">انضم اليوم</span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 mt-3">
+                                    <div class="card bg-white border-grey border-1 ph-item e-d-info mb-3">
+                                        <div
+                                            class="card-header bg-white border-bottom text-capitalize d-flex justify-content-between pt-4">
+                                            <h4 class="f-18 f-w-500 mb-0">موظفون تحت التدريب</h4>
+                                        </div>
+                                        <div class="card-body p-0 ">
+                                            <table class="table" id="example">
+                                                <tbody>
+                                                    <span class="shadow-none">
+                                                        <div
+                                                            class="align-items-center d-flex flex-column text-lightest p-20 w-100">
+                                                            <i class="fa fa-list f-21 w-100"></i>
+
+                                                            <div class="f-15 mt-4">
+                                                                - لا تتوفر بيانات لعرضها -
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 mt-2">
+                                    <div class="card bg-white border-grey border-1 ph-item e-d-info mb-3">
+                                        <div
+                                            class="card-header bg-white border-bottom text-capitalize d-flex justify-content-between pt-4">
+                                            <h4 class="f-18 f-w-500 mb-0">موظفون في فترة الإخطار</h4>
+                                        </div>
+                                        <div class="card-body p-0 ">
+                                            <table class="table" id="example">
+                                                <tbody>
+                                                    <span class="shadow-none">
+                                                        <div
+                                                            class="align-items-center d-flex flex-column text-lightest p-20 w-100">
+                                                            <i class="fa fa-list f-21 w-100"></i>
+
+                                                            <div class="f-15 mt-4">
+                                                                - لا تتوفر بيانات لعرضها -
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 mt-3">
+                                    <div class="card bg-white border-grey border-1 ph-item e-d-info mb-3">
+                                        <div
+                                            class="card-header bg-white border-bottom text-capitalize d-flex justify-content-between pt-4">
+                                            <h4 class="f-18 f-w-500 mb-0">تدريب الموظفين</h4>
+                                        </div>
+                                        <div class="card-body p-0 ">
+                                            <table class="table" id="example">
+                                                <tbody>
+                                                    <span class="shadow-none">
+                                                        <div
+                                                            class="align-items-center d-flex flex-column text-lightest p-20 w-100">
+                                                            <i class="fa fa-list f-21 w-100"></i>
+
+                                                            <div class="f-15 mt-4">
+                                                                - لا تتوفر بيانات لعرضها -
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-xl-7 col-lg-12 col-md-12 e-d-tasks-projects-events">
+                            <div class="row mb-3 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
+                                <div class="col-md-6 mb-3">
+                                    <div
+                                        class="bg-white p-20 rounded border-grey border-1 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0 ph-item">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">المهام</h5>
+                                            <div class="d-flex">
+                                                <a href="https://altab.flowdo.net/account/tasks?assignee=me">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        1<span class="f-12 font-weight-normal text-lightest">
+                                                            غير منجزة </span>
+                                                    </p>
+                                                </a>
+                                                <a
+                                                    href="https://altab.flowdo.net/account/tasks?assignee=me&amp;overdue=yes">
+                                                    <p class="mb-0 f-21 font-weight-bold text-red d-grid">0<span
+                                                            class="f-12 font-weight-normal text-lightest">متأخرة</span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <!-- <i class="fa fa-list text-lightest f-27"></i> -->
+                                            <span class="material-symbols-rounded text-lightest"
+                                                style="font-size: 45px;font-weight:200">task_alt</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div
+                                        class="bg-white p-20 rounded border-grey border-1 d-flex justify-content-between align-items-center mt-3 mt-lg-0 mt-md-0 ph-item">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey"> المشاريع </h5>
+                                            <div class="d-flex">
+                                                <a
+                                                    href="https://altab.flowdo.net/account/projects?assignee=me&amp;status=in progress">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        1<span class="f-12 font-weight-normal text-lightest">تحت
+                                                            التنفيذ</span>
+                                                    </p>
+                                                </a>
+                                                <a
+                                                    href="https://altab.flowdo.net/account/projects?assignee=me&amp;status=overdue">
+                                                    <p class="mb-0 f-21 font-weight-bold text-red d-grid">
+                                                        1<span
+                                                            class="f-12 font-weight-normal text-lightest">متأخر</span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <span class="material-symbols-rounded text-lightest"
+                                                style="font-size: 52px;font-weight:200">layers</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-12">
+                                    <div
+                                        class="bg-white p-20 rounded border-grey border-1 d-flex justify-content-between align-items-center ph-item">
+                                        <div class="d-block text-capitalize w-100">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">أيام العمل <span
+                                                    class="badge badge-secondary ml-1 f-10">0 د هذا الاسبوع</span></h5>
+
+                                            <div id="weekly-timelogs">
+                                                <nav class="mb-3">
+                                                    <ul class="pagination pagination-sm week-pagination"
+                                                        style="position: relative;left: 10px;">
+                                                        <li class="page-item week-timelog-day active"
+                                                            data-toggle="tooltip" data-original-title="24-03-2025"
+                                                            data-date="2025-03-24">
+                                                            <a class="page-link" href="javascript:;">اث</a>
+                                                        </li>
+                                                        <li class="page-item week-timelog-day" data-toggle="tooltip"
+                                                            data-original-title="25-03-2025" data-date="2025-03-25">
+                                                            <a class="page-link" href="javascript:;">ثل</a>
+                                                        </li>
+                                                        <li class="page-item week-timelog-day" data-toggle="tooltip"
+                                                            data-original-title="26-03-2025" data-date="2025-03-26">
+                                                            <a class="page-link" href="javascript:;">أر</a>
+                                                        </li>
+                                                        <li class="page-item week-timelog-day" data-toggle="tooltip"
+                                                            data-original-title="27-03-2025" data-date="2025-03-27">
+                                                            <a class="page-link" href="javascript:;">خم</a>
+                                                        </li>
+                                                        <li class="page-item week-timelog-day" data-toggle="tooltip"
+                                                            data-original-title="28-03-2025" data-date="2025-03-28">
+                                                            <a class="page-link" href="javascript:;">ج</a>
+                                                        </li>
+                                                        <li class="page-item week-timelog-day" data-toggle="tooltip"
+                                                            data-original-title="29-03-2025" data-date="2025-03-29">
+                                                            <a class="page-link" href="javascript:;">س</a>
+                                                        </li>
+                                                        <li class="page-item week-timelog-day" data-toggle="tooltip"
+                                                            data-original-title="30-03-2025" data-date="2025-03-30">
+                                                            <a class="page-link" href="javascript:;">ح</a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                                <div class="progress" style="height: 4px;">
+                                                    <div class="progress-bar bg-primary" role="progressbar"
+                                                        style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                                                        aria-valuemax="100" data-toggle="tooltip"
+                                                        data-original-title="0 د"></div>
+
+                                                    <div class="progress-bar bg-secondary" role="progressbar"
+                                                        style="width: 100%" aria-valuenow="0" aria-valuemin="0"
+                                                        aria-valuemax="100" data-toggle="tooltip"
+                                                        data-original-title="0 د"></div>
+                                                </div>
+
+                                                <div class="d-flex justify-content-between mt-1 text-dark-grey f-12">
+                                                    <small>مدة: 0 د</small>
+                                                    <small>استراحة: 0 د</small>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-sm-12">
+                                    <div class="mb-3 e-d-info ph-item">
+                                        <div class="card bg-white border-grey border-1 ph-item"
+                                            style="height: 382px;">
+                                            <div
+                                                class="card-header bg-white border-bottom text-capitalize d-flex justify-content-between pt-4">
+                                                <h4 class="f-18 f-w-500 mb-0">تتبع المستندات</h4>
+                                            </div>
+                                            <div class="card-body p-0 h-200">
+                                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                    <li class="nav-item" style="flex:1;" role="presentation">
+                                                        <button class="nav-link w-100 active" id="today-sessions-tab"
+                                                            data-toggle="tab" data-target="#today-sessions"
+                                                            type="button" role="tab"
+                                                            aria-controls="today-sessions" aria-selected="true">أوشك
+                                                            على الانتهاء</button>
+                                                    </li>
+                                                    <li class="nav-item" style="flex:1;" role="presentation">
+                                                        <button class="nav-link w-100" id="tomorrow-sessions-tab"
+                                                            data-toggle="tab" data-target="#tomorrow-sessions"
+                                                            type="button" role="tab"
+                                                            aria-controls="tomorrow-sessions"
+                                                            aria-selected="false">منتهى</button>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content" id="myTabContent">
+                                                    <div class="mt-2 tab-pane fade show active" id="today-sessions"
+                                                        role="tabpanel" aria-labelledby="today-sessions-tab">
+                                                        <table class="table" id="example">
+                                                            <thead class="">
+                                                                <tr>
+                                                                    <th>الموظف</th>
+                                                                    <th>نوع المستند</th>
+                                                                    <th>تاريخ الانتهاء</th>
+                                                                    <th>متبقى للانتهاء</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td colspan="4" class="shadow-none">
+                                                                        <div
+                                                                            class="align-items-center d-flex flex-column text-lightest p-20 w-100">
+                                                                            <i class="fa fa-tasks f-21 w-100"></i>
+
+                                                                            <div class="f-15 mt-4">
+                                                                                - لا تتوفر بيانات لعرضها -
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="mt-2 tab-pane fade" id="tomorrow-sessions"
+                                                        role="tabpanel" aria-labelledby="tomorrow-sessions-tab">
+                                                        <table class="table" id="example">
+                                                            <thead class="">
+                                                                <tr>
+                                                                    <th>الموظف</th>
+                                                                    <th>نوع المستند</th>
+                                                                    <th>تاريخ الانتهاء</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td colspan="4" class="shadow-none">
+                                                                        <div
+                                                                            class="align-items-center d-flex flex-column text-lightest p-20 w-100">
+                                                                            <i class="fa fa-tasks f-21 w-100"></i>
+
+                                                                            <div class="f-15 mt-4">
+                                                                                - لا تتوفر بيانات لعرضها -
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="mb-3 e-d-info ph-item">
+                                        <div class="card bg-white border-grey border-1 ph-item">
+                                            <div
+                                                class="card-header bg-white border-bottom text-capitalize d-flex justify-content-between pt-4">
+                                                <h4 class="f-18 f-w-500 mb-0">مهامي</h4>
+                                            </div>
+                                            <div class="card-body p-0 h-200">
+                                                <table class="table" id="example">
+                                                    <thead class="">
+                                                        <tr>
+                                                            <th>المهمة#</th>
+                                                            <th>المهمة</th>
+                                                            <th>الحالة</th>
+                                                            <th class="text-right pr-20">تاريخ الاستحقاق</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="pl-20">
+                                                                <a href="https://altab.flowdo.net/account/tasks/6913"
+                                                                    class="openRightModal f-12 mb-1 text-darkest-grey">#1-2</a>
+                                                            </td>
+                                                            <td>
+                                                                <div class="media align-items-center">
+                                                                    <div class="media-body">
+                                                                        <h5 class="f-12 mb-1 text-darkest-grey"><a
+                                                                                href="https://altab.flowdo.net/account/tasks/6913"
+                                                                                class="openRightModal">ضبط البحث</a>
+                                                                        </h5>
+                                                                        <p class="mb-0">
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td class="pr-20">
+                                                                <i class="far fa-circle mr-1 text-yellow"
+                                                                    style="color: #d21010"></i>
+                                                                لم تبدأ
+                                                            </td>
+                                                            <td class="pr-20" align="right">
+                                                                --
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card bg-white border-grey border-1 ph-item">
+                                        <div
+                                            class="card-header bg-white border-bottom text-capitalize d-flex justify-content-between pt-4">
+                                            <h4 class="f-18 f-w-500 mb-0">تقويمي</h4>
+                                            <div class="dropdown ml-auto calendar-action">
+                                                <button id="event-btn"
+                                                    class="btn btn-lg f-14 p-0 text-lightest text-capitalize rounded  dropdown-toggle cal-event"
+                                                    type="button" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-ellipsis-h"></i>
+                                                </button>
+                                                <div id="cal-drop"
+                                                    class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-2">
+                                                    <div class="custom-control custom-checkbox cal-filter">
+                                                        <input type="checkbox" value="task"
+                                                            class="form-check-input filter-check" name="calendar[]"
+                                                            id="customCheck1">
+                                                        <label
+                                                            class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
+                                                            for="customCheck1">المهام</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body pt-2 ">
+                                            <div id="calendar"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div id="myModalDefault" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog d-flex justify-content-center align-items-center">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modelHeading">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true"class="close material-symbols-rounded">close</span></button>
+                    </div>
+                    <div class="modal-body">
+                        تنزيل ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-cancel rounded mr-3" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn-primary rounded">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- also the modal itself -->
+        <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog d-flex justify-content-center align-items-center modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modelHeading">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true"class="close material-symbols-rounded">close</span></button>
+                    </div>
+                    <div class="modal-body">
+                        تنزيل ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-cancel rounded mr-3" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn-primary rounded">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- also the modal itself -->
+        <div id="myModalXl" class="modal fade overflow-auto" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog d-flex justify-content-center align-items-center modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modelHeading">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true"class="close material-symbols-rounded">close</span></button>
+                    </div>
+                    <div class="modal-body bg-grey">
+                        تنزيل ...
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Detail Start -->
+        <div class="task-overlay w-100 h-100" id="close-task-detail-overlay"></div>
+        <div class="task-detail-panel bg-additional-grey" id="task-detail-1">
+            <a class="close-task-detail" id="close-task-detail" style="display: none;">
+                <span><span class="material-symbols-rounded">close</span></span>
+            </a>
+            <div class="p-4 t-d-inner-panel">
+                <h3 class="heading-h1 mb-0" id="right-modal-title"></h3>
+
+                <div id="right-modal-content" class="mt-4">
+
+                </div>
+            </div>
+        </div>
+        <!-- Task Detail End -->
+
+        <div id="myModalPopUpMain" class="modal fade overflow-auto" tabindex="-1" role="dialog"
+            aria-hidden="true">
+            <div class="modal-dialog d-flex justify-content-center align-items-center modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-bottom: 0px !important;">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span style="font-size: 24px; font-weight: 100;"
+                                aria-hidden="true"class="close material-symbols-rounded">close</span></button>
+                    </div>
+                    <div class="modal-body bg-white">
+                        تنزيل ...
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="myModalPopUp" class="modal fade overflow-auto" tabindex="-1" role="dialog"
+            aria-hidden="true">
+            <div class="modal-dialog d-flex justify-content-center align-items-center modal-md">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-bottom: 0px !important;">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span style="font-size: 24px; font-weight: 100;"
+                                aria-hidden="true"class="close material-symbols-rounded">close</span></button>
+                    </div>
+                    <div class="modal-body bg-white">
+                        <h3 class="text-center m-auto" style="max-width: 350px;">مرحباً بك في الإصدار الخاص من نسخة
+                            فلودو</h3>
+                        <p class="text-center mt-2">هذا الإصدار يتضمن ميزات وتحسينات متقدمة من منصة فلودو على مستوى
+                            الأدوات وتجربة الاستخدام، غير متاحة في الإصدار العام، وقد تم اختياركم خصيصاً لتجربتها،
+                            وتسعدنا ملاحظاتكم ومقترحاتكم </p>
+                        <br>
+                        <div class="d-flex p-3" style="background-color: #00dd9036; border-radius: 8px;">
+                            <img width="180" height="140"
+                                style="width: 180px; height: 140px; filter: hue-rotate(35deg);"
+                                src="https://i.ibb.co/4PRBnkm/supportdribble-removebg-preview.png" />
+                            <div>
+                                <h5>هل تحتاج للمساعدة؟</h5>
+                                <p>فريق نجاح العملاء جاهزون لمساعدتك أثناء هذه التجربة لتحقيق أقصى استفادة منها</p>
+                                <a href="mailto:support@kamel.sa" type="button" class="btn-primary rounded">اتصل
+                                    الآن</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Required Javascript -->
+            <script src="https://altab.flowdo.net/js/main.js?v=2"></script>
+            <script src="https://altab.flowdo.net/js/dropbox.js"></script>
+            <script src="https://altab.flowdo.net/js/google_drive.js"></script>
+            <script src="scrpit.js"></script>
+
+            <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs"
+                data-app-key="1q2bdfumra47iqs"></script>
+            <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBv1xULyRb7-Hj178eIEhkiJHSKenrwMv0&callback=showTable"
+                async></script>
+            <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+            <script src="https://cdn.jsdelivr.net/npm/jquery-ui-sortable@1.0.0/jquery-ui.min.js"></script>
+
+</body>
+
+</html>

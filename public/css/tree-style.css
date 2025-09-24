@@ -1,0 +1,740 @@
+.treeview {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.treeview li {
+    margin: 0;
+    padding: 5px 0;
+    position: relative;
+}
+
+.treeview li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -20px;
+    bottom: 50%;
+    width: 1px;
+    background: #ccc;
+}
+
+.treeview li::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    width: 20px;
+    height: 1px;
+    background: #ccc;
+}
+
+.treeview li:last-child::before {
+    bottom: auto;
+    height: 50%;
+}
+
+.treeview ul {
+    margin: 0;
+    padding: 0 20px 0 0;
+    list-style: none;
+    border-right: 1px solid #ccc;
+    margin-right: 2px;
+}
+
+.treeview ul li {
+    margin: 0;
+    padding: 5px 0;
+    position: relative;
+}
+
+.account-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 2px 0;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.account-item:hover {
+    background-color: #f8f9fa;
+    border-color: #adb5bd;
+}
+
+.toggle-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.toggle-icon.rotated {
+    transform: rotate(-90deg);
+}
+
+.folder-icon {
+    margin-left: 8px;
+    color: #ffd700;
+}
+
+.account-name {
+    flex: 1;
+    margin-left: 8px;
+}
+
+.collapsed {
+    display: none;
+}
+
+.expanded {
+    display: block;
+}
+
+.has-children > .account-item {
+    font-weight: 500;
+}
+
+.has-children > .account-item .folder-icon {
+    color: #ffd700;
+}
+
+.no-children > .account-item .folder-icon {
+    color: #90a4ae;
+}
+
+/* تنسيق الأزرار */
+.btn-group {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.account-item:hover .btn-group {
+    opacity: 1;
+}
+
+.btn-group .btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    margin-right: 4px;
+}
+
+/* تنسيق القائمة المنسدلة */
+.dropdown-menu {
+    min-width: 120px;
+    padding: 4px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+}
+
+.dropdown-item {
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-item i {
+    margin-left: 8px;
+    width: 16px;
+    text-align: center;
+}
+
+/* تنسيق عام للشجرة */
+.treeview {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-family: 'Cairo', sans-serif;
+    direction: rtl;
+}
+
+.treeview ul {
+    list-style: none;
+    padding-right: 20px;
+    margin: 0;
+}
+
+.treeview li {
+    margin: 5px 0;
+    position: relative;
+}
+
+.account-type {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+/* خطوط الربط بين العناصر */
+.treeview li:before {
+    content: '';
+    position: absolute;
+    right: -15px;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background-color: #e9ecef;
+}
+
+.treeview li:after {
+    content: '';
+    position: absolute;
+    right: -15px;
+    top: 20px;
+    width: 15px;
+    height: 2px;
+    background-color: #e9ecef;
+}
+
+.treeview li:last-child:before {
+    height: 20px;
+}
+
+.treeview > ul > li:before,
+.treeview > ul > li:after {
+    display: none;
+}
+
+/* تنسيق العناصر الفرعية */
+.has-children > ul {
+    margin-right: 10px;
+}
+
+.account-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.account-details {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.account-balance {
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+.account-type-label {
+    background-color: #007bff;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.8em;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+.dropdown-toggle {
+    color: #6c757d;
+    padding: 0;
+}
+
+.dropdown-toggle:hover {
+    color: #343a40;
+}
+
+.dropdown-menu {
+    min-width: 200px;
+    padding: 8px 0;
+    margin: 0;
+    font-size: 0.9em;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.dropdown-item {
+    padding: 8px 16px;
+    color: #495057;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.dropdown-item i {
+    margin-left: 8px;
+    width: 16px;
+    text-align: center;
+}
+
+.account-item:hover {
+    background-color: #f8f9fa;
+}
+
+.account-type {
+    font-weight: bold;
+}
+
+.toggle-icon {
+    transition: transform 0.3s;
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.toggle-icon.rotated {
+    transform: rotate(-90deg);
+}
+
+.folder-icon {
+    color: #ffc107;
+}
+
+.section {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.treeview ul {
+    list-style: none;
+    padding-right: 20px;
+}
+
+.treeview li {
+    margin: 5px 0;
+}
+
+.collapsed {
+    display: none;
+}
+
+/* RTL Support */
+.dropdown-menu-end {
+    right: auto;
+    left: 0;
+}
+
+.dropdown-item i {
+    margin-right: 0;
+    margin-left: 8px;
+}
+
+.list-group-item {
+    border-left: 4px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+    border-left-color: #007bff;
+    background-color: #f8f9fa;
+}
+
+.badge {
+    font-size: 0.8em;
+    padding: 5px 10px;
+}
+
+.bg-primary {
+    background-color: #007bff !important;
+}
+
+.bg-danger {
+    background-color: #dc3545 !important;
+}
+
+.dropdown {
+    position: absolute;
+    right: 0.5rem;
+    display: none;
+}
+
+.account-item:hover .dropdown {
+    display: block;
+}
+
+.expanded {
+    display: block;
+}
+
+.treeview ul ul {
+    margin-right: 20px;
+    border-right: 1px solid #dee2e6;
+    margin-top: 2px;
+    padding-right: 10px;
+}
+
+/* تنسيق خاص للمستوى الأول */
+.treeview > ul > li > .account-item {
+    margin-bottom: 2px;
+}
+
+/* تنسيق المستويات المتداخلة */
+.treeview ul ul li:last-child {
+    margin-bottom: 0;
+}
+
+/* تنسيق خاص للعناصر التي لديها أبناء */
+.treeview .has-children > .account-item:hover {
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+/* تنسيق خاص للعناصر النهائية */
+.treeview .no-children > .account-item {
+    padding-right: 24px;
+}
+
+/* تنسيق خاص للنموذج */
+.modal-content {
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-radius: 15px 15px 0 0;
+    padding: 20px;
+}
+
+.modal-body {
+    padding: 25px;
+}
+
+.form-control {
+    font-size: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #1976d2;
+    box-shadow: none;
+}
+
+.form-label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+/* أزرار النموذج */
+.btn {
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #1976d2;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #1565c0;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+}
+
+/* تنسيق الرسائل */
+.alert {
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+}
+
+/* تنسيق العناوين */
+h4 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 25px;
+}
+
+/* تحسين المظهر العام للصفحة */
+.content-body {
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* تنسيق القوائم المنسدلة */
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 12 12'%3E%3Cpath d='M6 8.5L1.5 4h9L6 8.5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 10px center;
+    background-size: 12px;
+    padding-left: 30px;
+}
+
+/* أنماط أنواع الحسابات */
+.account-type-item {
+    padding: 15px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.account-type-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.account-type-item.active {
+    background: #6366f1;
+    color: white;
+}
+
+/* أنماط قائمة الحسابات */
+.accounts-list {
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.account-row {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.account-row:hover {
+    background-color: #f8f9fa;
+}
+
+.account-row:last-child {
+    border-bottom: none;
+}
+
+.account-name {
+    flex: 1;
+    font-weight: 500;
+}
+
+.account-code {
+    margin: 0 15px;
+    color: #6b7280;
+}
+
+.badge {
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+/* تنسيق الأيقونات */
+.fas {
+    width: 20px;
+    text-align: center;
+}
+
+.tree-item {
+    position: relative;
+    padding: 5px 0;
+}
+
+.tree-item .tree-content {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tree-item .tree-content:hover {
+    background-color: #f5f5f5;
+}
+
+.tree-item .toggle-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.tree-item .toggle-icon i {
+    transition: transform 0.3s ease;
+}
+
+.tree-item.has-children > .tree-content .toggle-icon i {
+    transform: rotate(-90deg);
+}
+
+.tree-item.has-children.active > .tree-content .toggle-icon i {
+    transform: rotate(0);
+}
+
+.tree-item .folder-icon {
+    margin-right: 8px;
+    color: #ffd700;
+}
+
+.tree-item .item-name {
+    flex: 1;
+    font-size: 14px;
+    color: #333;
+}
+
+.tree-item .tree-children {
+    display: none;
+    padding-left: 28px;
+    margin-top: 5px;
+}
+
+.tree-item.active > .tree-children {
+    display: block;
+}
+
+/* خط عمودي للتفريعات */
+.tree-item .tree-children::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 30px;
+    bottom: 12px;
+    width: 2px;
+    background: #e0e0e0;
+}
+
+/* خط أفقي للعناصر الفرعية */
+.tree-item .tree-children .tree-item::before {
+    content: '';
+    position: absolute;
+    left: -18px;
+    top: 50%;
+    width: 20px;
+    height: 2px;
+    background: #e0e0e0;
+}
+
+/* تنسيق الأيقونات */
+.fa-folder {
+    color: #ffd700;
+}
+
+.fa-file {
+    color: #90a4ae;
+}
+
+/* أنماط جديدة لشجرة الحسابات */
+.tree-item {
+    list-style: none;
+    position: relative;
+    padding: 5px 0;
+}
+
+.account-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 2px 0;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.account-item:hover {
+    background-color: #f8f9fa;
+}
+
+.toggle-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.has-children > .account-item .toggle-icon.active i {
+    transform: rotate(-90deg);
+}
+
+.folder-icon {
+    margin-left: 8px;
+    color: #ffd700;
+}
+
+.account-name {
+    flex: 1;
+    margin-right: 8px;
+}
+
+.list-unstyled {
+    padding-right: 25px;
+    margin: 0;
+    position: relative;
+}
+
+.collapsed {
+    display: none;
+}
+
+.expanded {
+    display: block;
+}
+
+/* خط عمودي للتفريعات */
+.has-children > .list-unstyled::before {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 0;
+    bottom: 12px;
+    width: 2px;
+    background: #e0e0e0;
+}
+
+/* خط أفقي للعناصر الفرعية */
+.has-children > .list-unstyled > .tree-item::before {
+    content: '';
+    position: absolute;
+    right: -15px;
+    top: 20px;
+    width: 25px;
+    height: 2px;
+    background: #e0e0e0;
+}

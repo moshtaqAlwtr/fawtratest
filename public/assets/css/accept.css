@@ -1,0 +1,447 @@
+        /* تصميم الأزرار المحسن */
+        .status-btn {
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            min-width: 140px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+/* تحسينات CSS لنافذة التحويل */
+.swal2-html-container {
+    text-align: right !important;
+    direction: rtl;
+}
+
+.swal2-html-container .form-check {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.swal2-html-container .form-check:hover {
+    border-color: #4776E6;
+    background-color: #f8f9fa;
+}
+
+.swal2-html-container .form-check-input:checked ~ .form-check-label {
+    color: #4776E6;
+    font-weight: bold;
+}
+
+.swal2-html-container .form-check-input:checked {
+    background-color: #4776E6;
+    border-color: #4776E6;
+}
+
+.swal2-html-container .form-check:has(.form-check-input:checked) {
+    border-color: #4776E6;
+    background-color: #f0f7ff;
+}
+
+.swal2-html-container .alert {
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+.swal2-html-container .alert-info {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
+    color: #1976d2;
+}
+
+.swal2-html-container .alert-warning {
+    background-color: #fff8e1;
+    border-color: #ff9800;
+    color: #f57c00;
+}
+
+.swal2-html-container .input-group {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.swal2-html-container .form-control {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.swal2-html-container .form-control:focus {
+    border-color: #4776E6;
+    box-shadow: 0 0 0 0.2rem rgba(71, 118, 230, 0.25);
+}
+
+.swal2-html-container .input-group-text {
+    background-color: #f8f9fa;
+    border-color: #e9ecef;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.swal2-html-container .form-label {
+    color: #495057;
+    margin-bottom: 8px;
+}
+
+.swal2-html-container .text-muted {
+    font-size: 0.875rem;
+    margin-top: 5px;
+}
+
+/* تأثيرات انتقالية للعناصر */
+#advance_payment_section, #due_amount_display {
+    transition: all 0.3s ease;
+}
+
+/* تحسين مظهر الأزرار */
+.swal2-confirm {
+    background-color: #4776E6 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 20px !important;
+    font-weight: 600 !important;
+}
+
+.swal2-cancel {
+    background-color: #6c757d !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 20px !important;
+    font-weight: 600 !important;
+}
+
+/* تحسين مظهر العنوان */
+.swal2-title {
+    color: #2c3e50 !important;
+    font-weight: 700 !important;
+    font-size: 1.5rem !important;
+}
+
+/* تحسين الرموز */
+.swal2-html-container .fas {
+    margin-left: 5px;
+}
+
+/* إضافة تأثير تفاعلي للنماذج */
+.swal2-html-container .form-check-label {
+    cursor: pointer;
+    user-select: none;
+}
+
+.swal2-html-container .form-check-input {
+    cursor: pointer;
+}
+
+/* تحسين مظهر المنطقة النشطة */
+.swal2-html-container .row {
+    margin-bottom: 0;
+}
+
+.swal2-html-container .col-12 {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+        .status-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .status-btn:hover::before {
+            left: 100%;
+        }
+
+        .status-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .status-btn:active {
+            transform: translateY(0);
+        }
+
+        /* أزرار حالة "تحت المراجعة" */
+        .btn-approve {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-approve:hover {
+            background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+            color: white;
+        }
+
+        .btn-reject {
+            background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-reject:hover {
+            background: linear-gradient(135deg, #e74c3c 0%, #dc3545 100%);
+            color: white;
+        }
+
+        /* أزرار حالة "موافق عليه" */
+        .btn-convert {
+            background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-convert:hover {
+            background: linear-gradient(135deg, #8E54E9 0%, #4776E6 100%);
+            color: white;
+        }
+
+        .btn-cancel-approval {
+            background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+            color: #212529;
+            border: none;
+        }
+
+        .btn-cancel-approval:hover {
+            background: linear-gradient(135deg, #e0a800 0%, #ffc107 100%);
+            color: #212529;
+        }
+
+        /* زر حالة "مرفوض" */
+        .btn-undo-rejection {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-undo-rejection:hover {
+            background: linear-gradient(135deg, #5a6268 0%, #6c757d 100%);
+            color: white;
+        }
+
+        /* الشارات المحسنة */
+        .status-badge {
+            border-radius: 25px;
+            padding: 8px 16px;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 2px solid transparent;
+        }
+
+        .badge-under-review {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            color: #856404;
+            border-color: #ffc107;
+        }
+
+        .badge-approved {
+            background: linear-gradient(135deg, #d4edda 0%, #a3d977 100%);
+            color: #155724;
+            border-color: #28a745;
+        }
+
+        .badge-rejected {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5b7b1 100%);
+            color: #721c24;
+            border-color: #dc3545;
+        }
+
+        /* تأثيرات الأيقونات */
+        .status-btn i {
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .status-btn:hover i {
+            transform: scale(1.1);
+        }
+
+        /* تأثير النبضة للأزرار المهمة */
+        .pulse-effect {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            }
+            50% {
+                box-shadow: 0 4px 25px rgba(71, 118, 230, 0.3);
+            }
+            100% {
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        /* تحسين الكارد الرئيسي */
+        .status-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: none;
+            overflow: hidden;
+        }
+
+        .status-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            margin: -1rem -1rem 1rem -1rem;
+        }
+
+        /* تصميم خاص للدروب داون */
+        .supplier-dropdown {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 10px;
+        }
+
+        .supplier-dropdown .dropdown-item {
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .supplier-dropdown .dropdown-item:hover {
+            background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        /* تصميم للكارد المصغر للمعاينة */
+        .preview-card {
+            transform: scale(0.8);
+            transform-origin: top center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        /* استجابة للهواتف */
+        @media (max-width: 768px) {
+            .status-btn {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+
+            .d-flex.gap-2 {
+                flex-direction: column;
+                gap: 8px !important;
+            }
+
+            .preview-card {
+                transform: scale(0.9);
+            }
+        }
+
+
+
+
+        .invoice-header {
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+            color: #333333;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .status-badge {
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+        }
+
+        .action-toolbar {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e9ecef;
+        }
+
+        .action-btn {
+            margin: 0.25rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .tab-content {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 10px 10px 0 0;
+            color: #6c757d;
+            font-weight: 600;
+            padding: 1rem 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+
+        .table-enhanced {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+
+        .timeline-item {
+            border-left: 3px solid #667eea;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 0 10px 10px 0;
+            padding: 1rem;
+        }
+
+        .preview-card {
+            transition: transform 0.3s ease;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .preview-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }

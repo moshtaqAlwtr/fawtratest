@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/pointsandblances",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\PointsAndBlances\\": "app/",
+            "Modules\\PointsAndBlances\\Database\\Factories\\": "database/factories/",
+            "Modules\\PointsAndBlances\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\PointsAndBlances\\Tests\\": "tests/"
+        }
+    }
+}

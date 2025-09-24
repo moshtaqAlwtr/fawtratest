@@ -1,0 +1,412 @@
+
+        #map {
+            height: 85vh;
+            width: 100%;
+            position: relative;
+        }
+
+            .map-toggle-button {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                z-index: 1000;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                cursor: pointer;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .map-toggle-button:hover {
+                background-color: #45a049;
+                transform: scale(1.1);
+            }
+
+            /* تنسيق التلميح العائم */
+            .map-toggle-button::after {
+                content: attr(data-tooltip);
+                position: absolute;
+                bottom: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: #333;
+                color: white;
+                padding: 5px 10px;
+                border-radius: 4px;
+                font-size: 14px;
+                white-space: nowrap;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s;
+            }
+
+            .map-toggle-button:hover::after {
+                opacity: 1;
+                visibility: visible;
+                margin-bottom: 5px;
+            }
+
+        /* تصميم صندوق البحث على غرار جوجل مابس */
+        .pac-card {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: 400px;
+            font-family: Roboto, Arial, sans-serif;
+        }
+
+        .search-container {
+            padding: 0;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            height: 48px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box {
+            width: 100%;
+            height: 100%;
+            border: none;
+            padding: 0 16px 0 48px;
+            font-size: 15px;
+            border-radius: 8px;
+            direction: rtl;
+        }
+
+        .search-box:focus {
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 18px;
+        }
+
+        /* تصميم لوحة التحكم على غرار جوجل مابس */
+        .map-controls {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .map-control-group {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .map-control-button {
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border: none;
+            border-bottom: 1px solid #e6e6e6;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .map-control-button:last-child {
+            border-bottom: none;
+        }
+
+        .map-control-button:hover {
+            background-color: #f1f1f1;
+        }
+
+        .map-control-button i {
+            color: #666;
+            font-size: 18px;
+        }
+
+        /* تصميم نافذة المعلومات على غرار جوجل مابس */
+        .gm-style .gm-style-iw-c {
+            padding: 0 !important;
+            border-radius: 8px !important;
+            max-width: 300px !important;
+        }
+
+        .gm-style .gm-style-iw-d {
+            overflow: hidden !important;
+            padding: 0 !important;
+        }
+
+        .client-info-window {
+            font-family: Roboto, Arial, sans-serif;
+        }
+
+        .info-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e6e6e6;
+        }
+
+        .info-content {
+            padding: 16px;
+        }
+
+        .info-row {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-label {
+            color: #666;
+            margin-left: 8px;
+            font-size: 13px;
+        }
+
+        .info-value {
+            color: #333;
+            font-size: 13px;
+        }
+
+        .info-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .info-button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .info-button.primary {
+            background: #1a73e8;
+            color: white;
+        }
+
+        .info-button.secondary {
+            background: #fff;
+            color: #1a73e8;
+            border: 1px solid #1a73e8;
+        }
+
+        .info-button:hover {
+            opacity: 0.9;
+        }
+
+        .hover-effect:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+
+        /* تكيف مع الشاشات الصغيرة */
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 0.75rem;
+            }
+
+
+
+            .fs-6 {
+                font-size: 0.8rem !important;
+            }
+
+            .mobile-stack {
+                flex-direction: column !important;
+            }
+
+            .mobile-full-width {
+                width: 100% !important;
+            }
+
+            .mobile-text-center {
+                text-align: center !important;
+            }
+
+            .mobile-mt-2 {
+                margin-top: 1rem !important;
+            }
+
+            .mobile-hide {
+                display: none !important;
+            }
+
+            .table-responsive {
+                font-size: 0.875rem;
+            }
+
+            .card-body {
+                padding: 1rem;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .tablet-stack {
+                flex-direction: column !important;
+            }
+
+            .tablet-text-center {
+                text-align: center !important;
+            }
+        }
+
+        .card {
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+
+
+        .badge {
+            padding: 0.5em 0.75em;
+            border-radius: 0.25rem;
+        }
+
+        .collapse-section {
+            margin-bottom: 1rem;
+        }
+
+        .table th {
+            white-space: nowrap;
+        }
+
+        .dropdown-menu {
+            border-radius: 0.25rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #clientSearch {
+            transition: all 0.3s ease;
+            border: 1px solid #ddd;
+        }
+
+        #clientSearch:focus {
+            outline: none;
+            border-color: #80bdff;
+        }
+
+        .input-group-text {
+            color: #6c757d;
+        }
+
+            /* Progress Circle Styles */
+            .circular-chart {
+                display: block;
+                width: 80px;
+                height: 80px;
+            }
+
+            .circle-bg {
+                fill: none;
+                stroke: #f3f4f6;
+                stroke-width: 2.8;
+            }
+
+            .circle {
+                fill: none;
+                stroke: #4CC790;
+                stroke-width: 2.8;
+                stroke-linecap: round;
+                animation: progress 1s ease-out forwards;
+            }
+
+            .percentage {
+                fill: #4a5568;
+                font-size: 0.5em;
+                text-anchor: middle;
+                font-weight: bold;
+            }
+
+            @keyframes progress {
+                0% {
+                    stroke-dasharray: 0 100;
+                }
+            }
+
+            /* Client Status */
+            .client-status {
+                color: #fff;
+                border-radius: 4px;
+                display: inline-block;
+            }
+
+            /* Responsive Adjustments */
+            @media (max-width: 767.98px) {
+                .card {
+                    height: auto !important;
+                }
+
+                .client-meta {
+                    align-items: flex-start;
+                }
+
+                .circular-chart {
+                    width: 60px;
+                    height: 60px;
+                }
+            }
+
+
+    .card-loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.8);
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card {
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .card-content {
+        transition: opacity 0.3s ease;
+    }
+
+    .pagination-links .page-item.disabled .page-link {
+        opacity: 0.5;
+    }
+
+    .pagination-links .page-item.active .page-link {
+        background-color: #0d6efd;
+        color: white;
+    }
+

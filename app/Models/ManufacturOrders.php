@@ -1,0 +1,80 @@
+<?php
+namespace App\Models;
+use Illuminate\Database\Eloquent\Model;
+
+class ManufacturOrders extends Model
+{
+    protected $table = 'manufactur_orders';
+
+    protected $fillable = [
+        'name', 'code', 'from_date', 'to_date', 'account_id',
+        'employee_id', 'client_id', 'product_id', 'quantity',
+        'production_material_id', 'production_path_id', 'last_total_cost',
+        'status', 'finished_at', 'main_warehouse_id', 'waste_warehouse_id',
+        'actual_quantity', 'finish_notes', 'created_by', 'updated_by'
+    ];
+
+    protected $dates = ['finished_at'];
+
+    public function manufacturOrdersItem()
+    {
+        return $this->hasMany(ManufacturOrdersItem::class,'manufactur_order_id');
+    }
+
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function productionMaterial()
+    {
+        return $this->belongsTo(ProductionMaterials::class);
+    }
+
+    public function productionPath()
+    {
+        return $this->belongsTo(ProductionPath::class);
+    }
+
+    public function manufacturOrders()
+    {
+        return $this->hasMany(ManufacturOrdersItem::class);
+    }
+
+    public function mainWarehouse()
+    {
+        return $this->belongsTo(StoreHouse::class, 'main_warehouse_id');
+    }
+
+    public function wasteWarehouse()
+    {
+        return $this->belongsTo(StoreHouse::class, 'waste_warehouse_id');
+    }
+
+    // Helper methods
+    public function isCompleted()
+    {
+        return $this->status === 'completed';
+    }
+
+    public function canBeCompleted()
+    {
+        return in_array($this->status, ['active', 'in_progress']);
+    }
+
+}

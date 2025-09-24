@@ -1,0 +1,22 @@
+{
+    "HR": true,
+    "Client": true,
+    "Sales": true,
+    "Stock": true,
+    "Account": true,
+    "Purchases": true,
+    "RentalManagement": true,
+    "Sitting": true,
+    "Branches": true,
+    "Memberships": true,
+    "PointsAndBlances": true,
+    "Reports": true,
+    "InsuranceAgents": true,
+    "Reservations": true,
+    "Api": true,
+    "UserGuide": true,
+    "Subscriptions": true,
+    "PurchaseInvoiceSetting": true,
+    "Pos": true,
+    "TaskManager": true
+}

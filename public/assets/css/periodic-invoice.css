@@ -1,0 +1,78 @@
+/* تنسيق القائمة الجانبية */
+.main-menu {
+    position: fixed;
+    height: 100vh;
+    z-index: 1000;
+}
+
+/* تنسيق المحتوى الرئيسي */
+.app-content {
+    margin-right: 260px; /* المسافة من اليمين لتجنب التداخل مع القائمة */
+    position: relative;
+    min-height: 100vh;
+    padding: 2rem;
+    transition: 300ms ease all;
+    backface-visibility: hidden;
+}
+
+/* تنسيق البطاقات */
+.card {
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+/* تنسيق النموذج */
+.form-control {
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    padding: 0.5rem 1rem;
+}
+
+/* تنسيق العناوين */
+.content-header {
+    position: relative;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* تحسين المظهر على الشاشات الصغيرة */
+@media (max-width: 991.98px) {
+    .app-content {
+        margin-right: 0;
+        padding: 1rem;
+    }
+    
+    .main-menu {
+        transform: translateX(100%);
+    }
+    
+    .menu-open .main-menu {
+        transform: translateX(0);
+    }
+}
+
+/* تنسيق الأزرار */
+.btn {
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+/* تنسيق الجداول */
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+}
+
+/* تنسيق الحقول */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}

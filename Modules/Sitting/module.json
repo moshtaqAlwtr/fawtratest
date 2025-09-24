@@ -1,0 +1,11 @@
+{
+    "name": "Sitting",
+    "alias": "sitting",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Sitting\\Providers\\SittingServiceProvider"
+    ],
+    "files": []
+}

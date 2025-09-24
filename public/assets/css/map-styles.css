@@ -1,0 +1,695 @@
+/* Loading Animation */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    border-radius: 8px;
+}
+
+.dot-pulse {
+    position: relative;
+    left: -9999px;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #4361ee;
+    color: #4361ee;
+    box-shadow: 9999px 0 0 -5px #4361ee;
+    animation: dot-pulse 1.5s infinite linear;
+    animation-delay: 0.25s;
+    margin: 0 auto;
+}
+
+.dot-pulse::before,
+.dot-pulse::after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #4361ee;
+    color: #4361ee;
+}
+
+.dot-pulse::before {
+    box-shadow: 9984px 0 0 -5px #4361ee;
+    animation: dot-pulse-before 1.5s infinite linear;
+    animation-delay: 0s;
+}
+
+.dot-pulse::after {
+    box-shadow: 10014px 0 0 -5px #4361ee;
+    animation: dot-pulse-after 1.5s infinite linear;
+    animation-delay: 0.5s;
+}
+
+@keyframes dot-pulse-before {
+    0% {
+        box-shadow: 9984px 0 0 -5px #4361ee;
+    }
+    30% {
+        box-shadow: 9984px 0 0 2px #4361ee;
+    }
+    60%, 100% {
+        box-shadow: 9984px 0 0 -5px #4361ee;
+    }
+}
+
+@keyframes dot-pulse {
+    0% {
+        box-shadow: 9999px 0 0 -5px #4361ee;
+    }
+    30% {
+        box-shadow: 9999px 0 0 2px #4361ee;
+    }
+    60%, 100% {
+        box-shadow: 9999px 0 0 -5px #4361ee;
+    }
+}
+
+@keyframes dot-pulse-after {
+    0% {
+        box-shadow: 10014px 0 0 -5px #4361ee;
+    }
+    30% {
+        box-shadow: 10014px 0 0 2px #4361ee;
+    }
+    60%, 100% {
+        box-shadow: 10014px 0 0 -5px #4361ee;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Map Button Styles */
+#toggleMapButton {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+#toggleMapButton:hover {
+    background: #f8f9fa !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+#toggleMapButton.map-active {
+    background: linear-gradient(135deg, #4285f4, #1a73e8) !important;
+    color: white;
+    border-color: #4285f4 !important;
+}
+
+#toggleMapButton.map-active i {
+    color: white !important;
+}
+
+#toggleMapButton.map-active:hover {
+    background: linear-gradient(135deg, #1a73e8, #1557b0) !important;
+}
+
+/* Map Loading Styles */
+.map-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    border-radius: 16px;
+}
+
+.map-loading .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Map Container Styles */
+#mapContainer {
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    background: white;
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: top center;
+}
+
+#mapContainer.map-hidden {
+    height: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px) scaleY(0);
+    margin-bottom: 0;
+}
+
+#mapContainer.map-show {
+    height: auto;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scaleY(1);
+    margin-bottom: 30px;
+}
+
+#map {
+    width: 100%;
+    height: 450px;
+    border: none;
+    position: relative;
+    min-height: 300px; /* للتأكد من ظهور الخريطة على جميع الأجهزة */
+}
+
+/* Action Card Animations */
+#actionCard {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 20px;
+}
+
+#actionCard.map-open {
+    margin-bottom: 0;
+    border-radius: 12px 12px 0 0;
+}
+
+#actionCard.map-closed {
+    margin-bottom: 20px;
+    border-radius: 12px;
+}
+
+#mapContainer.map-show {
+    border-radius: 0 0 16px 16px;
+    margin-top: 0;
+}
+
+/* Map Search Styles */
+.pac-card {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 50px;
+    padding: 8px 16px;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    width: 90%;        /* يغطي أغلب الشاشة على الجوال */
+    max-width: 400px;  /* ما يتعدى 400px على اللابتوب */
+}
+
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center; /* يخلي الأيقونة بالنص */
+}
+
+.search-box {
+    border: none !important;
+    background: transparent !important;
+    padding: 12px 45px 12px 20px !important;
+    border-radius: 50px !important;
+    font-size: 14px !important;
+    outline: none !important;
+    width: 100%;      /* ياخذ المساحة المتاحة */
+    color: #333;
+    font-weight: 500;
+    box-sizing: border-box;
+}
+
+.search-box::placeholder {
+    color: #030303;
+    font-weight: 400;
+}
+
+.search-icon {
+    position: absolute;
+    right: 20px;
+    color: #4285f4;
+    font-size: 16px;
+    pointer-events: none;
+}
+
+/* زر توسيط الخريطة */
+.map-center-button {
+    position: absolute !important;
+    top: 70px !important;
+    right: 10px !important;
+    z-index: 1000 !important;
+    width: 40px !important;
+    height: 40px !important;
+    background-color: white !important;
+    border: 2px solid rgba(0, 0, 0, .1) !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    color: #4285f4 !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.map-center-button:hover {
+    background-color: #f8f9fa !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+.map-center-button:active {
+    transform: scale(0.95) !important;
+}
+
+.map-center-button i {
+    transition: transform 0.3s ease !important;
+}
+
+.map-center-button:hover i {
+    transform: rotate(45deg) !important;
+}
+
+/* Fullscreen Button */
+.map-fullscreen-button {
+    position: absolute !important;
+    bottom: 15px !important;
+    left: 15px !important;
+    z-index: 1000 !important;
+    width: 40px !important;
+    height: 40px !important;
+    background-color: white !important;
+
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    color: #4285f4 !important;
+
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.map-fullscreen-button:hover {
+    background-color: #f8f9fa !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+.map-fullscreen-button:active {
+    transform: scale(0.95) !important;
+}
+
+/* Fullscreen mode */
+#mapContainer.fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100vh !important;
+    min-height: -webkit-fill-available !important;
+    z-index: 9999 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+}
+
+#mapContainer.fullscreen #map {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    border-radius: 0 !important;
+}
+
+/* زر مسح البحث */
+.search-clear-button {
+    position: absolute !important;
+    right: 35px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    background: transparent !important;
+    border: none !important;
+    color: #6c757d !important;
+    font-size: 12px !important;
+    cursor: pointer !important;
+    padding: 2px !important;
+    z-index: 10 !important;
+    transition: color 0.3s ease !important;
+}
+
+.search-clear-button:hover {
+    color: #dc3545 !important;
+}
+
+/* رسالة عدم وجود نتائج */
+.no-results-message {
+    background: white !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+    max-width: 300px !important;
+}
+
+/* Ripple Effect */
+.map-toggle-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(66, 133, 244, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.map-toggle-effect.active {
+    animation: ripple 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes ripple {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    100% {
+        width: 60px;
+        height: 60px;
+        opacity: 0;
+    }
+}
+
+/* Tooltip */
+#toggleMapButton::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 400;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+#toggleMapButton::after {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 1px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+#toggleMapButton:hover::before,
+#toggleMapButton:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Map Error Styles */
+.map-error-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    flex-direction: column;
+    padding: 20px;
+}
+
+.map-error-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    text-align: center;
+    max-width: 400px;
+}
+
+.map-loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: #f8f9fa;
+    flex-direction: column;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .map-fullscreen-button {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 14px !important;
+        bottom: 10px !important;
+        left: 10px !important;
+    }
+    #map {
+        height: 350px;
+        min-height: 250px;
+    }
+
+    #actionCard {
+        margin-bottom: 15px;
+    }
+
+    #actionCard.map-open {
+        margin-bottom: 0;
+    }
+
+    #mapContainer {
+        margin-bottom: 20px;
+        border-radius: 12px;
+    }
+
+    #mapContainer.map-show {
+        border-radius: 0 0 12px 12px;
+    }
+
+    #actionCard.map-open {
+        border-radius: 10px 10px 0 0;
+    }
+
+    .search-box {
+        width: 180px !important;
+        font-size: 13px !important;
+        padding: 10px 40px 10px 15px !important;
+    }
+
+    .pac-card {
+        top: 8px;
+        left: 8px !important;
+        transform: none !important;
+        padding: 4px 8px;
+        border-radius: 25px;
+    }
+
+    .search-icon {
+        right: 15px;
+        font-size: 14px;
+    }
+
+    .map-center-button {
+        top: 8px !important;
+        right: 8px !important;
+        width: 35px !important;
+        height: 35px !important;
+        font-size: 14px !important;
+    }
+
+    #toggleMapButton::before,
+    #toggleMapButton::after {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    #map {
+        height: 300px;
+        min-height: 200px;
+    }
+
+    #mapContainer {
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+
+    #mapContainer.map-show {
+        border-radius: 0 0 10px 10px;
+    }
+
+    #actionCard.map-open {
+        border-radius: 10px 10px 0 0;
+    }
+
+    .search-box {
+        width: 160px !important;
+        font-size: 12px !important;
+        padding: 8px 35px 8px 12px !important;
+    }
+
+    .pac-card {
+        top: 5px;
+        left: 5px !important;
+        transform: none !important;
+        padding: 3px 6px;
+        border-radius: 20px;
+    }
+
+    .search-icon {
+        right: 12px;
+        font-size: 13px;
+    }
+
+    .map-center-button {
+        top: 5px !important;
+        right: 5px !important;
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 12px !important;
+    }
+}
+
+@media (max-width: 399px) {
+    #map {
+        height: 250px;
+        min-height: 180px;
+    }
+
+    .search-box {
+        width: 140px !important;
+        font-size: 11px !important;
+    }
+
+    .pac-card {
+        top: 5px;
+        left: 5px !important;
+        transform: none !important;
+    }
+
+    .map-center-button {
+        top: 5px !important;
+        right: 5px !important;
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 11px !important;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    #mapContainer {
+        background: #2d2d2d;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .pac-card {
+        background: rgba(45, 45, 45, 0.95);
+    }
+
+    .search-box {
+        color: rgb(29, 25, 25);
+    }
+
+    .search-box::placeholder {
+        color: #100f0f;
+    }
+}
+
+/* Focus States for Accessibility */
+#toggleMapButton:focus,
+.search-box:focus {
+    outline: 3px solid rgba(66, 133, 244, 0.4);
+    outline-offset: 2px;
+}
+
+#toggleMapButton:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Performance Optimizations */
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+    #toggleMapButton,
+    .search-box {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Touch Device Support */
+@media (hover: none) and (pointer: coarse) {
+    #toggleMapButton:hover {
+        background: #fff !important;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .map-center-button:hover {
+        background-color: white !important;
+        transform: scale(1) !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+    }
+}
+
+/* Landscape orientation for mobile devices */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+    #map {
+        height: 250px;
+        min-height: 200px;
+    }
+}

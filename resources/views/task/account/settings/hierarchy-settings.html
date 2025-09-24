@@ -1,0 +1,2245 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <!-- Google Tag Manager -->
+    <!-- <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-TGNTTZ8Z');</script> -->
+    <!-- End Google Tag Manager -->
+
+    <script>
+        Promise.allSettled = ((promises) => Promise.all(
+            promises.map(p => p
+                .then(value => ({
+                    status: "fulfilled",
+                    value
+                }))
+                .catch(reason => ({
+                    status: "rejected",
+                    reason
+                }))
+            )
+        ));
+    </script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" type="image/png" sizes="16x16" href="https://altab.flowdo.net/user-uploads/favicon/6823163ef3557a2c287cd16b625019cb.png">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/all.min.css">
+
+    <!-- Remix Icons -->
+    
+
+    <!-- lucide Icons Static Font -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/css/lucide.css">
+
+    <!-- Simple Line Icons -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/simple-line-icons.css">
+
+    <!-- Datepicker -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/datepicker.min.css">
+
+    <!-- TimePicker -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/bootstrap-timepicker.min.css">
+
+    <!-- Select Plugin -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/select2.min.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,200,0,0" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hint.css/2.7.0/hint.css" integrity="sha512-dIMp2xDMSfWDPg7lvq1y86iBm48LsOhOga05oKHPm0YYhSfG8fhu7xr4evU0+egi5hQ5BSQYeEmw9wiOvlrSRA==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+        <!-- Datatables -->
+<link rel="stylesheet" href="https://altab.flowdo.net/vendor/css/daterangepicker.css">
+<link rel="stylesheet" href="https://altab.flowdo.net/vendor/datatables/dataTables.bootstrap4.min.css">
+
+<link rel="stylesheet" href="https://altab.flowdo.net/vendor/datatables/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://altab.flowdo.net/vendor/datatables/buttons.bootstrap4.min.css">    <style>
+        .filter-box {
+            z-index: 2;
+        }
+    </style>
+
+    <!-- Template CSS -->
+    <link type="text/css" rel="stylesheet" media="all" href="https://altab.flowdo.net/css/main.css?v=92469098">
+
+    <title> الهيكل التنظيمي</title>
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="https://altab.flowdo.net/user-uploads/favicon/6823163ef3557a2c287cd16b625019cb.png">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="csrf-token" content="DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap" />
+        <style>
+        .preloader-container {
+            margin-left: 510px;
+            width: calc(100% - 510px)
+        }
+
+        .blur-code {
+            filter: blur(3px);
+
+        }
+
+        .purchase-code {
+            transition: filter .2s ease-out;
+            margin-right: 4px;
+        }
+    </style>
+    
+    
+    <style>
+        :root {
+            --fc-border-color: #E8EEF3;
+            --fc-button-text-color: #99A5B5;
+            --fc-button-border-color: #99A5B5;
+            --fc-button-bg-color: #ffffff;
+            --fc-button-active-bg-color: #171f29;
+            --fc-today-bg-color: #f2f4f7;
+        }
+
+        .fc a[data-navlink] {
+            color: #99a5b5;
+        }
+
+        .ql-editor p {
+            line-height: 1.42;
+        }
+    </style>
+
+    
+        <style>
+    :root {
+        /* For Logged in user take header color a app theme*/
+        /* For public pages use company specific header color example invoice,estimate public page*/
+        /* For all other pages use like auth use global setting header*/
+        --header_color:  #00DD90 ;
+    }
+
+    .btn-primary,
+    .btn-primary.disabled:hover,
+    .btn-primary:disabled:hover {
+        background-color: var(--header_color) !important;
+        border: 1px solid var(--header_color) !important;
+    }
+
+    .text-primary {
+        color: var(--header_color) !important;
+    }
+
+    .bg-primary {
+        background: var(--header_color) !important;
+    }
+
+    .datepicker table tr td, .datepicker table tr th {
+        font-size: 14px;
+    }
+
+    .project-header .project-menu .p-sub-menu.active:after,
+    .project-header .project-menu .p-sub-menu::after,
+    .qs-current, .datepicker table tr td.active.active {
+        background: var(--header_color) !important;
+        text-shadow: none;
+        border-color: var(--header_color) !important;
+    }
+
+    .sidebar-brand-box .sidebar-brand-dropdown a.dropdown-item:hover,
+    .dropdown-item.active {
+        background-color: #ebebeb !important;
+        color: black;
+    }
+
+    .pagination .page-item.active .page-link,
+    .custom-control-input:checked ~ .custom-control-label::before {
+        background-color: var(--header_color) !important;
+        border-color: var(--header_color) !important;
+    }
+
+    .close-task-detail span {
+        border: 1px solid var(--header_color) !important;
+    }
+
+    .tabs .nav .nav-link.active,
+    .tabs .nav .nav-item:hover {
+        border-bottom: 3px solid var(--header_color) !important;
+    }
+
+    .sidebar-light .sidebar-menu li .nav-item:focus,
+    .sidebar-light .sidebar-menu li .nav-item:hover,
+    .sidebar-light .sidebar-menu li .accordionItemContent a:hover {
+        color: var(--header_color) !important;
+    }
+
+    .sidebar-light .accordionItem a.active {
+        color: var(--header_color) !important;
+        background-color: #00dd901a;
+    }
+
+    .sidebar-light .accordionItem a.active + span{
+        color: var(--header_color) !important;
+    }
+
+    .menu-item-count, .unread-notifications-count, .active-timer-count {
+        background-color: var(--header_color) !important;
+    }
+
+    .dropdown-item.active .text-dark-grey {
+        color: #ffffff;
+    }
+
+</style>
+    
+    
+    <script src="https://altab.flowdo.net/vendor/jquery/jquery.min.js"></script>
+    <script src="https://altab.flowdo.net/vendor/jquery/modernizr.min.js"></script>
+
+    
+    <script src="https://altab.flowdo.net/vendor/jquery/bootstrap-timepicker.min.js"></script>
+
+    <template id="push-template">
+    <swal-html>
+        <button style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: transparent;
+                padding: 5px;
+                color: #d1d1d1;"
+            type="cancel">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#bfbfbf" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+        <div style="display:flex;align-items:center;min-width:200px">
+            <img style="margin-left:5px;padding:10px" width="60" height="60" src="https://altab.flowdo.net/img/flowdo_icon.png" />
+            <div style="display:flex; flex-direction:column">
+            <span id="notification-title" style="font-size: 14px;font-weight: bold; margin-bottom: 5px;">إشعار جديد</span>
+            <span id="notification-description" style="font-size: 12px;">تفاصيل الإشعار</span>
+            </div>
+        </div>
+    </swal-html>
+    <swal-param name="allowEscapeKey" value="false" />
+    <swal-param
+      name="customClass"
+      value='{ "popup": "my-popup" }' />
+    <swal-function-param
+      name="didOpen"
+      value="popup => console.log(popup)" />
+  </template>
+
+    
+    
+
+    <script>
+        const checkMiniSidebar = localStorage.getItem("mini-sidebar");
+
+    //    localStorage.setItem("currentURL","https://altab.flowdo.net/account/settings/hierarchy-settings");
+       var currentURL = "https://altab.flowdo.net/account/settings/hierarchy-settings";
+    </script>
+
+    <script>
+        lucide.createIcons()
+        window.addEventListener('load', function() {
+            lucide.createIcons();
+            console.log('Page is fully loaded, including all resources');
+        });
+        ;
+    </script>
+
+</head>
+
+
+<body id="body" class=" rtl">
+
+    <!-- Google Tag Manager (noscript) -->
+    <!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TGNTTZ8Z"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> -->
+    <!-- End Google Tag Manager (noscript) -->
+
+    <script>
+        if (checkMiniSidebar == "yes" || checkMiniSidebar == "") {
+        $('body').addClass('sidebar-toggled');
+    }
+    </script>
+    
+        <!-- HEADER START -->
+<header class="main-header clearfix bg-white" id="header">
+
+
+    <!-- NAVBAR LEFT(MOBILE MENU COLLAPSE) START-->
+    <div class="navbar-left float-right d-flex align-items-center">
+        <!-- PAGE TITLE START -->
+<div class="page-title d-none d-lg-flex">
+    <div class="page-heading">
+        <h2 class="mb-0 pr-3 text-dark f-18 font-weight-bold d-flex align-items-center">
+            <span class="d-inline-block text-truncate mw-300"> الهيكل التنظيمي</span>
+        </h2>
+    </div>
+</div>
+<!-- PAGE TITLE END -->
+
+        <div class="d-block d-lg-none menu-collapse cursor-pointer position-relative" onclick="openMobileMenu()">
+            <div class="mc-wrap">
+                <div class="mcw-line"></div>
+                <div class="mcw-line center"></div>
+                <div class="mcw-line"></div>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <!-- NAVBAR LEFT(MOBILE MENU COLLAPSE) END-->
+    <!-- NAVBAR RIGHT(SEARCH, ADD, NOTIFICATION, LOGOUT) START-->
+    <div class="page-header-right left d-flex align-items-center justify-content-end">
+
+        <span id="timer-clock">
+                            <span class="border rounded f-14 py-2 px-2 d-none d-sm-block mr-3">
+        <span id="active-timer" class="mr-2">00:00:14</span>
+
+                    <a href="javascript:;" class="resume-active-timer mr-1 border-right" data-toggle="tooltip" data-original-title="استئناف" data-time-id="57">
+                <i class="fa fa-play-circle text-primary"></i>
+            </a>
+                <a href="javascript:;" class="stop-active-timer" data-toggle="tooltip" data-original-title="إيقاف الموقت" data-time-id="215">
+            <i class="fa fa-stop-circle text-danger"></i>
+        </a>
+
+    </span>
+
+    
+<script>
+    var $worked = $("#active-timer");
+    var activeBreak = "1";
+
+    function updateTimerTask() {
+        var myTime = $worked.html();
+        var ss = myTime.split(":");
+
+        var hours = ss[0];
+        var mins = ss[1];
+        var secs = ss[2];
+        secs = parseInt(secs) + 1;
+
+        if (secs > 59) {
+            secs = '00';
+            mins = parseInt(mins) + 1;
+        }
+
+        if (mins > 59) {
+            secs = '00';
+            mins = '00';
+            hours = parseInt(hours) + 1;
+        }
+
+        if (hours.toString().length < 2) {
+            hours = '0' + hours;
+        }
+        if (mins.toString().length < 2) {
+            mins = '0' + mins;
+        }
+        if (secs.toString().length < 2) {
+            secs = '0' + secs;
+        }
+        var ts = hours + ':' + mins + ':' + secs;
+
+        $worked.html(ts);
+
+        if (runTimeClock) {
+            return setTimeout(updateTimerTask, 1000);
+        }
+    }
+
+    if ($('#active-timer').length && activeBreak != '1') {
+        runTimeClock = true;
+        setTimeout(updateTimerTask, 1000);
+    } else {
+        runTimeClock = false;
+    }
+</script>
+                    </span>
+
+        
+                    
+            
+            
+        
+                    <ul>
+                        <!-- Chat START -->
+                        <li data-toggle="tooltip" data-placement="top" title="المحادثات" class="d-none d-sm-block">
+                            <div class="d-flex align-items-center">
+                                <a href="messages.html" class="d-block header-icon-box">
+                                    <i class="bi bi-chat-right-text f-16 text-dark-grey"></i>
+                                </a>
+                            </div>
+                        </li>
+                        <!-- Chat END -->
+                        <!-- SEARCH START -->
+                        <li data-toggle="tooltip" data-placement="top" title="يبحث" class="d-none d-sm-block">
+                            <div class="d-flex align-items-center">
+                                <a href="javascript:;" class="d-block header-icon-box open-search">
+                                    <i class="bi bi-search f-16 text-dark-grey"></i>
+                                </a>
+                            </div>
+                        </li>
+                        <!-- SEARCH END -->
+                        <!-- Sticky Note START -->
+                        <li data-toggle="tooltip" data-placement="top" title="الملاحظات" class="d-none d-sm-block">
+                            <div class="d-flex align-items-center">
+                                <a href="sticky-notes.html" class="d-block header-icon-box openRightModal">
+                                    <i class="bi bi-sticky f-16 text-dark-grey"></i>
+                                </a>
+                            </div>
+                        </li>
+                        <!-- Sticky Note END -->
+            
+                    
+                                        <!-- START TIMER -->
+                                <li data-toggle="tooltip" data-placement="top" title="بدء المؤقت">
+                                    <div class="add_box dropdown">
+                                        <a class="d-block dropdown-toggle header-icon-box" type="link" id="show-active-timer"
+                                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bi bi-stopwatch f-16 text-dark-grey"></i>
+                                                <span
+                                                    class="badge badge-primary active-timer-count position-absolute ">1</span>
+                                        </a>
+                                                            </div>
+                                </li>
+                                <!-- START TIMER END -->
+                        
+                        <!-- ADD START -->
+                            <li data-toggle="tooltip" data-placement="top" title="إضافة">
+                                <div class="add_box dropdown">
+                                    <a class="d-block dropdown-toggle header-icon-box" type="link" data-toggle="dropdown"
+                                       aria-haspopup="true" aria-expanded="false">
+                                        <i class="bi bi-plus-circle f-16 text-dark-grey"></i>
+                                    </a>
+                                    <!-- DROPDOWN - INFORMATION -->
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink" tabindex="0">
+                                                                        <a class="dropdown-item f-14 text-dark openRightModal"
+                                               href="projects.create.html">
+                                                <i class="bi bi-plus-square f-w-500 mr-2 f-11"></i>
+                                                مشروع جديد                                </a>
+                                        
+                                                                        <a class="dropdown-item f-14 text-dark openRightModal"
+                                               href="tasks.create.html">
+                                                <i class="bu bi-plus-square f-w-500 mr-2 f-11"></i>
+                                                إضافة مهمة                                </a>
+                                        
+                                                                        <a class="dropdown-item f-14 text-dark openRightModal"
+                                               href="clients.create.html">
+                                                <i class="bi bi-plus-square f-w-500 mr-2 f-11"></i>
+                                                إضافة عميل                                </a>
+                                        
+                                                                        <a class="dropdown-item f-14 text-dark openRightModal"
+                                               href="employees.create.html">
+                                                <i class="bi bi-plus-square f-w-500 mr-2 f-11"></i>
+                                                إضافة موظف                                </a>
+                                        
+                                        
+                                                                </div>
+                                </div>
+                            </li>
+                            <!-- ADD END -->
+                    
+                    <!-- NOTIFICATIONS START -->
+                        <li title="الإشعارات">
+                            <div class="notification_box dropdown">
+                                <a class="d-block dropdown-toggle header-icon-box show-user-notifications" type="link"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bi bi-bell f-16 text-dark-grey"></i>
+                                                                <span
+                                            class="badge badge-primary unread-notifications-count active-timer-count position-absolute">3</span>
+                                                        </a>
+                                <!-- DROPDOWN - INFORMATION -->
+                                <div
+                                    class="dropdown-menu dropdown-menu-right notification-dropdown border-0 shadow-lg py-0 bg-additional-grey"
+                                    tabindex="0">
+                                    <div
+                                        class="d-flex px-3 justify-content-between align-items-center border-bottom-grey py-1 bg-white">
+                                        <div class="___class_+?50___">
+                                            <p class="f-14 mb-0 text-dark f-w-500">الإشعارات</p>
+                                        </div>
+                                                                        <div class="f-12 ">
+                                                <a href="javascript:;"
+                                                   class="text-dark-grey mark-notification-read">ضع إشارة مقروء</a> |
+                                                <a href="https://altab.flowdo.net/account/all-notifications"
+                                                   class="text-dark-grey">عرض الكل</a>
+                                            </div>
+                                                                </div>
+                                    <div id="notification-list">
+            
+                                    </div>
+            
+                                                        </div>
+                            </div>
+                        </li>
+                        <!-- NOTIFICATIONS END -->
+                        <!-- LOGOUT START -->
+                        
+                        <!-- LOGOUT END -->
+                    </ul>
+    </div>
+    <!-- NAVBAR RIGHT(SEARCH, ADD, NOTIFICATION, LOGOUT) START-->
+</header>
+<!-- HEADER END -->
+
+<form id="logout-form" action="https://altab.flowdo.net/logout" method="POST" style="display: none;">
+    <input type="hidden" name="_token" value="DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap" autocomplete="off"></form>
+
+<script>
+    $(document).ready(function () {
+        var runTimeClock = true;
+
+                const activeTimerCount = parseInt("1");
+
+        if (activeTimerCount > 0) {
+
+            $('#show-active-timer').click(function () {
+                const url = "https://altab.flowdo.net/account/timelogs/show-active-timer";
+                $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
+                $.ajaxModal(MODAL_XL, url);
+            });
+
+        }
+        
+
+        $('#start-timer-modal').click(function () {
+            const url = "https://altab.flowdo.net/account/timelogs/show-timer";
+            $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
+            $.ajaxModal(MODAL_XL, url);
+        });
+
+        $('.open-search').click(function () {
+            const url = "https://altab.flowdo.net/account/search";
+            $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
+            $.ajaxModal(MODAL_LG, url);
+        });
+
+
+
+        $('.show-user-notifications').click(function () {
+            const openStatus = $(this).attr('aria-expanded');
+
+            if (typeof openStatus == "undefined" || openStatus == "false") {
+
+                const token = 'DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap';
+                $.easyAjax({
+                    type: 'POST',
+                    url: "https://altab.flowdo.net/account/show-notifications",
+                    container: "#notification-list",
+                    blockUI: true,
+                    data: {
+                        '_token': token
+                    },
+                    success: function (data) {
+                        if (data.status === 'success') {
+                            $('#notification-list').html(data.html);
+                        }
+                    }
+                });
+
+            }
+
+        });
+
+        $('.mark-notification-read').click(function () {
+            const token = 'DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap';
+            $.easyAjax({
+                type: 'POST',
+                url: "https://altab.flowdo.net/account/mark_notification_read",
+                blockUI: true,
+                data: {
+                    '_token': token
+                },
+                success: function (data) {
+                    if (data.status === 'success') {
+                        $('#notification-list').html('');
+                        $('.unread-notifications-count').remove();
+                        window.location.reload();
+                    }
+                }
+            });
+
+        });
+
+    });
+</script>
+    
+    
+    <!-- SIDEBAR START -->
+<aside class="sidebar-light">
+    <!-- MOBILE CLOSE SIDEBAR PANEL START -->
+    <div class="mobile-close-sidebar-panel w-100 h-100" onclick="closeMobileMenu()" id="mobile_close_panel"></div>
+    <!-- MOBILE CLOSE SIDEBAR PANEL END -->
+
+    <a id="sidebarToggle" class="text-lightest sidebarToggleBtn" href="javascript:;" style="z-index: 100;"><span class="material-symbols-rounded">keyboard_arrow_left</span></a>
+
+    <!-- MAIN SIDEBAR START -->
+    <div>
+    <div class="main-sidebar d-flex flex-column align-items-center justify-content-between" id="mobile_menu_collapse">
+        <!-- SIDEBAR BRAND START -->
+        <div class="mt-4 mb-3 d-flex justify-content-center">
+        <img src="https://altab.flowdo.net/user-uploads/app-logo/713a8c95c7cd38a61fc5092dce631cac.png" height="40" width="40" style="width:40px;height:40px;border-radius:12px">
+        <!-- <span class="avatar-dot"></span> -->
+        </div>
+        <!-- SIDEBAR BRAND END -->
+
+        <!-- SIDEBAR MENU START -->
+        <div class="sidebar-menu  h-100 w-100" id="sideMenuScroll">
+            <!-- WORKSUITESAAS -->
+                            <ul>
+    <!-- NAV ITEM - DASHBOARD COLLAPSE MENU-->
+            <li class="accordionItem closeIt">
+
+            <div class="d-flex flex-column justify-content-center align-items-center my-2">
+        <a class="nav-item text-lightest f-15 sidebar-text-color" href="dashboard.html" >
+            
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none"
+                     class="" viewBox="0 0 24 24">
+                    <path d="M21.5 10.9V4.1C21.5 2.6 20.86 2 19.27 2H15.23C13.64 2 13 2.6 13 4.1V10.9C13 12.4 13.64 13 15.23 13H19.27C20.86 13 21.5 12.4 21.5 10.9Z" fill="currentColor"/>
+                <path d="M11 13.1V19.9C11 21.4 10.36 22 8.77 22H4.73C3.14 22 2.5 21.4 2.5 19.9V13.1C2.5 11.6 3.14 11 4.73 11H8.77C10.36 11 11 11.6 11 13.1Z" fill="currentColor"/>
+                <path opacity="0.4" d="M21.5 19.9V17.1C21.5 15.6 20.86 15 19.27 15H15.23C13.64 15 13 15.6 13 17.1V19.9C13 21.4 13.64 22 15.23 22H19.27C20.86 22 21.5 21.4 21.5 19.9Z" fill="currentColor"/>
+                <path opacity="0.4" d="M11 6.9V4.1C11 2.6 10.36 2 8.77 2H4.73C3.14 2 2.5 2.6 2.5 4.1V6.9C2.5 8.4 3.14 9 4.73 9H8.77C10.36 9 11 8.4 11 6.9Z" fill="currentColor"/>
+                </svg>
+                                                
+        </a>
+        <span class="f-10">اللوحة</span>
+        </div>
+    
+    
+</li>
+    
+<!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
+            <li class="accordionItem closeIt">
+
+            <div class="d-flex flex-column justify-content-center align-items-center my-2">
+        <a class="nav-item text-lightest f-15 sidebar-text-color" href="clients.html" >
+            
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none"
+                     class="" viewBox="0 0 24 24">
+                    <path opacity="0.4" d="M11.5 7.41V22H19.92C21.08 22 22.03 21.07 22.03 19.93V5.09C22.03 2.47 20.07 1.28 17.68 2.45L13.25 4.64C12.29 5.11 11.5 6.36 11.5 7.41Z" fill="currentColor"/>
+            <path d="M2 15.05V19.5C2 20.88 3.12 22 4.5 22H11.5V10.42L11.03 10.52L6.99 11.42L6.51 11.53L4.47 11.99C3.98 12.09 3.53 12.26 3.14 12.51C3.14 12.52 3.13 12.52 3.13 12.52C3.03 12.59 2.93 12.67 2.84 12.76C2.38 13.22 2.08 13.89 2.01 14.87C2.01 14.93 2 14.99 2 15.05Z" fill="currentColor"/>
+                </svg>
+                                                
+        </a>
+        <span class="f-10">العملاء</span>
+        </div>
+    
+    
+</li>
+    
+    
+    
+    <!--         <li class="accordionItem closeIt">
+
+            <div class="d-flex flex-column justify-content-center align-items-center my-2">
+        <a class="nav-item text-lightest f-15 sidebar-text-color" href="https://altab.flowdo.net/account/clients" >
+            
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none"
+                     class="" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd"
+                      d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z" />
+                <path
+                    d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z" />
+                </svg>
+                                                
+        </a>
+        <span class="f-10">العملاء</span>
+        </div>
+    
+    
+</li>
+     -->
+
+    <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
+            <!-- NAV ITEM - HR COLLAPASE MENU -->
+    
+    <!-- NAV ITEM - WORK COLLAPASE MENU -->
+            <li class="accordionItem closeIt">
+
+            <div class="d-flex flex-column justify-content-center align-items-center my-2">
+        <a class="nav-item text-lightest f-15 sidebar-text-color" href="projects.html" >
+            
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none"
+                     class="" viewBox="0 0 24 24">
+                    <path
+                    d="M13.3111 14.75H5.03356C3.36523 14.75 2.30189 12.9625 3.10856 11.4958L5.24439 7.60911L7.24273 3.96995C8.07689 2.45745 10.2586 2.45745 11.0927 3.96995L13.1002 7.60911L14.0627 9.35995L15.2361 11.4958C16.0427 12.9625 14.9794 14.75 13.3111 14.75Z"
+                    fill="currentColor" />
+                <path fill-opacity="0.3"
+                    d="M21.1667 15.2083C21.1667 18.4992 18.4992 21.1667 15.2083 21.1667C11.9175 21.1667 9.25 18.4992 9.25 15.2083C9.25 15.0525 9.25917 14.9058 9.26833 14.75H13.3108C14.9792 14.75 16.0425 12.9625 15.2358 11.4958L14.0625 9.36C14.4292 9.28666 14.8142 9.25 15.2083 9.25C18.4992 9.25 21.1667 11.9175 21.1667 15.2083Z"
+                    fill="currentColor" />
+                </svg>
+                                                
+        </a>
+        <span class="f-10">المشاريع</span>
+        </div>
+    
+    
+</li>
+    
+    <!-- NAV ITEM - FINANCE COLLAPASE MENU -->
+    
+    <!-- NAV ITEM - PRODUCTS -->
+    <!--  -->
+
+<!-- NAV ITEM - PRODUCTS -->
+    <!--  -->
+
+<!-- NAV ITEM - TICKETS -->
+    <!--  -->
+
+
+<!-- NAV ITEM - EVENTS -->
+    
+    
+<!-- NAV ITEM - MESSAGES -->
+    <!--  -->
+
+<!-- NAV ITEM - GDPR -->
+    <!--  -->
+
+<!-- NAV ITEM - NOTICES -->
+    <!--  -->
+
+    <!-- Knowledge base -->
+        <!-- Knowledge base -->
+
+
+    <!-- NAV ITEM - NOTES -->
+    <!--  -->
+
+
+    <!-- NAV ITEM - CUSTOM MODULES  -->
+            
+                
+                
+                    
+                
+                
+                    
+                
+                
+                    
+                
+                
+                    
+                
+                
+                    
+                
+                
+                    
+                
+                
+            
+    <!-- NAV ITEM - REPORTS -->
+    
+
+<!-- NAV ITEM - CUSTOM LINK -->
+
+    <!-- 
+     -->
+
+<!-- NAV ITEM - REPORTS COLLAPASE MENU -->
+    <!-- NAV ITEM - SETTINGS -->
+
+    
+
+    <!-- <a id="sidebarToggle" class="text-lightest" href="javascript:;"><span class="material-symbols-rounded">keyboard_arrow_left</span></a> -->
+
+
+</ul>
+                    </div>
+        <!-- SIDEBAR MENU END -->
+
+        <div class="sidebar-brand-box dropdown d-flex flex-column align-items-center cursor-pointer my-4 ">
+            <li class="accordionItem closeIt">
+
+            <div class="d-flex flex-column justify-content-center align-items-center my-2">
+        <a class="nav-item text-lightest f-15 sidebar-text-color" href="company-settings.html" >
+            
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none"
+                     class="" viewBox="0 0 24 24">
+                    <path fill-opacity="0.3" fill="currentColor"
+                                d="M2 12.947v-1.771c0-1.047.85-1.913 1.899-1.913 1.81 0 2.549-1.288 1.64-2.868a1.919 1.919 0 0 1 .699-2.607l1.729-.996c.79-.474 1.81-.192 2.279.603l.11.192c.9 1.58 2.379 1.58 3.288 0l.11-.192c.47-.795 1.49-1.077 2.279-.603l1.73.996a1.92 1.92 0 0 1 .699 2.607c-.91 1.58-.17 2.868 1.639 2.868 1.04 0 1.899.856 1.899 1.912v1.772c0 1.047-.85 1.912-1.9 1.912-1.808 0-2.548 1.288-1.638 2.869.52.915.21 2.083-.7 2.606l-1.729.997c-.79.473-1.81.191-2.279-.604l-.11-.191c-.9-1.58-2.379-1.58-3.288 0l-.11.19c-.47.796-1.49 1.078-2.279.605l-1.73-.997a1.919 1.919 0 0 1-.699-2.606c.91-1.58.17-2.869-1.639-2.869A1.911 1.911 0 0 1 2 12.947Z" />
+                            <path fill="currentColor"
+                                d="M11.995 15.332c1.794 0 3.248-1.464 3.248-3.27 0-1.807-1.454-3.272-3.248-3.272-1.794 0-3.248 1.465-3.248 3.271 0 1.807 1.454 3.271 3.248 3.271Z" />
+                </svg>
+                                                
+        </a>
+        <span class="f-10">إعدادات</span>
+        </div>
+    
+    
+</li>
+            <div class="dropdown-toggle sidebar-brand d-flex align-items-center justify-content-between  w-100"
+                type="link" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                                    <!-- SIDEBAR BRAND NAME START -->
+                    <!-- <div class="sidebar-brand-name">
+                        <h1 class="mb-0 f-16 f-w-500 text-white-shade mt-0" data-placement="bottom" data-toggle="tooltip"
+                            data-original-title="مؤسسة الطيب الأفضل للتجارة">مؤسسة الطيب الأفضل للتجارة
+                            <i class="icon-arrow-down icons pl-2"></i>
+                        </h1>
+                        <div class="mb-0 position-relative pro-name">
+                            <span class="bg-light-green rounded-circle" style="right:0;"></span>
+                            <p class="f-13 text-lightest mb-0" data-placement="bottom" data-toggle="tooltip"
+                                data-original-title="محمد فالح العتيبي">محمد فالح العتيبي</p>
+                        </div>
+                    </div> -->
+                    <!-- SIDEBAR BRAND NAME END -->
+                    
+                    <!-- SIDEBAR BRAND LOGO START -->
+                    <div class="sidebar-brand-logo" style="border: 2px solid transparent;outline: 2px solid var(--header_color);">
+                        <img src="https://altab.flowdo.net/user-uploads/avatar/ar/13.png" height="40" width="40" style="width:34px;height:35px">
+                        <!-- <span class="avatar-dot"></span> -->
+                    </div>
+                    <!-- SIDEBAR BRAND LOGO END -->
+                            </div>
+            
+            <!-- DROPDOWN - INFORMATION -->
+            <div class="dropdown-menu dropdown-menu-right sidebar-brand-dropdown ml-3"
+                aria-labelledby="dropdownMenuLink" tabindex="0">
+                <div class="d-flex justify-content-between align-items-center profile-box">
+                    <a  href="https://altab.flowdo.net/account/employees/2614"  >
+                            <div class="profileInfo d-flex align-items-center mr-1 flex-wrap">
+                                <div class="profileImg mr-2">
+                                    <img class="h-100" src="https://altab.flowdo.net/user-uploads/avatar/ar/13.png"
+                                        alt="محمد فالح العتيبي">
+                                </div>
+                                <div class="ProfileData">
+                                    <h3 class="f-15 f-w-500 text-dark" data-placement="bottom" data-toggle="tooltip"
+                                        data-original-title="محمد فالح العتيبي">محمد فالح العتيبي</h3>
+                                    <p class="mb-0 f-12 text-dark-grey"></p>
+                                </div>
+                        </div>
+                    </a>
+
+
+                    
+                                            <a href="https://altab.flowdo.net/account/settings/profile-settings" data-toggle="tooltip"
+                           data-original-title=" الملف الشخصي">
+                            <i class="side-icon bi bi-pencil-square"></i>
+                        </a>
+                                    </div>
+
+                                    <a class="dropdown-item d-flex justify-content-between align-items-center f-15 text-dark invite-member"
+                        href="javascript:;">
+                        <span>إرسال دعوة لتسجيل الدخول في بوابة مؤسسة الطيب الأفضل للتجارة</span>
+                        <i class="side-icon bi bi-person-plus"></i>
+                    </a>
+                
+                <a class="dropdown-item d-flex justify-content-between align-items-center f-15 text-dark"
+                    href="javascript:;">
+                    <label for="dark-theme-toggle">الوضع الداكن</label>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="dark-theme-toggle"
+                            >
+                        <label class="custom-control-label f-14" for="dark-theme-toggle"></label>
+                    </div>
+                </a>
+                <a class="dropdown-item d-flex justify-content-between align-items-center f-15 text-dark"
+                    href="https://altab.flowdo.net/logout" onclick="event.preventDefault();
+                document.getElementById('logout-form').submit();">
+                    تسجيل خروج                    <i class="side-icon bi bi-power"></i>
+                </a>
+
+                <!-- WORKSUITESAAS -->
+                
+
+            </div>
+        </div>
+    </div>
+    <div class="main-sidebar side-panel" style="z-index: 2;" id="mobile_menu_collapse2">
+
+        <!-- SIDEBAR MENU START -->
+        <div class="sidebar-menu " id="sideMenuScroll">
+            <!-- WORKSUITESAAS -->
+                            <ul>
+    <script>
+        var notSettingPage = true;
+    </script><script>
+        notSettingPage = false;
+    </script>    <!-- NAV ITEM - DASHBOARD COLLAPSE MENU-->
+
+    <!-- <span class="f-18 font-weight-bold">hierarchy-settings.index</span> -->
+
+    
+    <div class="d-flex justify-content-between mb-3 mt-3"
+        style="padding: 11px 15px 15px 15px;border-bottom: 1px solid #e8eef3; ">
+        <span class="f-18 font-weight-bold">إعدادات</span>
+
+        <!-- <a id="sidebarToggle" class="text-lightest" href="javascript:;"><span class="material-symbols-rounded">keyboard_arrow_left</span></a> -->
+    </div>
+
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+
+
+
+    <!-- NAV ITEM - TICKETS -->
+    
+
+
+    
+
+    
+
+
+    
+
+    
+
+    
+
+
+    <!-- NAV ITEM - MESSAGES -->
+    
+
+    <!-- NAV ITEM - GDPR -->
+    
+
+    <!-- NAV ITEM - NOTICES -->
+
+    
+
+    <!-- Knowledge base -->
+    
+    <!-- Knowledge base -->
+
+    <!-- NAV ITEM - NOTES -->
+
+    
+
+    <!-- NAV ITEM - CUSTOM MODULES  -->
+    
+
+
+
+
+    
+    <!-- NAV ITEM - CUSTOM LINK -->
+
+    
+    
+
+
+
+    <!-- NAV ITEM - REPORTS COLLAPASE MENU -->
+    <!-- NAV ITEM - SETTINGS -->
+    
+
+    
+
+</ul>
+                    </div>
+        <!-- SIDEBAR MENU END -->
+    </div>
+    </div>
+    <!-- MAIN SIDEBAR END -->
+    <!-- Sidebar Toggler -->
+    <!-- <div
+        class="text-center d-flex justify-content-between align-items-center position-fixed sidebarTogglerBox ">
+        <button class="border-0 d-lg-block d-none text-lightest font-weight-bold" id="sidebarToggle"></button>
+
+        <div class="d-flex align-items-center">
+                                                            
+                             
+        </div>
+    </div> -->
+    <!-- Sidebar Toggler -->
+</aside>
+<!-- SIDEBAR END -->
+
+<script>
+    // function showMenuPanel(module) {
+    //     if ( notSettingPage && !$("body").hasClass("sidebar-toggled")) {
+    //         toggleSidebar()
+    //     }
+    // }
+    $(document).ready(function() {
+
+        if ( !notSettingPage && !$("body").hasClass("sidebar-toggled")) {
+            toggleSidebar()
+        }
+
+        $('.invite-member').click(function() {
+            const url = "https://altab.flowdo.net/account/employees/invite-member";
+            $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
+            $.ajaxModal(MODAL_LG, url);
+        });
+
+        $('#dark-theme-toggle').change(function() {
+            const darkTheme = ($(this).is(':checked')) ? '1' : '0'
+
+            $.easyAjax({
+                type: 'POST',
+                url: "https://altab.flowdo.net/account/settings/profile/dark-theme",
+                blockUI: true,
+                data: {
+                    '_token': 'DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap',
+                    'darkTheme': darkTheme
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        window.location.reload();
+                    }
+                }
+            });
+
+        });
+
+    });
+</script>
+
+    <!-- BODY WRAPPER START -->
+    <div class="body-wrapper clearfix">
+
+
+        <!-- MAIN CONTAINER START -->
+        <section class="main-container bg-white mb-5 mb-sm-0" id="fullscreen">
+
+            <div class="preloader-container d-none">
+                
+                
+            </div>
+
+
+            
+            <!-- PAGE TITLE START -->
+<div class="page-title d-block d-lg-none">
+    <div class="page-heading">
+        <h2 class="mb-0 pr-3 text-dark f-18 font-weight-bold d-flex align-items-center">
+            <span class="d-inline-block text-truncate mw-300"> الهيكل التنظيمي</span>
+        </h2>
+    </div>
+</div>
+<!-- PAGE TITLE END -->
+
+                <!-- CONTENT WRAPPER START -->
+    <div class="w-100 d-flex ">
+        <!-- SETTINGS SIDEBAR START -->
+<div class="mobile-close-overlay w-100 h-100" id="close-settings-overlay"></div>
+<div class="settings-sidebar bg-white py-3" id="mob-settings-sidebar">
+    <a class="d-block d-lg-none close-it" id="close-settings"><i class="fa fa-times"></i></a>
+
+    <!-- SETTINGS SEARCH START -->
+    <form class="border-bottom-grey px-4 pb-3 d-flex">
+        <div class="input-group rounded py-1 border-grey">
+            <div class="input-group-prepend">
+                <span class="input-group-text border-0 bg-white">
+                    <i class="fa fa-search f-12 text-lightest"></i>
+                </span>
+            </div>
+            <input type="text" id="search-setting-menu" class="form-control border-0 f-14 pl-0"
+                placeholder="يبحث">
+        </div>
+    </form>
+    <!-- SETTINGS SEARCH END -->
+
+    <!-- SETTINGS MENU START -->
+    <ul class="settings-menu" id="settingsMenu">
+        
+        
+        <li class="">
+<label class="d-block f-15 text-dark-grey text-capitalize font-weight-bolder text-dark " style="background-color:#f2f4f7;padding: 15px 24px;white-space: break-spaces;margin:0px;">  معلومات المنشأة </label>
+</li>
+
+
+        <li class=active  >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/company-settings.html">بيانات المنشأة    </a>
+</li>
+
+            <li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/app-settings.html">التنسيق والعرض    </a>
+</li>
+
+        <li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/theme-settings.html"> التصميم    </a>
+</li>
+
+
+
+        <li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/hierarchy-settings.html"> الهيكل التنظيمي    </a>
+</li>
+
+        <li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/designation-settings.html"> المسميات الوظيفية    </a>
+</li>
+        
+
+<li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/business-address.html">مواقع العمل    </a>
+</li>
+
+
+<li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/profile-settings.html"> الملف الشخصي    </a>
+</li>
+
+
+        <li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/custom-fields.html">الحقول المخصصة    </a>
+</li>
+
+
+
+
+            <li class="">
+<label class="d-block f-15 text-dark-grey text-capitalize font-weight-bolder text-dark " style="background-color:#f2f4f7;padding: 15px 24px;white-space: break-spaces;margin:0px;">  إعدادات المشاريع والمهام  </label>
+</li>
+
+
+        <li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/project-settings.html">المشاريع    </a>
+</li>
+
+        <li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/task-settings.html">المهام    </a>
+</li>
+         
+
+
+
+            <li class="">
+<label class="d-block f-15 text-dark-grey text-capitalize font-weight-bolder text-dark " style="background-color:#f2f4f7;padding: 15px 24px;white-space: break-spaces;margin:0px;">  إعدادات الموارد البشرية  </label>
+</li>
+
+
+
+
+
+            <li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/approval-flow.html">سلاسل الموافقات<span class='badge badge-secondary mr-1' style="background:#e9c81024;color:color-mix(in srgb, #e9c810 70%, black);">تجريبي</span>     </a>
+</li>
+
+                    
+        <li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/timelog-settings.html">السجلات الزمنية    </a>
+</li>
+
+        
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+ 
+         
+
+
+
+
+
+
+        
+
+
+<li class="">
+<label class="d-block f-15 text-dark-grey text-capitalize font-weight-bolder text-dark " style="background-color:#f2f4f7;padding: 15px 24px;white-space: break-spaces;margin:0px;">  إعدادات الخصوصية </label>
+</li>
+
+
+
+        <li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/notifications.html"> الإشعارات    </a>
+</li>
+
+
+<li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/security-settings.html">الأمان    </a>
+</li>
+
+
+        <li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/module-settings.html"> التطبيقات    </a>
+</li>
+
+
+
+
+
+
+
+
+
+
+        <li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="settings/role-permissions.html">الأدوار والصلاحيات    </a>
+</li>
+ 
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                
+
+
+
+        
+<li   >
+<a class="d-block f-15 text-dark-grey text-capitalize border-bottom-grey" href="billing.html">تفاصيل الباقة    </a>
+</li>
+
+</ul>
+    <!-- SETTINGS MENU END -->
+
+</div>
+<!-- SETTINGS SIDEBAR END -->
+
+<script>
+    $("body").on("click", ".ajax-tab", function (event) {
+        event.preventDefault();
+
+        $('.project-menu .p-sub-menu').removeClass('active');
+        $(this).addClass('active');
+
+        const requestUrl = this.href;
+
+        $.easyAjax({
+            url: requestUrl,
+            blockUI: true,
+            container: ".content-wrapper",
+            historyPush: true,
+            success: function (response) {
+                if (response.status === "success") {
+                    $('.content-wrapper').html(response.html);
+                    init('.content-wrapper');
+                }
+            }
+        });
+    });
+
+    $("#search-setting-menu").on("keyup", function () {
+        var value = this.value.toLowerCase().trim();
+        $("#settingsMenu li").show().filter(function () {
+            return $(this).text().toLowerCase().trim().indexOf(value) == -1;
+        }).hide();
+    });
+
+    document.querySelector('#settingsMenu .active').scrollIntoView()
+
+    //make sidebar-menu-hidden when is in settings
+    let toggleSettings = document.querySelector('body');
+
+            toggleSettings.classList.toggle('sidebar-toggled',true); 
+    
+</script>
+        <!-- SETTINGS BOX START -->
+<div class="settings-box bg-additional-grey rounded">
+
+        
+    <form method="POST" id="editSettings" class="ajax-form" autocomplete="off" >
+    <input type="search" class="autocomplete-password" style="opacity: 0;position: absolute;">
+<input type="password" class="autocomplete-password" style="opacity: 0;position: absolute;">
+<input type="email" name="f_email" class="autocomplete-password" readonly style="opacity: 0;position: absolute;">
+<input type="text" name="f_slack_username" class="autocomplete-password" readonly style="opacity: 0;position: absolute;">
+
+
+
+    <input type="hidden" id="redirect_url" name="redirect_url" value="">
+
+            <input type="hidden" name="_token" value="DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap" autocomplete="off">    
+            <input type="hidden" name="_method" value="PUT">    
+    <a class="mb-0 d-block d-lg-none text-dark-grey s-b-mob-sidebar" onclick="openSettingsSidebar()"><i
+                class="icon-ellipsis-vertical"></i></a>
+        <div class="s-b-inner s-b-notifications bg-white b-shadow-4 rounded">
+            <div class="s-b-n-header" id="tabs">
+                    <h2 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
+                         الهيكل التنظيمي</h2>
+                </div>
+            <div class="s-b-n-content">
+                <div class="tab-content" id="nav-tabContent">
+                    <!--  TAB CONTENT START -->
+                    <div class="tab-pane fade show active" id="nav-email" role="tabpanel"
+                        aria-labelledby="nav-email-tab">
+                        <div class="d-flex flex-wrap justify-content-between">
+                            <div class="col-lg-12 col-md-12 ntfcn-tab-content-left w-100 p-4 ">
+                <div class="content-wrapper">
+
+
+                    <!-- Add Task Export Buttons Start -->
+                    <div class="d-block d-lg-flex d-md-flex justify-content-between action-bar">
+                        <div id="table-actions" class="flex-grow-1 align-items-center">
+                                                            <a href="departments.create.html" class="btn-primary rounded f-14 p-2 openRightModal float-left">
+            <i class="icon-plus mr-1"></i>
+        اضافة قسم
+</a>
+                                                    </div>
+
+                        
+
+                        <div class="btn-group mt-2 mt-lg-0 mt-md-0 ml-3" role="group" aria-label="Basic example">
+                            <a href="department-hierarchy.html" class="btn btn-secondary f-14"
+                                data-toggle="tooltip" data-original-title="الهيكل التنظيمي"><i
+                                    class="bi bi-diagram-3"></i></a>
+                            <a href="departments" class="btn btn-secondary f-14 btn-active"
+                                data-toggle="tooltip" data-original-title="عرض جدول"><i
+                                    class="side-icon bi bi-list-ul"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- leave table Box Start -->
+                    <div class="d-flex flex-column border-grey border-1 rounded mt-3 bg-white">
+
+                        <table class="table table-hover border-0 w-100" id="departments-table"><thead><tr><th title="&lt;input type=&quot;checkbox&quot; name=&quot;select_all_table&quot; id=&quot;select-all-table&quot; onclick=&quot;selectAllTable(this)&quot;&gt;"><input type="checkbox" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)"></th><th title="#">#</th><th title="الاسم">الاسم</th><th title="مدير القسم">مدير القسم</th><th title="يندرج تحت">يندرج تحت</th><th title="الإجراء">الإجراء</th></tr></thead></table>
+
+                    </div>
+                    <!-- leave table End -->
+
+                </div>
+            </div>
+                        </div>
+                                            </div>
+                    <!-- TAB CONTENT END -->
+                </div>
+            </div>
+        </div>
+</form>
+</div>
+<!-- SETTINGS BOX END -->
+
+        <!-- CONTENT WRAPPER END -->
+    
+
+        </section>
+        <!-- MAIN CONTAINER END -->
+    </div>
+
+    <!-- BODY WRAPPER END -->
+    <!-- also the modal itself -->
+<div id="myModalDefault" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center align-items-center">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modelHeading">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true"class="close material-symbols-rounded">close</span></button>
+            </div>
+            <div class="modal-body">
+                تنزيل ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel rounded mr-3" data-dismiss="modal">Close</button>
+                <button type="button" class="btn-primary rounded">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- also the modal itself -->
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center align-items-center modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modelHeading">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true"class="close material-symbols-rounded">close</span></button>
+            </div>
+            <div class="modal-body">
+                تنزيل ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel rounded mr-3" data-dismiss="modal">Close</button>
+                <button type="button" class="btn-primary rounded">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- also the modal itself -->
+<div id="myModalXl" class="modal fade overflow-auto" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center align-items-center modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modelHeading">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true"class="close material-symbols-rounded">close</span></button>
+            </div>
+            <div class="modal-body bg-grey">
+                تنزيل ...
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Task Detail Start -->
+<div class="task-overlay w-100 h-100" id="close-task-detail-overlay"></div>
+<div class="task-detail-panel bg-additional-grey" id="task-detail-1">
+    <a class="close-task-detail" id="close-task-detail" style="display: none;">
+        <span><span class="material-symbols-rounded">close</span></span>
+    </a>
+    <div class="p-4 t-d-inner-panel">
+        <h3 class="heading-h1 mb-0" id="right-modal-title"></h3>
+
+        <div id="right-modal-content" class="mt-4">
+
+        </div>
+    </div>
+</div>
+<!-- Task Detail End -->
+
+<div id="myModalPopUpMain" class="modal fade overflow-auto" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center align-items-center modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" style="border-bottom: 0px !important;">
+                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span style="font-size: 24px; font-weight: 100;"
+                        aria-hidden="true"class="close material-symbols-rounded">close</span></button>
+            </div>
+            <div class="modal-body bg-white">
+                تنزيل ...
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="myModalPopUp" class="modal fade overflow-auto" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center align-items-center modal-md">
+        <div class="modal-content">
+            <div class="modal-header" style="border-bottom: 0px !important;">
+                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span style="font-size: 24px; font-weight: 100;"
+                        aria-hidden="true"class="close material-symbols-rounded">close</span></button>
+            </div>
+            <div class="modal-body bg-white">
+                <h3 class="text-center m-auto" style="max-width: 350px;">مرحباً بك في الإصدار الخاص من نسخة فلودو</h3>
+                <p class="text-center mt-2">هذا الإصدار يتضمن ميزات وتحسينات متقدمة من منصة فلودو على مستوى الأدوات وتجربة الاستخدام، غير متاحة في الإصدار العام، وقد تم اختياركم خصيصاً لتجربتها، وتسعدنا ملاحظاتكم ومقترحاتكم </p>
+                <br>
+                <div class="d-flex p-3" style="background-color: #00dd9036; border-radius: 8px;">
+                    <img width="180" height="140" style="width: 180px; height: 140px; filter: hue-rotate(35deg);" src="https://i.ibb.co/4PRBnkm/supportdribble-removebg-preview.png" />
+                    <div>
+                        <h5>هل تحتاج للمساعدة؟</h5>
+                        <p>فريق نجاح العملاء جاهزون لمساعدتك أثناء هذه التجربة لتحقيق أقصى استفادة منها</p>
+                        <a href="mailto:support@kamel.sa" type="button" class="btn-primary rounded">اتصل الآن</a>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+
+    <!-- Global Required Javascript -->
+    <script src="https://altab.flowdo.net/js/main.js?v=2"></script>
+    <script src="https://altab.flowdo.net/js/dropbox.js"></script>
+    <script src="https://altab.flowdo.net/js/google_drive.js"></script>
+
+    <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs"
+        data-app-key="1q2bdfumra47iqs"></script>
+    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBv1xULyRb7-Hj178eIEhkiJHSKenrwMv0&callback=showTable" async></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-ui-sortable@1.0.0/jquery-ui.min.js"></script>
+
+    <script>
+        // Translation of default values for the select picker box.
+    $.fn.selectpicker.Constructor.DEFAULTS.noneSelectedText = "اختر من القائمة";
+    $.fn.selectpicker.Constructor.DEFAULTS.noneResultsText = "لا توجد نتائج مطابقة {0}";
+    $.fn.selectpicker.Constructor.DEFAULTS.selectAllText = "اختر الكل";
+    $.fn.selectpicker.Constructor.DEFAULTS.deselectAllText = "الغاء تحديد الكل";
+
+    const MODAL_DEFAULT = '#myModalDefault';
+    const MODAL_LG = '#myModal';
+    const MODAL_XL = '#myModalXl';
+    const MODAL_HEADING = '#modelHeading';
+    const RIGHT_MODAL = '#task-detail-1';
+    const RIGHT_MODAL_CONTENT = '#right-modal-content';
+    const RIGHT_MODAL_TITLE = '#right-modal-title';
+    const company = {"id":462,"sub_domain":"Altab.flowdo.net","company_name":"\u0645\u0624\u0633\u0633\u0629 \u0627\u0644\u0637\u064a\u0628 \u0627\u0644\u0623\u0641\u0636\u0644 \u0644\u0644\u062a\u062c\u0627\u0631\u0629","app_name":"\u0645\u0624\u0633\u0633\u0629 \u0627\u0644\u0637\u064a\u0628 \u0627\u0644\u0623\u0641\u0636\u0644 \u0644\u0644\u062a\u062c\u0627\u0631\u0629","company_email":"alroewes@gmail.com","company_phone":"\u0660\u0665\u0660\u0669\u0669\u0669\u0662\u0668\u0660\u0663","logo":"3514c4e1a404d36ddd99acbe6080e544.png","login_background":null,"country_id":187,"address":"\u0645\u0624\u0633\u0633\u0629 \u0627\u0644\u0637\u064a\u0628 \u0627\u0644\u0623\u0641\u0636\u0644 \u0644\u0644\u062a\u062c\u0627\u0631\u0629","city":null,"district":null,"postal_code":null,"additional_number":null,"national_address":null,"building_number":null,"website":null,"currency_id":1065,"package_id":49,"package_type":"monthly","timezone":"Asia\/Riyadh","date_format":"d-m-Y","date_picker_format":"dd-mm-yyyy","year_starts_from":"1","moment_format":"DD-MM-YYYY","time_format":"h:i a","locale":"ar","latitude":"26.91243360","longitude":"75.78727090","leaves_start_from":"joining_date","active_theme":"default","status":"active","task_self":"yes","last_updated_by":null,"stripe_id":null,"card_brand":null,"card_last_four":null,"trial_ends_at":null,"licence_expire_on":null,"license_updated_at":null,"subscription_updated_at":"2025-03-24T06:34:18+00:00","rounded_theme":1,"last_login":"2025-03-24T18:47:56+00:00","default_task_status":6059,"dashboard_clock":1,"ticket_form_google_captcha":0,"lead_form_google_captcha":0,"rtl":1,"company_name_en":null,"address_en":null,"city_en":null,"district_en":null,"identification_type":"CRN","cr_number":null,"gst_number":null,"token":null,"hash":"4910d1da9eac50d61c4bbc599634f085","logo_background_color":"#FFFFFF","header_color":"#00DD90","light_logo":"713a8c95c7cd38a61fc5092dce631cac.png","favicon":"6823163ef3557a2c287cd16b625019cb.png","auth_theme":"light","auth_theme_text":"dark","sidebar_logo_style":"square","before_days":0,"after_days":0,"on_deadline":"yes","taskboard_length":10,"datatable_row_limit":100,"allow_client_signup":0,"admin_client_signup_approval":0,"google_calendar_status":"inactive","google_client_id":null,"google_client_secret":null,"google_calendar_verification_status":"non_verified","name":null,"license_type":null,"approved":1,"approved_by":null,"show_new_webhook_alert":0,"pm_type":null,"pm_last_four":null,"currency_converter_key":null,"google_map_key":null,"purchase_code":null,"supported_until":null,"google_recaptcha_status":"deactive","google_recaptcha_v2_status":"deactive","google_recaptcha_v2_site_key":null,"google_recaptcha_v2_secret_key":null,"google_recaptcha_v3_status":"deactive","google_recaptcha_v3_site_key":null,"google_recaptcha_v3_secret_key":null,"app_debug":0,"hide_cron_message":0,"system_update":1,"show_review_modal":1,"last_cron_run":null,"session_driver":"file","allowed_file_types":null,"google_id":null,"allowed_file_size":10,"currency_key_version":"free","google_drive_status":"inactive","company_type":null,"business_category":null,"logo_url":"https:\/\/altab.flowdo.net\/user-uploads\/app-logo\/713a8c95c7cd38a61fc5092dce631cac.png","login_background_url":null,"moment_date_format":"DD-MM-YYYY","favicon_url":"https:\/\/altab.flowdo.net\/user-uploads\/favicon\/6823163ef3557a2c287cd16b625019cb.png","full_address":"\u0645\u0624\u0633\u0633\u0629 \u0627\u0644\u0637\u064a\u0628 \u0627\u0644\u0623\u0641\u0636\u0644 \u0644\u0644\u062a\u062c\u0627\u0631\u0629\u060c \u060c \u060c \u0627\u0644\u0645\u0645\u0644\u0643\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629 \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629","full_address_en":", , , Saudi Arabia","package":{"id":49,"currency_id":9,"name":"\u0628\u0627\u0642\u0629 \u0627\u0644\u0645\u0634\u0627\u0631\u064a\u0639 \u0627\u0644\u0627\u0633\u0627\u0633\u064a\u0629","description":"[project]","max_storage_size":100000,"max_file_size":0,"annual_price":1,"monthly_price":1,"billing_cycle":0,"max_employees":20,"sort":"35","module_in_package":"{\u00221\u0022:\u0022clients\u0022,\u00222\u0022:\u0022employees\u0022,\u00223\u0022:\u0022projects\u0022,\u00225\u0022:\u0022tasks\u0022,\u00229\u0022:\u0022timelogs\u0022}","stripe_annual_plan_id":null,"razorpay_annual_plan_id":null,"razorpay_monthly_plan_id":null,"stripe_monthly_plan_id":null,"paystack_monthly_plan_id":null,"paystack_annual_plan_id":null,"default":"no","is_private":0,"storage_unit":"mb","is_recommended":0,"is_free":0,"is_auto_renew":0,"monthly_status":"1","annual_status":"1","formatted_annual_price":"SR1.00","formatted_monthly_price":"SR1.00"},"country":{"id":187,"iso":"SA","name":"SAUDI ARABIA","nicename":"Saudi Arabia","iso3":"SAU","numcode":682,"phonecode":966,"nationality":"Saudi"}};
+    const pusher_setting = {"id":1,"pusher_app_id":null,"pusher_app_key":null,"pusher_app_secret":null,"pusher_cluster":null,"force_tls":0,"status":0,"taskboard":0,"messages":0};
+    const message_setting = {"id":464,"company_id":462,"allow_client_admin":"no","allow_client_employee":"no","restrict_client":"no","send_sound_notification":0};
+    const SEARCH_KEYWORD = "";
+    const MOMENTJS_TIME_FORMAT = "hh:mm a";
+
+    const datepickerConfig = {
+        formatter: (input, date, instance) => {
+            input.value = moment(date).format('DD-MM-YYYY')
+        },
+        showAllDates: true,
+        customDays: ["\u0623\u062d\u062f","\u0627\u062b\u0646\u064a\u0646","\u062b\u0644\u0627\u062b\u0627\u0621","\u0623\u0631\u0628\u0639\u0627\u0621","\u062e\u0645\u064a\u0633","\u062c\u0645\u0639\u0629","\u0633\u0628\u062a"],
+        customMonths: ["\u064a\u0646\u0627\u064a\u0631","\u0641\u0628\u0631\u0627\u064a\u0631","\u0645\u0627\u0631\u0633","\u0623\u0628\u0631\u064a\u0644","\u0645\u0627\u064a\u0648","\u064a\u0648\u0646\u064a\u0648","\u064a\u0648\u0644\u064a\u0648","\u0623\u063a\u0633\u0637\u0633","\u0633\u0628\u062a\u0645\u0628\u0631","\u0623\u0643\u062a\u0648\u0628\u0631","\u0646\u0648\u0641\u0645\u0628\u0631","\u062f\u064a\u0633\u0645\u0628\u0631"],
+        customOverlayMonths: ["\u064a\u0646\u0627\u064a\u0631","\u0641\u0628\u0631\u0627\u064a\u0631","\u0645\u0627\u0631\u0633","\u0623\u0628\u0631\u064a\u0644","\u0645\u0627\u064a\u0648","\u064a\u0648\u0646\u064a\u0648","\u064a\u0648\u0644\u064a\u0648","\u0623\u063a\u0633\u0637\u0633","\u0633\u0628\u062a\u0645\u0628\u0631","\u0623\u0643\u062a\u0648\u0628\u0631","\u0646\u0648\u0641\u0645\u0628\u0631","\u062f\u064a\u0633\u0645\u0628\u0631"],
+        overlayButton: "موافق",
+        overlayPlaceholder: "4 أرقام سنة",
+        startDay: parseInt("1")
+    };
+
+    const datepickerConfig2 = {
+        formatter: (input, date, instance) => {
+            input.value = moment(date).format('YYYY-MM-DD')
+        },
+        showAllDates: true,
+        customDays: ["\u0623\u062d\u062f","\u0627\u062b\u0646\u064a\u0646","\u062b\u0644\u0627\u062b\u0627\u0621","\u0623\u0631\u0628\u0639\u0627\u0621","\u062e\u0645\u064a\u0633","\u062c\u0645\u0639\u0629","\u0633\u0628\u062a"],
+        customMonths: ["\u064a\u0646\u0627\u064a\u0631","\u0641\u0628\u0631\u0627\u064a\u0631","\u0645\u0627\u0631\u0633","\u0623\u0628\u0631\u064a\u0644","\u0645\u0627\u064a\u0648","\u064a\u0648\u0646\u064a\u0648","\u064a\u0648\u0644\u064a\u0648","\u0623\u063a\u0633\u0637\u0633","\u0633\u0628\u062a\u0645\u0628\u0631","\u0623\u0643\u062a\u0648\u0628\u0631","\u0646\u0648\u0641\u0645\u0628\u0631","\u062f\u064a\u0633\u0645\u0628\u0631"],
+        customOverlayMonths: ["\u064a\u0646\u0627\u064a\u0631","\u0641\u0628\u0631\u0627\u064a\u0631","\u0645\u0627\u0631\u0633","\u0623\u0628\u0631\u064a\u0644","\u0645\u0627\u064a\u0648","\u064a\u0648\u0646\u064a\u0648","\u064a\u0648\u0644\u064a\u0648","\u0623\u063a\u0633\u0637\u0633","\u0633\u0628\u062a\u0645\u0628\u0631","\u0623\u0643\u062a\u0648\u0628\u0631","\u0646\u0648\u0641\u0645\u0628\u0631","\u062f\u064a\u0633\u0645\u0628\u0631"],
+        overlayButton: "موافق",
+        overlayPlaceholder: "4 أرقام سنة",
+        startDay: parseInt("1")
+    };
+
+    const daterangeConfig = {
+        "اليوم": [moment(), moment()],
+        "آخر 30 يومًا": [moment().subtract(29, 'days'), moment()],
+        "هذا الشهر": [moment().startOf('month'), moment().endOf('month')],
+        "الشهر الماضي": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+        "آخر 90 يومًا": [moment().subtract(89, 'days'), moment()],
+        "آخر 6 أشهر": [moment().subtract(6, 'months'), moment()],
+        "العام الماضي": [moment().subtract(1, 'years'), moment()]
+    };
+
+    const daterangeLocale = {
+        "format": "DD-MM-YYYY",
+        "customRangeLabel": "نطاق مخصص",
+        "separator": " ل ",
+        "applyLabel": "تأكيد",
+        "cancelLabel": "إلغاء",
+        "monthNames": ["\u064a\u0646\u0627\u064a\u0631","\u0641\u0628\u0631\u0627\u064a\u0631","\u0645\u0627\u0631\u0633","\u0623\u0628\u0631\u064a\u0644","\u0645\u0627\u064a\u0648","\u064a\u0648\u0646\u064a\u0648","\u064a\u0648\u0644\u064a\u0648","\u0623\u063a\u0633\u0637\u0633","\u0633\u0628\u062a\u0645\u0628\u0631","\u0623\u0643\u062a\u0648\u0628\u0631","\u0646\u0648\u0641\u0645\u0628\u0631","\u062f\u064a\u0633\u0645\u0628\u0631"],
+        "daysOfWeek": ["\u0623\u062d\u062f","\u0627\u062b\u0646\u064a\u0646","\u062b\u0644\u0627\u062b\u0627\u0621","\u0623\u0631\u0628\u0639\u0627\u0621","\u062e\u0645\u064a\u0633","\u062c\u0645\u0639\u0629","\u0633\u0628\u062a"],
+        "firstDay": parseInt("1")
+    };
+
+    const dropifyMessages = {
+        default: "اختيار ملف",
+        replace: "قم بإسقاط ملف أو انقر لاستبداله",
+        remove: "حذف",
+        error: "حدث خطأ ما.",
+    };
+
+    const DROPZONE_FILE_ALLOW = "image/*,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/docx,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip,application/x-zip-compressed,application/x-compressed,multipart/x-zip,.xlsx,video/x-flv,video/mp4,application/x-mpegURL,video/MP2T,video/3gpp,video/quicktime,video/x-msvideo,video/x-ms-wmv,application/sla,.stl,.ai,.psd,.xmind,.pptx,.rar,.html";
+    const DROPZONE_MAX_FILESIZE = "10000";
+    const DROPZONE_MAX_FILES = "10";
+
+    Dropzone.prototype.defaultOptions.dictFallbackMessage = "متصفحك لا يدعم سحب الملفات وإسقاطها.";
+    Dropzone.prototype.defaultOptions.dictFallbackText = "يرجى استخدام النموذج الاحتياطي أدناه لتحميل ملفاتك كما في الأيام الخوالي.";
+    Dropzone.prototype.defaultOptions.dictFileTooBig = "الملف كبير جدًا ({{حجم الملف}} ميغا بايت). الحد الأقصى لحجم الملف: {{max File size}} ميغا بايت.";
+    Dropzone.prototype.defaultOptions.dictInvalidFileType = "لا يمكنك تحميل ملفات من هذا النوع.";
+    Dropzone.prototype.defaultOptions.dictResponseError = "استجاب الخادم برمز {{statusCode}}.";
+    Dropzone.prototype.defaultOptions.dictCancelUpload = "إلغاء الرفع";
+    Dropzone.prototype.defaultOptions.dictCancelUploadConfirmation = "هل أنت متأكد أنك تريد إلغاء هذا التحميل؟";
+    Dropzone.prototype.defaultOptions.dictRemoveFile = "إزالة الملف";
+    Dropzone.prototype.defaultOptions.dictMaxFilesExceeded = "لا يمكنك تحميل أكثر من {{maxFiles}} من الملفات.";
+    Dropzone.prototype.defaultOptions.dictDefaultMessage = "قم بإسقاط الملفات هنا أو انقر للتحميل";
+    Dropzone.prototype.defaultOptions.timeout = 0;
+
+    $('#datatableRange').on('apply.daterangepicker', (event, picker) => {
+        cb(picker.startDate, picker.endDate);
+        $('#datatableRange').val(picker.startDate.format('DD-MM-YYYY') +
+            ' ل ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+    });
+
+    $('#datatableRange2').on('apply.daterangepicker', (event, picker) => {
+        cb(picker.startDate, picker.endDate);
+        $('#datatableRange2').val(picker.startDate.format('DD-MM-YYYY') +
+            ' ل ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+    });
+
+    function cb(start, end) {
+        $('#datatableRange, #datatableRange2').val(start.format('DD-MM-YYYY') +
+            ' ل ' + end.format(
+                'DD-MM-YYYY'));
+            $('#reset-filters, #reset-filters-2').removeClass('d-none');
+
+    }
+
+    </script>
+
+    <!-- Scripts -->
+    <script>
+        window.Laravel = {"csrfToken":"DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap","user":{"id":2614,"company_id":462,"user_auth_id":1493,"name":"\u0645\u062d\u0645\u062f \u0641\u0627\u0644\u062d \u0627\u0644\u0639\u062a\u064a\u0628\u064a","email":"alroewes@gmail.com","image":null,"country_phonecode":null,"mobile":null,"gender":"male","locale":"ar","status":"active","login":"enable","onesignal_player_id":null,"fcm_device_token":null,"is_superadmin":0,"email_notifications":1,"country_id":null,"last_login":"2025-03-24T18:47:56+00:00","customised_permissions":0,"salutation":null,"dark_theme":0,"rtl":1,"admin_approval":1,"permission_sync":1,"google_calendar_status":1,"stripe_id":null,"pm_type":null,"pm_last_four":null,"trial_ends_at":null,"name_en":null,"image_url":"https:\/\/altab.flowdo.net\/user-uploads\/avatar\/ar\/13.png","modules":["clients","projects","tasks","timelogs","employees"],"mobile_with_phonecode":"--","client_details":null,"employee_detail":{"id":817,"company_id":462,"user_id":2614,"employee_id":"EMP-1","address":null,"hourly_rate":null,"number_of_hour_day":0,"salary":"0.00","salary_component":null,"slack_username":null,"department_id":null,"designation_id":null,"joining_date":"2025-03-24T14:34:24+00:00","last_date":null,"attendance_reminder":null,"added_by":null,"last_updated_by":null,"date_of_birth":null,"calendar_view":null,"about_me":null,"reporting_to":null,"contract_end_date":null,"internship_end_date":null,"employment_type":null,"marriage_anniversary_date":null,"marital_status":"unmarried","notice_period_end_date":null,"notice_period_start_date":null,"probation_end_date":null,"company_address_id":null,"monthly_rate":null,"comp_address_id":null,"reporting_to2":null,"shift_id":null,"hijri_birth_date":null,"restrict_workplace":0,"annual_leave_days":null,"overtime_hourly_rate":null,"upcoming_birthday":null,"employee_prefix":"EMP-1","annual_salary":"0.00","designation":null,"company":{"id":462,"sub_domain":"Altab.flowdo.net","company_name":"\u0645\u0624\u0633\u0633\u0629 \u0627\u0644\u0637\u064a\u0628 \u0627\u0644\u0623\u0641\u0636\u0644 \u0644\u0644\u062a\u062c\u0627\u0631\u0629","app_name":"\u0645\u0624\u0633\u0633\u0629 \u0627\u0644\u0637\u064a\u0628 \u0627\u0644\u0623\u0641\u0636\u0644 \u0644\u0644\u062a\u062c\u0627\u0631\u0629","company_email":"alroewes@gmail.com","company_phone":"\u0660\u0665\u0660\u0669\u0669\u0669\u0662\u0668\u0660\u0663","logo":"3514c4e1a404d36ddd99acbe6080e544.png","login_background":null,"country_id":187,"address":"\u0645\u0624\u0633\u0633\u0629 \u0627\u0644\u0637\u064a\u0628 \u0627\u0644\u0623\u0641\u0636\u0644 \u0644\u0644\u062a\u062c\u0627\u0631\u0629","city":null,"district":null,"postal_code":null,"additional_number":null,"national_address":null,"building_number":null,"website":null,"currency_id":1065,"package_id":49,"package_type":"monthly","timezone":"Asia\/Riyadh","date_format":"d-m-Y","date_picker_format":"dd-mm-yyyy","year_starts_from":"1","moment_format":"DD-MM-YYYY","time_format":"h:i a","locale":"ar","latitude":"26.91243360","longitude":"75.78727090","leaves_start_from":"joining_date","active_theme":"default","status":"active","task_self":"yes","last_updated_by":null,"stripe_id":null,"card_brand":null,"card_last_four":null,"trial_ends_at":null,"licence_expire_on":null,"license_updated_at":null,"subscription_updated_at":"2025-03-24T06:34:18+00:00","rounded_theme":1,"last_login":"2025-03-24T18:47:56+00:00","default_task_status":6059,"dashboard_clock":1,"ticket_form_google_captcha":0,"lead_form_google_captcha":0,"rtl":1,"company_name_en":null,"address_en":null,"city_en":null,"district_en":null,"identification_type":"CRN","cr_number":null,"gst_number":null,"token":null,"hash":"4910d1da9eac50d61c4bbc599634f085","logo_background_color":"#FFFFFF","header_color":"#00DD90","light_logo":"713a8c95c7cd38a61fc5092dce631cac.png","favicon":"6823163ef3557a2c287cd16b625019cb.png","auth_theme":"light","auth_theme_text":"dark","sidebar_logo_style":"square","before_days":0,"after_days":0,"on_deadline":"yes","taskboard_length":10,"datatable_row_limit":100,"allow_client_signup":0,"admin_client_signup_approval":0,"google_calendar_status":"inactive","google_client_id":null,"google_client_secret":null,"google_calendar_verification_status":"non_verified","name":null,"license_type":null,"approved":1,"approved_by":null,"show_new_webhook_alert":0,"pm_type":null,"pm_last_four":null,"currency_converter_key":null,"google_map_key":null,"purchase_code":null,"supported_until":null,"google_recaptcha_status":"deactive","google_recaptcha_v2_status":"deactive","google_recaptcha_v2_site_key":null,"google_recaptcha_v2_secret_key":null,"google_recaptcha_v3_status":"deactive","google_recaptcha_v3_site_key":null,"google_recaptcha_v3_secret_key":null,"app_debug":0,"hide_cron_message":0,"system_update":1,"show_review_modal":1,"last_cron_run":null,"session_driver":"file","allowed_file_types":null,"google_id":null,"allowed_file_size":10,"currency_key_version":"free","google_drive_status":"inactive","company_type":null,"business_category":null,"logo_url":"https:\/\/altab.flowdo.net\/user-uploads\/app-logo\/713a8c95c7cd38a61fc5092dce631cac.png","login_background_url":null,"moment_date_format":"DD-MM-YYYY","favicon_url":"https:\/\/altab.flowdo.net\/user-uploads\/favicon\/6823163ef3557a2c287cd16b625019cb.png","full_address":"\u0645\u0624\u0633\u0633\u0629 \u0627\u0644\u0637\u064a\u0628 \u0627\u0644\u0623\u0641\u0636\u0644 \u0644\u0644\u062a\u062c\u0627\u0631\u0629\u060c \u060c \u060c \u0627\u0644\u0645\u0645\u0644\u0643\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629 \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629","full_address_en":", , , Saudi Arabia","package":{"id":49,"currency_id":9,"name":"\u0628\u0627\u0642\u0629 \u0627\u0644\u0645\u0634\u0627\u0631\u064a\u0639 \u0627\u0644\u0627\u0633\u0627\u0633\u064a\u0629","description":"[project]","max_storage_size":100000,"max_file_size":0,"annual_price":1,"monthly_price":1,"billing_cycle":0,"max_employees":20,"sort":"35","module_in_package":"{\"1\":\"clients\",\"2\":\"employees\",\"3\":\"projects\",\"5\":\"tasks\",\"9\":\"timelogs\"}","stripe_annual_plan_id":null,"razorpay_annual_plan_id":null,"razorpay_monthly_plan_id":null,"stripe_monthly_plan_id":null,"paystack_monthly_plan_id":null,"paystack_annual_plan_id":null,"default":"no","is_private":0,"storage_unit":"mb","is_recommended":0,"is_free":0,"is_auto_renew":0,"monthly_status":"1","annual_status":"1","formatted_annual_price":"SR1.00","formatted_monthly_price":"SR1.00"},"country":{"id":187,"iso":"SA","name":"SAUDI ARABIA","nicename":"Saudi Arabia","iso3":"SAU","numcode":682,"phonecode":966,"nationality":"Saudi"}},"department":null},"roles":[{"id":1551,"company_id":462,"name":"admin","display_name":"App Administrator","description":"Admin is allowed to manage everything of the app.","created_at":"2025-03-24T06:34:19.000000Z","updated_at":"2025-03-24T06:34:19.000000Z","pivot":{"user_id":2614,"role_id":1551}},{"id":1552,"company_id":462,"name":"employee","display_name":"Employee","description":"Employee can see tasks and projects assigned to him.","created_at":"2025-03-24T06:34:19.000000Z","updated_at":"2025-03-24T06:34:19.000000Z","pivot":{"user_id":2614,"role_id":1552}}],"sticky":[],"role":[{"user_id":2614,"role_id":1551},{"user_id":2614,"role_id":1552}]}};
+    </script>
+
+            <!-- Datatables -->
+<script src="https://altab.flowdo.net/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="https://altab.flowdo.net/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+
+<script src="https://altab.flowdo.net/vendor/datatables/dataTables.buttons.min.js"></script>
+<script src="https://altab.flowdo.net/vendor/datatables/buttons.bootstrap4.min.js"></script>
+<script src="https://altab.flowdo.net/vendor/datatables/buttons.server-side.js"></script>
+<script type="text/javascript">$(function(){window.LaravelDataTables=window.LaravelDataTables||{};window.LaravelDataTables["departments-table"]=$("#departments-table").DataTable({"serverSide":true,"processing":true,"ajax":{"url":"https:\/\/altab.flowdo.net\/account\/settings\/hierarchy-settings","type":"GET","data":function(data) {
+            for (var i = 0, len = data.columns.length; i < len; i++) {
+                if (!data.columns[i].search.value) delete data.columns[i].search;
+                if (data.columns[i].searchable === true) delete data.columns[i].searchable;
+                if (data.columns[i].orderable === true) delete data.columns[i].orderable;
+                if (data.columns[i].data === data.columns[i].name) delete data.columns[i].name;
+            }
+            delete data.search.regex;}},"columns":[{"title":"<input type=\"checkbox\" name=\"select_all_table\" id=\"select-all-table\" onclick=\"selectAllTable(this)\">","orderable":false,"searchable":false,"visible":true,"name":"check","data":"check"},{"data":"DT_RowIndex","orderable":false,"searchable":false,"visible":false,"title":"#","name":"DT_RowIndex"},{"data":"name","name":"team_name","title":"\u0627\u0644\u0627\u0633\u0645","orderable":true,"searchable":true},{"data":"dept_manager","name":"dept_manager","title":"\u0645\u062f\u064a\u0631 \u0627\u0644\u0642\u0633\u0645","orderable":true,"searchable":true},{"data":"parent_id","name":"parent_id","title":"\u064a\u0646\u062f\u0631\u062c \u062a\u062d\u062a","orderable":true,"searchable":true},{"data":"action","name":"action","title":"\u0627\u0644\u0625\u062c\u0631\u0627\u0621","orderable":false,"searchable":false,"className":"text-right pr-20"}],"order":[[2,"desc"]],"destroy":true,"responsive":true,"stateSave":false,"pageLength":100,"dom":"<'row'<'col-sm-12'tr>><'d-flex'<'flex-grow-1'l><i><p>>","language":{"url":"https:\/\/altab.flowdo.net\/i18n\/ar.json"},"buttons":[{"extend":"excel","text":"<i class=\"fa fa-file-export\"><\/i> \u062a\u0635\u062f\u064a\u0631"}],"initComplete":function () {
+                   window.LaravelDataTables["departments-table"].buttons().container()
+                    .appendTo("#table-actions")
+                },"fnDrawCallback":function( oSettings ) {
+                    $("body").tooltip({
+                        selector: '[data-toggle="tooltip"]'
+                    })
+                }});});</script>
+
+<script>
+    $('.table-responsive').on('show.bs.dropdown', function () {
+        $('.table-responsive').css( "overflow", "inherit" );
+    });
+
+    $('.table-responsive').on('hide.bs.dropdown', function () {
+        $('.table-responsive').css( "overflow", "auto" );
+    })
+    $(document).ready(function() {
+        $('#filter-form').removeClass("invisible");
+    });
+</script>
+
+<script src="https://altab.flowdo.net/vendor/jquery/daterangepicker.min.js"></script>
+
+<script type="text/javascript">
+    $(function() {
+
+        var start = moment().subtract(89, 'days');
+        var end = moment();
+
+        $('#datatableRange').daterangepicker({
+            autoUpdateInput: false,
+            locale: daterangeLocale,
+            linkedCalendars: false,
+            startDate: start,
+            endDate: end,
+            showDropdowns: true,
+            ranges: daterangeConfig
+        }, cb);
+
+
+        $('#datatableRange').on('apply.daterangepicker', function(ev, picker) {
+            showTable();
+        });
+
+    });
+
+</script>
+
+        <script>
+            $('#departments-table').on('preXhr.dt', function(e, settings, data) {
+                const dateRangePicker = $('#datatableRange').data('daterangepicker');
+
+                const parentId = $('#parent_id').val();
+                const childId = $('#child').val();
+                const searchText = $('#search-text-field').val();
+
+                data['searchText'] = searchText;
+                data['parentId'] = parentId;
+                data['childId'] = childId;
+            });
+
+            const showTable = () => {
+                window.LaravelDataTables["departments-table"].draw(false);
+            }
+
+            $('#parent_id, #child').on('change keyup',
+                function() {
+                    if ($('#parent_id').val() != "all") {
+                        $('#reset-filters').removeClass('d-none');
+
+                    } else if ($('#child').val() != "all") {
+                        $('#reset-filters').removeClass('d-none');
+                    } else {
+                        $('#reset-filters').addClass('d-none');
+                    }
+
+                    showTable();
+                });
+
+            $('#search-text-field').on('keyup', function() {
+                if ($('#search-text-field').val() != "") {
+                    $('#reset-filters').removeClass('d-none');
+                    showTable();
+                }
+            });
+
+            $('#reset-filters').click(function() {
+                $('#filter-form')[0].reset();
+                $('.filter-box #status').val('not finished');
+                $('.filter-box .select-picker').selectpicker("refresh");
+                $('#reset-filters').addClass('d-none');
+                showTable();
+            });
+
+            $('#reset-filters-2').click(function() {
+                $('#filter-form')[0].reset();
+
+                $('.filter-box #parent_id').val('all');
+                $('.filter-box #child').val('all');
+                $('.filter-box .select-picker').selectpicker("refresh");
+                $('#reset-filters').addClass('d-none');
+                showTable();
+            });
+
+            $('body').on('click', '.delete-table-row', function() {
+                var id = $(this).data('department-id');
+                Swal.fire({
+                    title: "هل أنت متأكد؟",
+                    text: "لن تتمكن من تغيير الحالة لاحقًا.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    focusConfirm: false,
+                    confirmButtonText: "نعم ، احذفها!",
+                    cancelButtonText: "إلغاء",
+                    customClass: {
+                        confirmButton: 'btn btn-primary mr-3',
+                        cancelButton: 'btn btn-secondary'
+                    },
+                    showClass: {
+                        popup: 'swal2-noanimation',
+                        backdrop: 'swal2-noanimation'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var url = "https://altab.flowdo.net/account/departments/:id";
+                        url = url.replace(':id', id);
+
+                        var token = "DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap";
+
+                        $.easyAjax({
+                            type: 'POST',
+                            url: url,
+                            blockUI: true,
+                            data: {
+                                '_token': token,
+                                '_method': 'DELETE'
+                            },
+                            success: function(response) {
+                                if (response.status == "success") {
+                                    showTable();
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('#quick-action-type').change(function() {
+                const actionValue = $(this).val();
+
+                if (actionValue != '') {
+                    $('#quick-action-apply').removeAttr('disabled');
+                } else {
+                    $('#quick-action-apply').attr('disabled', true);
+                    $('.quick-action-field').addClass('d-none');
+                }
+            });
+
+            $('#quick-action-apply').click(function() {
+                const actionValue = $('#quick-action-type').val();
+                if (actionValue === 'delete') {
+                    Swal.fire({
+                        title: "هل أنت متأكد؟",
+                        text: "لن تتمكن من تغيير الحالة لاحقًا.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        focusConfirm: false,
+                        confirmButtonText: "نعم ، احذفها!",
+                        cancelButtonText: "إلغاء",
+                        customClass: {
+                            confirmButton: 'btn btn-primary mr-3',
+                            cancelButton: 'btn btn-secondary'
+                        },
+                        showClass: {
+                            popup: 'swal2-noanimation',
+                            backdrop: 'swal2-noanimation'
+                        },
+                        buttonsStyling: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            applyQuickAction();
+                        }
+                    });
+
+                } else {
+                    applyQuickAction();
+                }
+            });
+
+            const applyQuickAction = () => {
+                const rowdIds = $("#departments-table input:checkbox:checked").map(function() {
+                    return $(this).val();
+                }).get();
+
+
+                const url = "https://altab.flowdo.net/account/departments/apply-quick-action?row_ids=" + rowdIds;
+
+                $.easyAjax({
+                    url: url,
+                    container: '#quick-action-form',
+                    type: "POST",
+                    disableButton: true,
+                    buttonSelector: "#quick-action-apply",
+                    data: $('#quick-action-form').serialize(),
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            showTable();
+                            resetActionButtons();
+                            deSelectAll();
+                            $('#quick-action-form').hide();
+                        }
+                    }
+                })
+            };
+        </script>
+    
+    <script>
+        let current_route = "hierarchy-settings.index";
+    $(window).on('load', function () {
+        // Animate loader off screen
+        init();
+        // $(".preloader-container").fadeOut("slow", function () {
+        //     $(this).removeClass("d-flex");
+        // });
+        if(current_route != 'tasks.show') {
+            $('.ph-item').removeClass('ph-item');
+        }
+
+        // $('.material-symbols-rounded').css('display','inline');
+
+        // const pathname = window.location.pathname;
+        // const pathnameSegments = pathname.split('/');
+
+        // if(pathnameSegments[pathnameSegments.length-1] == 'dashboard'){
+        //     $('#myModalPopUp').modal('show');
+        //     init('#myModalPopUp');
+        // }
+    });
+
+    $('body').on('click', '.view-notification', function (event) {
+        event.preventDefault();
+        const id = $(this).data('notification-id');
+        const href = $(this).attr('href');
+
+        $.easyAjax({
+            url: "https://altab.flowdo.net/account/mark-read",
+            type: "POST",
+            data: {
+                '_token': "DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap",
+                'id': id
+            },
+            success: function () {
+                if (typeof href !== 'undefined') {
+                    window.location = href;
+                }
+            }
+        });
+    });
+
+    $('body').on('click', '.img-lightbox', function () {
+        const imageUrl = $(this).data('image-url');
+        const url = "https://altab.flowdo.net/front/show-image?image_url=" + encodeURIComponent(imageUrl);
+        $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
+        $.ajaxModal(MODAL_XL, url);
+    });
+
+    function updateOnesignalPlayerId(userId) {
+        $.easyAjax({
+            url: 'https://altab.flowdo.net/account/settings/profile/updateOneSignalId',
+            type: 'POST',
+            data: {
+                'userId': userId,
+                '_token': 'DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap'
+            }
+        })
+    }
+
+    if (SEARCH_KEYWORD !== '' && $('#search-text-field').length > 0) {
+        $('#search-text-field').val(SEARCH_KEYWORD);
+        $('#reset-filters').removeClass('d-none');
+    }
+
+    $('body').on('click', '.show-hide-purchase-code', function () {
+        $('> .icon', this).toggleClass('fa-eye-slash fa-eye');
+        $(this).siblings('span').toggleClass('blur-code ');
+    });
+
+    </script>
+
+    <script>
+        let quillArray = {};
+    let global_quill;
+
+    function quillImageLoad(ID) {
+        const quillContainer = document.querySelector(ID);
+        quillArray[ID] = new Quill(ID, {
+            modules: {
+                toolbar: [
+                    // [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
+                    [{
+                        header: [1, 2, 3, 4, 5, false]
+                    }],
+                    [{
+                        'list': 'ordered'
+                    }, {
+                        'list': 'bullet'
+                    }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['image', 'code-block', 'link','video'],
+                    [{
+                        'direction': 'rtl'
+                    }],
+                    ['clean']
+                ],
+                clipboard: {
+                    matchVisual: false
+                },
+                "emoji-toolbar": true,
+                "emoji-textarea": true,
+                "emoji-shortname": true,
+            },
+            theme: 'snow',
+            bounds: quillContainer
+        });
+        $.each(quillArray, function (key, quill) {
+            quill.getModule('toolbar').addHandler('image', selectLocalImage);
+        });
+
+
+    }
+        function destory_editor(selector){
+            if($(selector)[0])
+            {
+                var content = $(selector).find('.ql-editor').html();
+                $(selector).html(content);
+
+                $(selector).siblings('.ql-toolbar').remove();
+                $(selector + " *[class*='ql-']").removeClass (function (index, class_name) {
+                return (class_name.match (/(^|\s)ql-\S+/g) || []).join(' ');
+                });
+
+                $(selector + "[class*='ql-']").removeClass (function (index, class_name) {
+                return (class_name.match (/(^|\s)ql-\S+/g) || []).join(' ');
+                });
+            }
+            else
+            {
+                console.error('editor not exists');
+            }
+        }
+    function quillMention(atValues,ID) {
+        const mentionItemTemplate = '<div class="mention-item"> <img src="{image}" class="align-self-start mr-3 taskEmployeeImg rounded">{name}</div>';
+
+        const customRenderItem = function(item, searchTerm) {
+            const html = mentionItemTemplate.replace('{image}', item.image).replace('{name}', item.value);
+            return html;
+        }
+        let placeholder;
+        if (ID === '#submitTexts') {
+            placeholder = "اكتب رسالتك هنا";
+        } else {
+            placeholder = '';
+        }
+
+        var quillEditor = new Quill(ID, {
+            placeholder: placeholder,
+            modules: {
+                toolbar: [
+
+                    [{
+                        header: [1, 2, 3, 4, 5, false]
+                    }],
+
+                    [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
+
+                    [{
+                        'list': 'ordered'
+                    }, {
+                        'list': 'bullet'
+                    }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{
+                        'direction': 'rtl'
+                    }],
+                    ['clean'],
+                    //[{ 'add_client_name': 'add_client_name' }] // Add the table button
+                ],
+                magicUrl: {
+                    urlRegularExpression: /(https?:\/\/[\S]+)|(www.[\S]+)|(tel:[\S]+)/g,
+                    globalRegularExpression: /(https?:\/\/|www\.|tel:)[\S]+/g,
+                },
+                mention: {
+                    allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+                    mentionDenotationChars: ["@", "#"],
+                    source: function(searchTerm, renderList, mentionChar) {
+                    let values;
+                    if (mentionChar === "@") {
+                        values = atValues;
+                    } else {
+                        values = hashValues;
+                    }
+
+                    if (searchTerm.length === 0) {
+                        renderList(values, searchTerm);
+
+                    } else {
+                        const matches = [];
+                        for (i = 0; i < values.length; i++)
+                        if (
+                            ~values[i].value
+                            .toLowerCase()
+                            .indexOf(searchTerm.toLowerCase())
+                        )
+                            matches.push(values[i]);
+                        renderList(matches, searchTerm);
+                    }
+                    },
+                    renderItem: customRenderItem,
+
+                },
+
+            },
+            theme: 'snow',
+            direction: 'rtl'
+        });
+
+        global_quill = [ID, quillEditor];
+
+
+    //    var tableButton = document.querySelector('.ql-add_client_name');
+    //    tableButton.addEventListener('click', function () {
+    //    console.log("kookko");
+    //});
+    }
+
+     /**
+     * click to open user profile
+     *
+     */
+    window.addEventListener('mention-clicked', function ({ value }) {
+    if (value?.link) {
+        window.open(value.link, value?.target ?? '_blank');
+    }
+    });
+    /**
+     * Step1. select local image
+     *
+     */
+    function selectLocalImage() {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.click();
+
+        // Listen upload local image and save to server
+        input.onchange = () => {
+            const file = input.files[0];
+
+            // file type is only image.
+            if (/^image\//.test(file.type)) {
+                saveToServer(file);
+            } else {
+                console.warn('You could only upload images.');
+            }
+        };
+    }
+
+    /**
+     * Step2. save to server
+     *
+     * @param {File} file
+     */
+    function saveToServer(file) {
+        const fd = new FormData();
+        fd.append('image', file);
+        $.ajax({
+            type: 'POST',
+            url: "https://altab.flowdo.net/account/image/upload",
+            dataType: "json",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: fd,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                insertToEditor(response)
+            },
+        });
+    }
+
+    function insertToEditor(url) {
+        // push image url to rich editor.
+        $.each(quillArray, function (key, quill) {
+            try {
+                let range = quill.getSelection();
+                quill.insertEmbed(range.index, 'image', url);
+            } catch (err) {
+            }
+        });
+    }
+    </script>
+
+    <script>
+        $('body').on('click', '#pause-timer-btn, .pause-active-timer', function () {
+        const id = $(this).data('time-id');
+        let url = "https://altab.flowdo.net/account/timelogs/pause-timer?:id";
+        url = url.replace(':id', id);
+        const token = 'DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap';
+        $.easyAjax({
+            url: url,
+            blockUI: true,
+            type: "POST",
+            disableButton: true,
+            buttonSelector: "#pause-timer-btn",
+            data: {
+                timeId: id,
+                _token: token
+            },
+            success: function (response) {
+                if (response.status === 'success') {
+                    if ($('#myActiveTimer').length > 0) {
+                        $(MODAL_XL + ' .modal-content').html(response.html);
+
+                        if ($('#allTasks-table').length) {
+                            window.LaravelDataTables["allTasks-table"].draw(false);
+                        }
+                    }
+
+                    if ($('#allTasks-table').length) {
+                        window.LaravelDataTables["allTasks-table"].draw(false);
+                    }
+
+                    $('#timer-clock').html(response.clockHtml);
+                }
+            }
+        })
+    });
+
+    $('body').on('click', '#resume-timer-btn, .resume-active-timer', function () {
+        const id = $(this).data('time-id');
+        let url = "https://altab.flowdo.net/account/timelogs/resume-timer?:id";
+        url = url.replace(':id', id);
+        const token = 'DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap';
+        $.easyAjax({
+            url: url,
+            blockUI: true,
+            type: "POST",
+            disableButton: true,
+            buttonSelector: "#resume-timer-btn",
+            data: {
+                timeId: id,
+                _token: token
+            },
+            success: function (response) {
+                if (response.status === 'success') {
+                    if ($('#myActiveTimer').length > 0) {
+                        $(MODAL_XL + ' .modal-content').html(response.html);
+                    }
+
+                    $('#timer-clock').html(response.clockHtml);
+                    if ($('#allTasks-table').length) {
+                        window.LaravelDataTables["allTasks-table"].draw(false);
+                    }
+                }
+            }
+        })
+    });
+
+    $('body').on('click', '.stop-active-timer', function () {
+        const id = $(this).data('time-id');
+        let url = "https://altab.flowdo.net/account/timelogs/stop-timer?:id";
+        url = url.replace(':id', id);
+        const token = 'DmuMveDNEA3WztFQS9PMQtLlZxNEiLIOx1KYI1ap';
+        $.easyAjax({
+            url: url,
+            type: "POST",
+            data: {
+                timeId: id,
+                _token: token
+            },
+            success: function (response) {
+                if ($('#myActiveTimer').length > 0) {
+                    $(MODAL_XL + ' .modal-content').html(response.html);
+                }
+
+                if (response.activeTimerCount > 0) {
+                    $('#show-active-timer .active-timer-count').html(response.activeTimerCount);
+                } else {
+                    $('#show-active-timer .active-timer-count').addClass('d-none');
+                }
+
+                $('#timer-clock').html('');
+                if ($('#allTasks-table').length) {
+                    window.LaravelDataTables["allTasks-table"].draw(false);
+                }
+
+            }
+        })
+
+    });
+
+    </script>
+
+    
+
+    <!--Start of Tawk.to Script-->
+    <!-- <script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/64ddd2dbcc26a871b02fbfae/1h817vb7g';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script> -->
+    <!--End of Tawk.to Script-->
+
+</body>
+
+</html>

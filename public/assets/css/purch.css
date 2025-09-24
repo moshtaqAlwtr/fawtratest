@@ -1,0 +1,473 @@
+/* تحسينات عامة للتصميم */
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #eff0f3 0%, #e5e5e5 100%);
+            color: white;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 1rem 1.5rem;
+        }
+
+        /* تحسين select2 */
+        .select2-container--default .select2-selection--single {
+            height: 42px;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .select2-container--default .select2-selection--single:focus-within {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 38px;
+            padding-right: 12px;
+            font-size: 14px;
+        }
+
+        /* كارد رصيد المورد */
+        #supplierBalanceCard .card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid #e3f2fd;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        #supplierBalanceCard .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            border-color: #2196f3;
+        }
+
+        #supplierBalanceCard .card-body {
+            position: relative;
+            overflow: hidden;
+        }
+
+        #supplierBalanceCard .card-body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* تحسين الجدول - متجاوب مع جميع الشاشات */
+        .table-responsive {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .table {
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            min-width: 800px; /* حد أدنى للعرض لضمان عدم التشويه */
+        }
+
+        .table thead th {
+            background: linear-gradient(135deg, #fcfcff 0%, #f4f4f4 100%);
+            color: rgb(0, 0, 0);
+            font-weight: 600;
+            padding: 1rem 0.75rem;
+            border: none;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 14px;
+            white-space: nowrap; /* منع كسر النص */
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .table tbody td {
+            padding: 0.75rem 0.5rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #e9ecef;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(102, 126, 234, 0.05);
+            transform: scale(1.001);
+            transition: all 0.2s ease;
+        }
+
+        .table tfoot td {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            padding: 1rem 0.75rem;
+            border-top: 2px solid #dee2e6;
+            white-space: nowrap;
+        }
+
+        /* تحسين الأزرار */
+        .btn {
+            border-radius: 8px;
+            padding: 0.5rem 1.25rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #fefefe 0%, #ffffff 100%);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-outline-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+            border: none;
+        }
+
+        /* تحسين الحقول */
+        .form-control {
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            transform: scale(1.02);
+        }
+
+        /* التبويبات */
+        .nav-tabs {
+            border-bottom: 2px solid #e9ecef;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 8px 8px 0 0;
+            padding: 1rem 1.5rem;
+            font-weight: 500;
+            color: #6c757d;
+            transition: all 0.3s ease;
+            margin-right: 0.25rem;
+        }
+
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(135deg, #feffff 0%, #ffffff 100%);
+            color: white;
+            border: none;
+            transform: translateY(-2px);
+        }
+
+        .nav-tabs .nav-link:hover:not(.active) {
+            background-color: rgba(102, 126, 234, 0.1);
+            color: #f5f7ff;
+        }
+
+        /* تحسين المحتوى للشاشات المتوسطة - التابلت */
+        @media (max-width: 992px) {
+            .table {
+                min-width: 700px;
+                font-size: 13px;
+            }
+
+            .table thead th {
+                padding: 0.75rem 0.5rem;
+                font-size: 13px;
+            }
+
+            .table tbody td {
+                padding: 0.6rem 0.4rem;
+            }
+
+            .table tfoot td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+
+        /* تحسين المحتوى للشاشات الصغيرة - الجوال الكبير */
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 1rem;
+            }
+
+            .btn {
+                padding: 0.4rem 1rem;
+                font-size: 0.875rem;
+            }
+
+            .table-responsive {
+                font-size: 0.875rem;
+                margin: 0 -15px; /* توسيع الجدول ليأخذ كامل العرض */
+                border-radius: 0;
+            }
+
+            .table {
+                min-width: 600px;
+                font-size: 12px;
+            }
+
+            .table thead th,
+            .table tbody td,
+            .table tfoot td {
+                padding: 0.5rem 0.25rem;
+                font-size: 12px;
+            }
+
+            .nav-tabs .nav-link {
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+
+            .form-control {
+                font-size: 0.875rem;
+            }
+
+            .select2-container--default .select2-selection--single {
+                height: 38px;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                line-height: 34px;
+                font-size: 0.875rem;
+            }
+        }
+
+        /* تحسين المحتوى للشاشات الصغيرة جداً - الجوال الصغير */
+        @media (max-width: 576px) {
+            .content-body {
+                padding: 0.5rem;
+            }
+
+            .card {
+                margin-bottom: 1rem;
+            }
+
+            .row {
+                margin: 0 -0.5rem;
+            }
+
+            .col-md-6,
+            .col-md-3,
+            .col-md-8,
+            .col-md-4,
+            .col-12 {
+                padding: 0 0.5rem;
+            }
+
+            .table-responsive {
+                border-radius: 8px;
+                margin: 0 -20px; /* توسيع أكبر للجداول في الشاشات الصغيرة جداً */
+                overflow-x: scroll;
+                -webkit-overflow-scrolling: touch; /* تحسين التمرير في iOS */
+            }
+
+            .table {
+                min-width: 550px;
+                font-size: 11px;
+            }
+
+            .table thead th {
+                padding: 0.4rem 0.2rem;
+                font-size: 11px;
+                min-width: 80px; /* عرض أدنى للأعمدة */
+            }
+
+            .table tbody td {
+                padding: 0.4rem 0.2rem;
+                font-size: 11px;
+                min-width: 80px;
+            }
+
+            .table tfoot td {
+                padding: 0.4rem 0.2rem;
+                font-size: 11px;
+                min-width: 80px;
+            }
+
+            .btn-group-responsive {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .btn-group-responsive .btn {
+                width: 100%;
+                font-size: 0.75rem;
+                padding: 0.3rem 0.8rem;
+            }
+        }
+
+        /* تحسين أداء التمرير الأفقي */
+        .table-responsive::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-responsive::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* تحسين عرض الأرقام */
+        .currency-display {
+            font-family: 'Cairo', Arial, sans-serif;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .positive-amount {
+            color: #28a745;
+        }
+
+        .negative-amount {
+            color: #dc3545;
+        }
+
+        /* تحسين المؤشرات */
+        .loading-indicator {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+        }
+
+        /* تحسين الفواصل */
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #e6e7eb 50%, transparent 100%);
+            margin: 2rem 0;
+            border: none;
+        }
+
+        /* تحسين كارد الملاحظات */
+        .notes-card {
+            border-left: 4px solid #e9eaee;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        /* تحسين الأيقونات */
+        .icon-enhanced {
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 8px;
+        }
+
+        /* تحسين الانيميشن */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* تحسين السكرول */
+        .table-container {
+            max-height: 600px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #ffffff #f1f1f1;
+        }
+
+        .table-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: #ececef;
+            border-radius: 3px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #ffffff;
+        }
+
+        /* تحسينات إضافية للجداول المتجاوبة */
+        @media (max-width: 480px) {
+            .table {
+                min-width: 500px;
+                font-size: 10px;
+            }
+
+            .table thead th,
+            .table tbody td,
+            .table tfoot td {
+                padding: 0.3rem 0.15rem;
+                font-size: 10px;
+                min-width: 70px;
+            }
+        }
+
+        /* تحسين للشاشات العريضة جداً */
+        @media (min-width: 1400px) {
+            .table {
+                font-size: 15px;
+            }
+
+            .table thead th {
+                padding: 1.2rem 1rem;
+                font-size: 15px;
+            }
+
+            .table tbody td {
+                padding: 1rem 0.75rem;
+            }
+        }

@@ -1,0 +1,288 @@
+/* Hidden Clients Styles */
+.hidden-client-item {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+}
+
+.hidden-client-item:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.client-card.hidden {
+    opacity: 0.3;
+    transform: scale(0.95);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.show-client-btn {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.show-client-btn:hover {
+    background: linear-gradient(45deg, #218838, #1ea085);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+#toggleIcon {
+    transition: transform 0.3s ease;
+}
+
+.collapsed #toggleIcon {
+    transform: rotate(-180deg);
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    min-width: 320px;
+    animation: slideInRight 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.client-info h6 {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.client-meta {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+/* Container Styles */
+#hiddenClientsContainer {
+    border: 2px solid #ffc107;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+#hiddenClientsContainer .card-header {
+    background: linear-gradient(45deg, #ffc107, #ffca2c);
+    border: none;
+    padding: 15px 20px;
+}
+
+#hiddenClientsContainer .card-body {
+    background: #fff;
+    border: none;
+}
+
+#hiddenCountBadge {
+    background: #dc3545;
+    color: white;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+/* Empty Message Styles */
+#emptyMessage {
+    padding: 30px 20px;
+}
+
+#emptyMessage i {
+    color: #6c757d;
+    margin-bottom: 10px;
+}
+
+#emptyMessage div {
+    color: #6c757d;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Responsive Design for Hidden Clients */
+@media (max-width: 768px) {
+    .hidden-client-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .show-client-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .notification {
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+        max-width: calc(100% - 20px);
+    }
+
+    #hiddenClientsContainer .card-header {
+        padding: 12px 15px;
+    }
+
+    .client-info h6 {
+        font-size: 14px;
+    }
+
+    .client-meta {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hidden-client-item {
+        padding: 10px;
+        margin: 6px 0;
+    }
+
+    #hiddenCountBadge {
+        font-size: 0.7rem;
+        padding: 3px 6px;
+    }
+
+    #emptyMessage {
+        padding: 20px 15px;
+    }
+
+    #emptyMessage div {
+        font-size: 14px;
+    }
+}
+
+/* Button States */
+.show-client-btn:focus {
+    outline: 3px solid rgba(40, 167, 69, 0.3);
+    outline-offset: 2px;
+}
+
+.show-client-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.show-client-btn:disabled:hover {
+    background: #6c757d;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Loading state for show button */
+.show-client-btn.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.show-client-btn.loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .hidden-client-item {
+        background: #343a40;
+        border-color: #495057;
+        color: #fff;
+    }
+
+    .hidden-client-item:hover {
+        background: #495057;
+    }
+
+    .client-info h6 {
+        color: #fff;
+    }
+
+    .client-meta {
+        color: #adb5bd;
+    }
+
+    #hiddenClientsContainer {
+        border-color: #ffc107;
+    }
+
+    #hiddenClientsContainer .card-body {
+        background: #212529;
+        color: #fff;
+    }
+
+    #emptyMessage {
+        color: #adb5bd;
+    }
+
+    #emptyMessage div {
+        color: #adb5bd;
+    }
+
+    #emptyMessage i {
+        color: #6c757d;
+    }
+}
+
+/* Animation for container show/hide */
+#hiddenClientsContainer {
+    transition: all 0.3s ease;
+}
+
+#hiddenClientsContainer.hide {
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+}
+
+#hiddenClientsContainer.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Accessibility improvements */
+.show-client-btn:focus-visible {
+    outline: 3px solid rgba(40, 167, 69, 0.5);
+    outline-offset: 2px;
+}
+
+#hiddenClientsContainer .card-header:focus {
+    outline: 2px solid #0d6efd;
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    #hiddenClientsContainer,
+    .notification {
+        display: none !important;
+    }
+}

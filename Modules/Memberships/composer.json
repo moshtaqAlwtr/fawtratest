@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/memberships",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Memberships\\": "app/",
+            "Modules\\Memberships\\Database\\Factories\\": "database/factories/",
+            "Modules\\Memberships\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Memberships\\Tests\\": "tests/"
+        }
+    }
+}
