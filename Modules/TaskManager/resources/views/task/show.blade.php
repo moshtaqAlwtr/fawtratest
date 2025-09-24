@@ -387,7 +387,7 @@
                         <!-- Loading placeholder -->
                         <div class="text-center py-3" id="task-loading">
                             <div class="spinner-border text-primary" role="status">
-                                <span class="sr-only">جاري التحميل...</span>
+
                             </div>
                         </div>
                     </div>

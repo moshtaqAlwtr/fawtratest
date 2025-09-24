@@ -275,3 +275,8 @@ Route::post('/{project}/invite', [WorkspaceController::class, 'inviteMember'])->
         return view('errors.404');
     });
 });
+
+// مسارات قبول ورفض الدعوات للمشاريع
+Route::get('/projects/invite/{token}/accept', [ProjectController::class, 'showAcceptInvite'])->name('projects.invite.accept');
+Route::post('/projects/invite/{token}/accept', [ProjectController::class, 'acceptInvite'])->name('projects.invite.process');
+Route::get('/projects/invite/{token}/decline', [ProjectController::class, 'declineInvite'])->name('projects.invite.decline');

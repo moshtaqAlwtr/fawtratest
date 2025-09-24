@@ -26,9 +26,9 @@
                     </th>
                     <th>المشروع</th>
                     <th>مساحة العمل</th>
-                    
+
                     <th>المهام والتعليقات</th>
-                 
+
                     <th>الميزانية</th>
                     <th>الحالة</th>
                     <th>الجدول الزمني</th>
@@ -63,7 +63,7 @@
                                         ];
                                         $priorityColor = $priorityColors[$project->priority] ?? '#6c757d';
                                     @endphp
-                                   
+
                                 </div>
                                 <div>
                                     <strong class="text-primary">{{ $project->title }}</strong>
@@ -162,7 +162,7 @@
                             </div>
                         </td>
 
-                      
+
 
                         <td>
                             <div class="d-flex flex-column">
@@ -183,7 +183,7 @@
                                         متبقي: {{ number_format($remaining, 0) }} {{ $currencySymbol }}
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </td>
 
@@ -212,9 +212,9 @@
                         <td>
                             <div class="d-flex flex-column align-items-center">
                                 <!-- المؤقت الدائري الصغير -->
-                                <div class="circular-countdown" 
+                                <div class="circular-countdown"
                                      data-project-id="{{ $project->id }}"
-                                     data-start="{{ $project->start_date }}" 
+                                     data-start="{{ $project->start_date }}"
                                      data-end="{{ $project->end_date }}">
                                     <svg width="80" height="80" viewBox="0 0 80 80">
                                         <circle class="countdown-bg-circle" cx="40" cy="40" r="35"></circle>
@@ -250,23 +250,23 @@
 
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="{{ route('projects.show', $project->id) }}" 
-                                   class="btn btn-sm btn-info" 
-                                   data-bs-toggle="tooltip" 
+                                <a href="{{ route('projects.show', $project->id) }}"
+                                   class="btn btn-sm btn-info"
+                                   data-bs-toggle="tooltip"
                                    title="عرض المشروع">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="{{ route('projects.edit', $project->id) }}" 
-                                   class="btn btn-sm btn-success" 
-                                   data-bs-toggle="tooltip" 
+                                <a href="{{ route('projects.edit', $project->id) }}"
+                                   class="btn btn-sm btn-success"
+                                   data-bs-toggle="tooltip"
                                    title="تعديل">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 @if ($project->status != 'completed')
-                                    <button type="button" 
-                                            class="btn btn-sm btn-danger delete-project" 
+                                    <button type="button"
+                                            class="btn btn-sm btn-danger delete-project"
                                             data-id="{{ $project->id }}"
-                                            data-bs-toggle="tooltip" 
+                                            data-bs-toggle="tooltip"
                                             title="حذف">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -303,7 +303,7 @@
             </tbody>
         </table>
     </div>
-    
+
     @if ($projects->hasPages())
         <div class="d-flex justify-content-between align-items-center mt-3">
             <div>
@@ -588,7 +588,7 @@ $(document).ready(function() {
     function updateCircularCountdown(projectId, startDate, endDate, now, $element) {
         const circle = $(`#circle-${projectId}`);
         const textEl = $(`#countdown-text-${projectId}`);
-        
+
         let days, hours, minutes, seconds, diff, progress, statusText, statusClass;
 
         if (now < startDate) {
@@ -621,12 +621,12 @@ $(document).ready(function() {
             minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             seconds = Math.floor((diff % (1000 * 60)) / 1000);
             statusText = 'متبقي';
-            
+
             // حساب التقدم
             const totalTime = endDate - startDate;
             const elapsed = now - startDate;
             progress = (elapsed / totalTime) * 100;
-            
+
             // تحديد اللون بناءً على الأيام المتبقية
             if (days <= 3) {
                 statusClass = 'countdown-warning';

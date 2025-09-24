@@ -1096,10 +1096,10 @@ private function addTaskFile($task, $filename, $extension, $originalName, $size)
  */
 public function show($id)
 {
-    try {
+
         $task = Task::with([
             'creator:id,name,email',
-            'assignedUsers:id,name,email,avatar,job_title',
+            'assignedUsers:id,name,email',
             'project:id,title',
             'subTasks' => function($query) {
                 $query->select('id', 'parent_task_id', 'title', 'status', 'completion_percentage')
@@ -1109,7 +1109,7 @@ public function show($id)
                 $query->whereNull('parent_id')
                       ->with([
                           'user:id,name,email,avatar',
-                          'replies.user:id,name,email,avatar'
+                          'replies.user:id,name,email'
                       ])
                       ->orderBy('created_at', 'desc');
             }
@@ -1135,22 +1135,7 @@ public function show($id)
         // إذا كان طلب عادي، أرجع الـ view
         return view('taskmanager::task.show', compact('task'));
 
-    } catch (\Exception $e) {
-        Log::error('خطأ في عرض تفاصيل المهمة: ' . $e->getMessage(), [
-            'task_id' => $id,
-            'user_id' => auth()->id()
-        ]);
 
-        if (request()->ajax() || request()->expectsJson()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'حدث خطأ في تحميل تفاصيل المهمة'
-            ], 500);
-        }
-
-        return redirect()->route('tasks.index')
-                        ->with('error', 'حدث خطأ في تحميل تفاصيل المهمة');
-    }
 }
 
 /**

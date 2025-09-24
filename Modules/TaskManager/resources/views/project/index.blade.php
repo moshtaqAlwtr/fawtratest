@@ -1,1117 +1,1176 @@
 @extends('master')
 
-@section('title')
-إدارة المهام
-@stop
+@section('title', 'تحليلات المشاريع')
+@section('css')
+
+<style>
+/* أنماط خاصة بنظام دعوة الأعضاء في صفحة الفهرس */
+.bulk-actions-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 50px;
+    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+    z-index: 1000;
+    display: none;
+    animation: slideUpFade 0.3s ease;
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.bulk-actions-bar .selected-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 5px 10px;
+    border-radius: 15px;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.bulk-invite-modal .user-selection-item {
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+
+.bulk-invite-modal .user-selection-item:hover {
+    background-color: #f8f9fa;
+    border-color: #007bff;
+}
+
+.bulk-invite-modal .user-selection-item.selected {
+    background-color: #e3f2fd;
+    border-color: #007bff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.15);
+}
+
+.user-avatar-invite {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    margin-right: 12px;
+}
+
+.member-info {
+    flex: 1;
+}
+
+.member-name {
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: #2c3e50;
+}
+
+.member-email {
+    font-size: 13px;
+    color: #6c757d;
+}
+
+.selected-projects-summary {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.project-chip {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 20px;
+    padding: 5px 12px;
+    margin: 2px;
+    display: inline-block;
+    font-size: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.project-actions-toolbar {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+}
+
+/* تحسينات للجدول */
+.project-row.selected {
+    background-color: #f0f8ff !important;
+    border-left: 4px solid #007bff;
+}
+
+.table-hover tbody tr.selected:hover {
+    background-color: #e3f2fd !important;
+}
+
+/* تحسينات responsive للمودال */
+@media (max-width: 768px) {
+    .bulk-actions-bar {
+        left: 10px;
+        right: 10px;
+        transform: none;
+        border-radius: 10px;
+        padding: 10px 15px;
+    }
+
+    .bulk-actions-bar .btn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
+</style>
+@endsection
+@section('head')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 
 @section('content')
-
-<div class="content-header row">
-    <div class="content-header-left col-md-9 col-12 mb-2">
-        <div class="row breadcrumbs-top">
-            <div class="col-12">
-                <h2 class="content-header-title float-left mb-0">إدارة المهام</h2>
-                <div class="breadcrumb-wrapper col-12">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">الرئيسية</a></li>
-                        <li class="breadcrumb-item active">المهام</li>
-                    </ol>
+    <div class="content-header row">
+        <div class="content-header-left col-md-9 col-12 mb-2">
+            <div class="row breadcrumbs-top">
+                <div class="col-12">
+                    <h2 class="content-header-title float-left mb-0">تحليلات المشاريع</h2>
+                    <div class="breadcrumb-wrapper">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="">الرئيسية</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">المشاريع</a></li>
+                            <li class="breadcrumb-item active">التحليلات</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="content-header-right text-md-right col-md-3 col-12 d-md-block d-none">
-        <button type="button" class="btn btn-primary" id="btnAddTask">
-            <i class="feather icon-plus"></i> إضافة مهمة جديدة
-        </button>
-    </div>
-</div>
 
-<div class="content-body">
-    <!-- فلاتر البحث المحسنة -->
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-3">
-                    <label>المشروع</label>
-                    <select class="form-control select2" id="filterProject">
-                        <option value="">جميع المشاريع</option>
-                        @foreach($projects as $project)
-                            <option value="{{ $project->id }}">{{ $project->title }}</option>
-                        @endforeach
-                    </select>
+    <div class="content-body">
+        <!-- إحصائيات عامة -->
+        <div class="row mb-4" id="statsContainer">
+            <div class="col-xl-3 col-sm-6 col-12">
+                <div class="card analytics-card">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="stat-icon bg-primary text-white rounded me-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <i class="fas fa-project-diagram"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h3 class="mb-0" id="totalProjects">0</h3>
+                                        <p class="mb-0 text-muted">إجمالي المشاريع</p>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge badge-light-primary" id="projectsGrowth">+0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <label>الحالة</label>
-                    <select class="form-control select2" id="filterStatus">
-                        <option value="">جميع الحالات</option>
-                        <option value="not_started">لم تبدأ</option>
-                        <option value="in_progress">قيد التنفيذ</option>
-                        <option value="completed">مكتملة</option>
-                        <option value="overdue">متأخرة</option>
-                    </select>
+            </div>
+
+            <div class="col-xl-3 col-sm-6 col-12">
+                <div class="card analytics-card">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="stat-icon bg-success text-white rounded me-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <i class="fas fa-play-circle"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h3 class="mb-0" id="activeProjects">0</h3>
+                                        <p class="mb-0 text-muted">المشاريع النشطة</p>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge badge-light-success" id="activeGrowth">+0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <label>الأولوية</label>
-                    <select class="form-control select2" id="filterPriority">
-                        <option value="">جميع الأولويات</option>
-                        <option value="low">منخفضة</option>
-                        <option value="medium">متوسطة</option>
-                        <option value="high">عالية</option>
-                        <option value="urgent">عاجلة</option>
-                    </select>
+            </div>
+
+            <div class="col-xl-3 col-sm-6 col-12">
+                <div class="card analytics-card">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="stat-icon bg-info text-white rounded me-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h3 class="mb-0" id="completionRate">0%</h3>
+                                        <p class="mb-0 text-muted">معدل الإكمال</p>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge badge-light-info" id="completionGrowth">+0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <label>المستخدم المعين</label>
-                    <select class="form-control select2" id="filterAssignee">
-                        <option value="">الجميع</option>
-                        @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                        @endforeach
-                    </select>
+            </div>
+
+            <div class="col-xl-3 col-sm-6 col-12">
+                <div class="card analytics-card">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="stat-icon bg-warning text-white rounded me-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h3 class="mb-0" id="totalBudget">0</h3>
+                                        <p class="mb-0 text-muted">إجمالي الميزانية</p>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge badge-light-warning" id="budgetGrowth">+0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <label>&nbsp;</label>
-                    <button class="btn btn-primary btn-block" id="btnFilterTasks">
-                        <i class="feather icon-search"></i> بحث
+            </div>
+        </div>
+
+        <!-- شريط الأدوات العلوي -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2">
+                        <!-- زر التصدير -->
+                        <button class="btn btn-outline-success btn-sm d-flex align-items-center rounded-pill px-3" id="exportAnalyticsBtn">
+                            <i class="fas fa-file-excel me-1"></i>تصدير التحليلات
+                        </button>
+
+                        <!-- زر الطباعة -->
+                        <button class="btn btn-outline-secondary btn-sm d-flex align-items-center rounded-pill px-3" id="printAnalyticsBtn">
+                            <i class="fas fa-print me-1"></i>طباعة
+                        </button>
+
+                        <!-- زر التحديث -->
+                        <button class="btn btn-outline-primary btn-sm d-flex align-items-center rounded-pill px-3" id="refreshAnalyticsBtn">
+                            <i class="fas fa-sync-alt me-1"></i>تحديث
+                        </button>
+                    </div>
+
+                    <!-- معلومات النتائج -->
+                    <div class="d-flex align-items-center gap-2" id="top-pagination-info">
+                        <span class="text-muted mx-2 results-info">0 مشروع</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2" id="top-pagination-info">
+                        <a href="{{ route('projects.create') }}" class="btn btn-outline-primary btn-sm d-flex align-items-center rounded-pill px-3" id="refreshAnalyticsBtn">
+                            <i class="fas fa-plus me-1"></i>إنشاء مشروع
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- نموذج البحث والفلترة -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center p-2">
+                <div class="d-flex gap-2">
+                    <span class="hide-button-text">بحث وتصفية</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="toggleSearchFields(this)">
+                        <i class="fa fa-times"></i>
+                        <span class="hide-button-text">اخفاء</span>
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="collapse"
+                        data-bs-target="#advancedSearchForm" onclick="toggleSearchText(this)">
+                        <i class="fa fa-filter"></i>
+                        <span class="button-text">متقدم</span>
+                    </button>
+                    <button type="button" id="resetSearch" class="btn btn-outline-warning btn-sm">
+                        <i class="fa fa-refresh"></i>
+                        إعادة تعيين
                     </button>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- لوحة المهام بالسحب والإفلات -->
-    <div class="row task-board">
-        @foreach($statuses as $statusKey => $statusName)
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">{{ $statusName }}</h4>
-                        <span class="badge badge-pill task-count task-count-{{ $statusKey }}">
-                            {{ isset($tasks[$statusKey]) ? $tasks[$statusKey]->count() : 0 }}
-                        </span>
-                    </div>
-                    <div class="card-body task-column" data-status="{{ $statusKey }}">
-                        @if(isset($tasks[$statusKey]))
-                            @foreach($tasks[$statusKey] as $task)
-                                @include('taskmanager::task.partial.task-card', ['task' => $task])
-                            @endforeach
-                        @endif
-                    </div>
-                </div>
-            </div>
-        @endforeach
-    </div>
-</div>
-
-<!-- Modal إضافة/تعديل المهمة -->
-<div class="modal fade" id="taskModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="taskModalTitle">إضافة مهمة جديدة</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <form id="taskForm" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="id" id="task_id">
-
-                <div class="modal-body">
-                    <div class="alert alert-danger" id="formErrors" style="display: none;"></div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>المشروع <span class="text-danger">*</span></label>
-                                <select name="project_id" id="project_id" class="form-control select2" required>
-                                    <option value="">اختر المشروع</option>
-                                    @foreach($projects as $project)
-                                        <option value="{{ $project->id }}">{{ $project->title }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+            <div class="card-body">
+                <form class="form" id="searchForm">
+                    <div class="row g-3" id="basicSearchFields">
+                        <!-- 1. عنوان المشروع -->
+                        <div class="col-md-4 mb-3">
+                            <input type="text" id="title" class="form-control" placeholder="عنوان المشروع"
+                                name="title">
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>المهمة الرئيسية</label>
-                                <select name="parent_task_id" id="parent_task_id" class="form-control select2">
-                                    <option value="">لا يوجد (مهمة رئيسية)</option>
-                                </select>
-                            </div>
+
+                        <!-- 2. مساحة العمل -->
+                        <div class="col-md-4 mb-3">
+                            <select name="workspace_id" class="form-control select2" id="workspace_id">
+                                <option value="">اختر مساحة العمل</option>
+                                @foreach ($workspaces as $workspace)
+                                    <option value="{{ $workspace->id }}">{{ $workspace->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- 3. الحالة -->
+                        <div class="col-md-4 mb-3">
+                            <select name="status" class="form-control select2" id="status">
+                                <option value="">الحالة</option>
+                                <option value="new">جديد</option>
+                                <option value="in_progress">قيد التنفيذ</option>
+                                <option value="completed">مكتمل</option>
+                                <option value="on_hold">متوقف</option>
+                            </select>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>عنوان المهمة <span class="text-danger">*</span></label>
-                        <input type="text" name="title" id="title" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>الوصف</label>
-                        <textarea name="description" id="description" class="form-control" rows="3"></textarea>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>الحالة <span class="text-danger">*</span></label>
-                                <select name="status" id="status" class="form-control select2" required>
-                                    <option value="not_started">لم تبدأ</option>
-                                    <option value="in_progress">قيد التنفيذ</option>
-                                    <option value="completed">مكتملة</option>
-                                    <option value="overdue">متأخرة</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>الأولوية <span class="text-danger">*</span></label>
-                                <select name="priority" id="priority" class="form-control" required>
+                    <!-- البحث المتقدم -->
+                    <div class="collapse" id="advancedSearchForm">
+                        <div class="row g-3 mt-2">
+                            <!-- 4. الأولوية -->
+                            <div class="col-md-4 mb-3">
+                                <select name="priority" class="form-control select2" id="priority">
+                                    <option value="">الأولوية</option>
                                     <option value="low">منخفضة</option>
                                     <option value="medium">متوسطة</option>
                                     <option value="high">عالية</option>
                                     <option value="urgent">عاجلة</option>
                                 </select>
                             </div>
+
+                            <!-- 5. منشئ المشروع -->
+                            <div class="col-md-4 mb-3">
+                                <select name="created_by" class="form-control select2" id="created_by">
+                                    <option value="">منشئ المشروع</option>
+                                    @foreach ($creators as $creator)
+                                        <option value="{{ $creator->id }}">{{ $creator->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- 6. من (التاريخ) -->
+                            <div class="col-md-4 mb-3">
+                                <input type="date" id="from_date" class="form-control" placeholder="من"
+                                    name="from_date">
+                            </div>
+
+                            <!-- 7. إلى (التاريخ) -->
+                            <div class="col-md-4 mb-3">
+                                <input type="date" id="to_date" class="form-control" placeholder="إلى"
+                                    name="to_date">
+                            </div>
+
+                            <!-- 8. الميزانية (من) -->
+                            <div class="col-md-4 mb-3">
+                                <input type="number" id="budget_min" class="form-control"
+                                    placeholder="الميزانية (من)" name="budget_min" min="0" step="0.01">
+                            </div>
+
+                            <!-- 9. الميزانية (إلى) -->
+                            <div class="col-md-4 mb-3">
+                                <input type="number" id="budget_max" class="form-control"
+                                    placeholder="الميزانية (إلى)" name="budget_max" min="0" step="0.01">
+                            </div>
+
+                            <!-- 10. نسبة الإكمال (من) -->
+                            <div class="col-md-4 mb-3">
+                                <input type="number" id="progress_min" class="form-control"
+                                    placeholder="نسبة الإكمال (من %)" name="progress_min" min="0" max="100">
+                            </div>
+
+                            <!-- 11. نسبة الإكمال (إلى) -->
+                            <div class="col-md-4 mb-3">
+                                <input type="number" id="progress_max" class="form-control"
+                                    placeholder="نسبة الإكمال (إلى %)" name="progress_max" min="0" max="100">
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>تاريخ البدء</label>
-                                <input type="date" name="start_date" id="start_date" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>تاريخ الانتهاء</label>
-                                <input type="date" name="due_date" id="due_date" class="form-control">
-                            </div>
-                        </div>
+                    <!-- الأزرار -->
+                    <div class="form-actions mt-2">
+                        <button type="submit" class="btn btn-primary">بحث</button>
+                        <button type="button" id="resetSearchBtn" class="btn btn-outline-warning">إلغاء</button>
                     </div>
+                </form>
+            </div>
+        </div>
 
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>الميزانية</label>
-                                <input type="number" name="budget" id="budget" class="form-control" step="0.01">
-                            </div>
+        <!-- بطاقة النتائج -->
+        <div class="card">
+            <div class="card-body position-relative">
+                <!-- مؤشر التحميل -->
+                <div id="loadingIndicator" class="loading-overlay" style="display: none;">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only">جاري التحميل...</span>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>الساعات المقدرة</label>
-                                <input type="number" name="estimated_hours" id="estimated_hours" class="form-control" step="0.5">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>نسبة الإنجاز (%)</label>
-                                <input type="number" name="completion_percentage" id="completion_percentage" class="form-control" min="0" max="100" value="0">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>تعيين المستخدمين</label>
-                        <select name="assigned_users[]" id="assigned_users" class="form-control select2" multiple>
-                            @foreach($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>إرفاق ملفات</label>
-                        <input type="file" name="files[]" id="files" class="form-control" multiple>
-                        <small class="text-muted">الحد الأقصى: 10 ميجابايت</small>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="send_notifications" name="send_notifications" value="1">
-                            <label class="custom-control-label" for="send_notifications">إرسال إشعارات للمستخدمين</label>
-                        </div>
+                        <p class="mt-2 text-muted">جاري تحميل البيانات...</p>
                     </div>
                 </div>
 
+                <!-- نتائج البحث -->
+                <div id="resultsContainer">
+                    @include('taskmanager::project.partials.table', [
+                        'projects' => $projects,
+                    ])
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- شريط الإجراءات الجماعية -->
+    <div class="bulk-actions-bar" id="bulkActionsBar">
+        <div class="d-flex align-items-center">
+            <span class="selected-count" id="selectedCount">0 مشروع محدد</span>
+            <div class="d-flex gap-2 ms-3">
+                <button class="btn btn-light btn-sm" onclick="bulkInviteMembers()">
+                    <i class="fas fa-user-plus me-1"></i>دعوة أعضاء
+                </button>
+                <button class="btn btn-outline-light btn-sm" onclick="bulkStatusUpdate()">
+                    <i class="fas fa-edit me-1"></i>تعديل الحالة
+                </button>
+                <button class="btn btn-outline-light btn-sm" onclick="clearSelection()">
+                    <i class="fas fa-times me-1"></i>إلغاء التحديد
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal دعوة أعضاء جماعية -->
+    <div class="modal fade bulk-invite-modal" id="bulkInviteMembersModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h4 class="modal-title">
+                        <i class="fas fa-users me-2"></i>
+                        دعوة أعضاء للمشاريع المحددة
+                    </h4>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!-- ملخص المشاريع المحددة -->
+                    <div class="selected-projects-summary">
+                        <h6 class="mb-2">
+                            <i class="fas fa-project-diagram me-2"></i>
+                            المشاريع المحددة (<span id="modalSelectedCount">0</span>):
+                        </h6>
+                        <div id="selectedProjectsList" class="d-flex flex-wrap"></div>
+                    </div>
+
+                    <!-- طرق الدعوة -->
+                    <ul class="nav nav-tabs mb-3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#bulk-email-invite" role="tab">
+                                <i class="fas fa-envelope me-1"></i>بالبريد الإلكتروني
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#bulk-users-invite" role="tab"
+                               onclick="loadBulkAvailableUsers()">
+                                <i class="fas fa-users me-1"></i>من المستخدمين المتاحين
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <!-- الدعوة بالبريد الإلكتروني -->
+                        <div class="tab-pane active" id="bulk-email-invite" role="tabpanel">
+                            <form id="bulkInviteByEmailForm">
+                                <div class="form-group">
+                                    <label>البريد الإلكتروني *</label>
+                                    <input type="email" class="form-control" id="bulk_invite_email"
+                                           placeholder="أدخل البريد الإلكتروني للعضو المراد دعوته" required>
+                                    <small class="form-text text-muted">
+                                        سيتم البحث عن المستخدم وإرسال دعوة له لجميع المشاريع المحددة
+                                    </small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>الدور في المشاريع *</label>
+                                    <select class="form-control" id="bulk_invite_role" required>
+                                        <option value="">اختر الدور</option>
+                                        <option value="member">عضو - يمكنه العمل على المهام</option>
+                                        <option value="manager">مدير - يمكنه إدارة المشروع والمهام</option>
+                                        <option value="viewer">مشاهد - يمكنه مشاهدة المشروع فقط</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>رسالة الدعوة (اختياري)</label>
+                                    <textarea class="form-control" id="bulk_invite_message" rows="3"
+                                            placeholder="أضف رسالة شخصية للمدعو..."></textarea>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- من المستخدمين المتاحين -->
+                        <div class="tab-pane" id="bulk-users-invite" role="tabpanel">
+                            <div class="form-group">
+                                <label>البحث عن المستخدمين</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="bulkUserSearchInput"
+                                           placeholder="ابحث بالاسم أو البريد الإلكتروني...">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button"
+                                                onclick="loadBulkAvailableUsers()">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>الدور للمستخدمين المختارين</label>
+                                <select class="form-control" id="bulk_users_role">
+                                    <option value="member">عضو</option>
+                                    <option value="manager">مدير</option>
+                                    <option value="viewer">مشاهد</option>
+                                </select>
+                            </div>
+
+                            <div id="bulkAvailableUsersList" style="max-height: 300px; overflow-y: auto;">
+                                <div class="text-center py-3">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="sr-only">جاري التحميل...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>ملاحظة:</strong> سيتم إرسال الدعوة لجميع المشاريع المحددة. العضو المدعو سيتمكن من الوصول لهذه المشاريع حسب الصلاحيات المحددة
+                    </div>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-primary" id="saveTaskBtn">
-                        <i class="feather icon-save"></i> حفظ
+                    <button type="button" class="btn btn-info" onclick="sendBulkInvite()">
+                        <i class="fas fa-paper-plane me-1"></i>إرسال الدعوات
                     </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-{{-- تضمين Modal عرض تفاصيل المهمة مع التعليقات --}}
-@include('taskmanager::task.modals.task-details')
-
-{{-- Modal عرض تفاصيل المهمة مع التعليقات --}}
-<div class="modal fade task-details-modal" id="taskDetailsModal" tabindex="-1" role="dialog" aria-labelledby="taskDetailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="taskDetailsModalLabel">
-                    <i class="feather icon-eye me-2"></i>
-                    تفاصيل المهمة
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="إغلاق"></button>
-            </div>
-            
-            <div class="modal-body" id="taskDetailsContent">
-                {{-- محتوى ديناميكي سيتم تحميله عبر AJAX --}}
-                <div class="text-center py-5">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">جاري التحميل...</span>
-                    </div>
-                    <p class="mt-3 text-muted">جاري تحميل تفاصيل المهمة...</p>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-{{-- Modal إضافة/تعديل التعليق --}}
-<div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title" id="commentModalLabel">
-                    <i class="feather icon-message-circle me-2"></i>
-                    <span id="commentModalTitle">إضافة تعليق جديد</span>
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="إغلاق"></button>
-            </div>
-            
-            <form id="commentForm">
-                <div class="modal-body">
-                    <div class="alert alert-danger d-none" id="commentFormErrors"></div>
-                    
-                    <input type="hidden" id="comment_id" name="comment_id">
-                    <input type="hidden" id="commentable_type" name="commentable_type" value="App\\Models\\Task">
-                    <input type="hidden" id="commentable_id" name="commentable_id">
-                    <input type="hidden" id="parent_id" name="parent_id">
-                    
-                    <div class="form-group">
-                        <label for="comment_content" class="form-label">
-                            <i class="feather icon-edit-3 me-1"></i>
-                            محتوى التعليق <span class="text-danger">*</span>
-                        </label>
-                        <textarea 
-                            id="comment_content" 
-                            name="content" 
-                            class="form-control" 
-                            rows="4" 
-                            placeholder="اكتب تعليقك هنا..."
-                            required
-                            maxlength="2000"
-                        ></textarea>
-                        <div class="form-text">
-                            <span id="char_count">0</span> / 2000 حرف
-                        </div>
-                    </div>
-                    
-                    <div id="reply_to_section" class="alert alert-info d-none">
-                        <i class="feather icon-corner-down-left me-1"></i>
-                        <strong>رد على:</strong> <span id="reply_to_user"></span>
-                        <button type="button" class="btn btn-sm btn-outline-secondary ms-2" onclick="cancelReply()">
-                            إلغاء الرد
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="feather icon-x me-1"></i>
-                        إلغاء
-                    </button>
-                    <button type="submit" class="btn btn-success" id="saveCommentBtn">
-                        <i class="feather icon-send me-1"></i>
-                        <span id="saveCommentBtnText">إرسال التعليق</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-@endsection
-
-@section('styles')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<link rel="stylesheet" href="{{ asset('assets/css/task-manager.css') }}">
-
-<style>
-/* تنسيقات Modal عرض التفاصيل */
-.task-details-modal .modal-dialog {
-    max-width: 1100px;
-}
-
-.task-info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    margin-bottom: 25px;
-}
-
-.info-card {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 20px;
-    border-left: 4px solid #007bff;
-    transition: all 0.3s ease;
-}
-
-.info-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.info-label {
-    font-size: 0.85rem;
-    color: #6c757d;
-    margin-bottom: 8px;
-    font-weight: 500;
-}
-
-.info-value {
-    font-size: 1rem;
-    color: #495057;
-    font-weight: 600;
-}
-
-/* تنسيقات الحالة والأولوية */
-.status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-}
-
-.status-not_started { background: #fff3cd; color: #856404; }
-.status-in_progress { background: #d1ecf1; color: #0c5460; }
-.status-completed { background: #d4edda; color: #155724; }
-.status-overdue { background: #f8d7da; color: #721c24; }
-
-.priority-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 6px 12px;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-.priority-low { background: #e8f5e8; color: #28c76f; }
-.priority-medium { background: #fff3cd; color: #ffc107; }
-.priority-high { background: #f8d7da; color: #dc3545; }
-.priority-urgent { 
-    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-    color: white;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(238, 90, 82, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(238, 90, 82, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(238, 90, 82, 0); }
-}
-
-/* تنسيقات دائرة التقدم */
-.progress-circle-container {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    margin: 0 auto;
-}
-
-.progress-circle {
-    transform: rotate(-90deg);
-}
-
-.progress-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-}
-
-.progress-percentage {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #495057;
-    line-height: 1;
-}
-
-.progress-label {
-    font-size: 0.8rem;
-    color: #6c757d;
-    margin-top: 2px;
-}
-
-/* تنسيقات المستخدمين */
-.user-avatar {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    border: 3px solid #007bff;
-    object-fit: cover;
-    margin-left: 10px;
-}
-
-.user-card {
-    background: white;
-    border-radius: 10px;
-    padding: 15px;
-    border: 1px solid #e9ecef;
-    transition: all 0.3s ease;
-}
-
-.user-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* تنسيقات قسم التعليقات */
-.comments-section {
-    background: #f8f9fa;
-    border-radius: 15px;
-    padding: 25px;
-    margin-top: 25px;
-    max-height: 600px;
-    overflow-y: auto;
-}
-
-.comments-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #dee2e6;
-}
-
-.comments-count {
-    background: #007bff;
-    color: white;
-    padding: 5px 12px;
-    border-radius: 15px;
-    font-size: 0.85rem;
-    font-weight: 600;
-}
-
-.comment-item {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 15px;
-    border: 1px solid #e9ecef;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.comment-item:hover {
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    transform: translateY(-1px);
-}
-
-.comment-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #f1f3f4;
-}
-
-.comment-user {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.comment-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 2px solid #007bff;
-    object-fit: cover;
-}
-
-.comment-user-info h6 {
-    margin: 0;
-    font-size: 0.95rem;
-    color: #495057;
-    font-weight: 600;
-}
-
-.comment-time {
-    font-size: 0.8rem;
-    color: #6c757d;
-    direction: ltr;
-    text-align: left;
-}
-
-.comment-content {
-    color: #495057;
-    line-height: 1.7;
-    margin-bottom: 15px;
-    font-size: 0.95rem;
-}
-
-.comment-actions {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-}
-
-.comment-action-btn {
-    background: none;
-    border: none;
-    color: #6c757d;
-    font-size: 0.85rem;
-    padding: 5px 10px;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-    cursor: pointer;
-}
-
-.comment-action-btn:hover {
-    background: #f8f9fa;
-    color: #495057;
-}
-
-.comment-action-btn.active {
-    color: #007bff;
-    background: #e3f2fd;
-}
-
-/* تنسيقات الردود */
-.replies-container {
-    margin-top: 15px;
-    margin-right: 50px;
-    padding-right: 20px;
-    border-right: 3px solid #e9ecef;
-}
-
-.reply-item {
-    background: #f8f9fa;
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 10px;
-    border: 1px solid #e9ecef;
-}
-
-/* تنسيقات النموذج */
-.form-floating textarea {
-    min-height: 120px;
-    resize: vertical;
-}
-
-.char-counter {
-    font-size: 0.8rem;
-    color: #6c757d;
-    text-align: left;
-    direction: ltr;
-}
-
-.char-counter.warning {
-    color: #ffc107;
-}
-
-.char-counter.danger {
-    color: #dc3545;
-}
-
-/* تنسيقات responsive */
-@media (max-width: 768px) {
-    .task-info-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .replies-container {
-        margin-right: 20px;
-        padding-right: 15px;
-    }
-    
-    .comment-actions {
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-}
-
-/* تنسيقات إضافية */
-.no-comments {
-    text-align: center;
-    padding: 40px 20px;
-    color: #6c757d;
-}
-
-.no-comments i {
-    font-size: 3rem;
-    margin-bottom: 15px;
-    color: #adb5bd;
-}
-
-.btn-add-comment {
-    background: linear-gradient(135deg, #28c76f, #20bf6b);
-    border: none;
-    padding: 12px 25px;
-    border-radius: 25px;
-    color: white;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.btn-add-comment:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(40, 199, 111, 0.3);
-    color: white;
-}
-
-.loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    z-index: 10;
-}
-</style>
 @endsection
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // متغيرات النظام الجماعي
+        let selectedProjects = new Set();
+        let selectedUsersForBulkInvite = new Set();
+        let availableUsersForBulkInvite = [];
 
-<script>
-    // تحديد معرف المستخدم الحالي للاستخدام في JavaScript
-    window.authUserId = {{ auth()->id() ?? 'null' }};
-</script>
+        $(document).ready(function() {
+            let currentPage = 1;
+            let isLoading = false;
+            let searchXHR = null;
 
-<!-- الملفات المنظمة -->
-<script src="{{ asset('assets/js/task/utils.js') }}"></script>
-<script src="{{ asset('assets/js/task/task-card.js') }}"></script>
-<script src="{{ asset('assets/js/task/drag-drop.js') }}"></script>
-<script src="{{ asset('assets/js/task/task-updater.js') }}"></script>
-<script src="{{ asset('assets/js/task/task-modal.js') }}"></script>
-<script src="{{ asset('assets/js/task/comments-system.js') }}"></script>
-<script src="{{ asset('assets/js/task/task-manager.js') }}"></script>
-
-<script>
-$(document).ready(function() {
-    // متغيرات عامة
-    let currentTaskId = null;
-    let currentCommentId = null;
-    let isEditingComment = false;
-
-    // فتح modal تفاصيل المهمة
-    window.showTaskDetails = function(taskId) {
-        currentTaskId = taskId;
-        $('#taskDetailsModal').modal('show');
-        loadTaskDetails(taskId);
-    };
-
-    // تحميل تفاصيل المهمة
-    function loadTaskDetails(taskId) {
-        const loadingHtml = `
-            <div class="text-center py-5">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">جاري التحميل...</span>
-                </div>
-                <p class="mt-3 text-muted">جاري تحميل تفاصيل المهمة...</p>
-            </div>
-        `;
-        
-        $('#taskDetailsContent').html(loadingHtml);
-
-        $.ajax({
-            url: `/tasks/${taskId}/details`,
-            type: 'GET',
-            success: function(response) {
-                if (response.success) {
-                    renderTaskDetails(response.task);
-                    if (window.commentsSystem) {
-                        window.commentsSystem.loadTaskComments(taskId);
+            // تهيئة Select2
+            $('.select2').select2({
+                width: '100%',
+                placeholder: 'اختر...',
+                allowClear: true,
+                language: {
+                    noResults: function() {
+                        return "لا توجد نتائج";
                     }
-                } else {
-                    showError('فشل في تحميل تفاصيل المهمة');
                 }
-            },
-            error: function(xhr) {
-                console.error('خطأ في تحميل تفاصيل المهمة:', xhr);
-                showError('حدث خطأ في تحميل التفاصيل');
+            });
+
+            // معالجة تحديد جميع المشاريع
+            $(document).on('change', '#selectAll', function() {
+                const isChecked = $(this).is(':checked');
+                $('.project-checkbox').prop('checked', isChecked).trigger('change');
+            });
+
+            // معالجة تحديد مشروع واحد
+            $(document).on('change', '.project-checkbox', function() {
+                const projectId = $(this).val();
+                const isChecked = $(this).is(':checked');
+                const projectTitle = $(this).closest('tr').find('.text-primary').text();
+
+                if (isChecked) {
+                    selectedProjects.add({
+                        id: projectId,
+                        title: projectTitle
+                    });
+                    $(this).closest('tr').addClass('selected');
+                } else {
+                    selectedProjects.forEach(project => {
+                        if (project.id === projectId) {
+                            selectedProjects.delete(project);
+                        }
+                    });
+                    $(this).closest('tr').removeClass('selected');
+                }
+
+                updateBulkActionsBar();
+                updateSelectAllCheckbox();
+            });
+
+            // باقي الكود الأصلي...
+            $('#searchForm').submit(function(e) {
+                e.preventDefault();
+                if (!isLoading) {
+                    currentPage = 1;
+                    loadData();
+                }
+            });
+
+            $('#searchForm input, #searchForm select').on('change input', function() {
+                if (searchXHR) {
+                    searchXHR.abort();
+                }
+
+                clearTimeout(window.searchTimeout);
+                window.searchTimeout = setTimeout(function() {
+                    if (!isLoading) {
+                        currentPage = 1;
+                        loadData();
+                    }
+                }, 500);
+            });
+
+            // إعادة تعيين البحث
+            $('#resetSearch, #resetSearchBtn').click(function() {
+                $('#searchForm')[0].reset();
+                $('.select2').val(null).trigger('change');
+                currentPage = 1;
+                loadData();
+            });
+
+            // تحديث البيانات
+            $('#refreshAnalyticsBtn').click(function() {
+                if (!isLoading) {
+                    loadData();
+                    loadStats();
+                }
+            });
+
+            // دالة تحميل البيانات
+            function loadData() {
+                if (isLoading) return;
+
+                isLoading = true;
+                showLoading();
+
+                // جمع بيانات النموذج
+                let formData = $('#searchForm').serializeArray()
+                    .filter(item => item.name !== '_token')
+                    .reduce((obj, item) => {
+                        obj[item.name] = item.value;
+                        return obj;
+                    }, {});
+
+                formData.page = currentPage;
+
+                // إلغاء أي طلب سابق
+                if (searchXHR) {
+                    searchXHR.abort();
+                }
+
+                searchXHR = $.ajax({
+                    url: "",
+                    method: 'GET',
+                    data: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#resultsContainer').html(response.html);
+                            updatePaginationInfo(response);
+                            // إعادة تعيين التحديدات بعد تحديث الجدول
+                            clearSelection();
+                        } else {
+                            showError('حدث خطأ أثناء جلب البيانات');
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.statusText !== 'abort') {
+                            handleAjaxError(xhr);
+                        }
+                    },
+                    complete: function() {
+                        isLoading = false;
+                        hideLoading();
+                        searchXHR = null;
+                    }
+                });
             }
+
+            function showLoading() {
+                $('#loadingIndicator').show();
+            }
+
+            function hideLoading() {
+                $('#loadingIndicator').hide();
+            }
+
+            function showError(message) {
+                console.error(message);
+                // يمكن إضافة عرض رسالة خطأ للمستخدم هنا
+            }
+
+            function handleAjaxError(xhr) {
+                let message = 'حدث خطأ غير متوقع';
+                if (xhr.status === 422) {
+                    message = 'خطأ في البيانات المرسلة';
+                } else if (xhr.status === 500) {
+                    message = 'خطأ في الخادم';
+                }
+                showError(message);
+            }
+
+            function updatePaginationInfo(response) {
+                if (response.pagination) {
+                    $('.results-info').text(`${response.pagination.total} مشروع`);
+                }
+            }
+
+            // تحميل البيانات الأولية
+            loadData();
         });
-    }
 
-    // عرض تفاصيل المهمة
-    function renderTaskDetails(task) {
-        const progressColor = getProgressColor(task.completion_percentage || 0);
-        const circumference = 2 * Math.PI * 50;
-        const offset = circumference - ((task.completion_percentage || 0) / 100) * circumference;
+        // دوال النظام الجماعي
+        function updateBulkActionsBar() {
+            const count = selectedProjects.size;
+            if (count > 0) {
+                $('#selectedCount').text(`${count} مشروع محدد`);
+                $('#bulkActionsBar').fadeIn();
+            } else {
+                $('#bulkActionsBar').fadeOut();
+            }
+        }
 
-        const detailsHtml = `
-            <div class="row">
-                <!-- معلومات المهمة الأساسية -->
-                <div class="col-lg-8">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body">
-                            <h4 class="card-title mb-4">
-                                <i class="feather icon-file-text text-primary me-2"></i>
-                                ${task.title}
-                            </h4>
-                            
-                            ${task.description ? `
-                                <div class="mb-4">
-                                    <h6 class="text-muted mb-2">
-                                        <i class="feather icon-align-left me-1"></i>
-                                        الوصف
-                                    </h6>
-                                    <p class="text-secondary">${task.description}</p>
-                                </div>
-                            ` : ''}
+        function updateSelectAllCheckbox() {
+            const totalCheckboxes = $('.project-checkbox').length;
+            const checkedCheckboxes = $('.project-checkbox:checked').length;
 
-                            <div class="task-info-grid">
-                                <div class="info-card">
-                                    <div class="info-label">
-                                        <i class="feather icon-folder me-1"></i>
-                                        المشروع
-                                    </div>
-                                    <div class="info-value">${task.project?.title || 'غير محدد'}</div>
-                                </div>
+            if (checkedCheckboxes === 0) {
+                $('#selectAll').prop('indeterminate', false).prop('checked', false);
+            } else if (checkedCheckboxes === totalCheckboxes) {
+                $('#selectAll').prop('indeterminate', false).prop('checked', true);
+            } else {
+                $('#selectAll').prop('indeterminate', true);
+            }
+        }
 
-                                <div class="info-card">
-                                    <div class="info-label">
-                                        <i class="feather icon-activity me-1"></i>
-                                        الحالة
-                                    </div>
-                                    <div class="info-value">
-                                        <span class="status-badge status-${task.status}">
-                                            ${getStatusIcon(task.status)}
-                                            ${getStatusName(task.status)}
-                                        </span>
-                                    </div>
-                                </div>
+        function clearSelection() {
+            selectedProjects.clear();
+            $('.project-checkbox').prop('checked', false);
+            $('.project-row').removeClass('selected');
+            $('#selectAll').prop('checked', false).prop('indeterminate', false);
+            updateBulkActionsBar();
+        }
 
-                                <div class="info-card">
-                                    <div class="info-label">
-                                        <i class="feather icon-flag me-1"></i>
-                                        الأولوية
-                                    </div>
-                                    <div class="info-value">
-                                        <span class="priority-badge priority-${task.priority}">
-                                            ${getPriorityIcon(task.priority)}
-                                            ${getPriorityName(task.priority)}
-                                        </span>
-                                    </div>
-                                </div>
+        // دالة فتح مودال الدعوة الجماعية
+        function bulkInviteMembers() {
+            if (selectedProjects.size === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'لم يتم تحديد مشاريع',
+                    text: 'الرجاء تحديد مشروع واحد على الأقل للمتابعة'
+                });
+                return;
+            }
 
-                                ${task.start_date ? `
-                                    <div class="info-card">
-                                        <div class="info-label">
-                                            <i class="feather icon-play-circle me-1"></i>
-                                            تاريخ البدء
-                                        </div>
-                                        <div class="info-value">${formatDate(task.start_date)}</div>
-                                    </div>
-                                ` : ''}
+            // تحديث ملخص المشاريع المحددة
+            updateSelectedProjectsSummary();
 
-                                ${task.due_date ? `
-                                    <div class="info-card ${task.due_date < new Date().toISOString().split('T')[0] && task.status !== 'completed' ? 'border-danger' : ''}">
-                                        <div class="info-label">
-                                            <i class="feather icon-calendar me-1"></i>
-                                            تاريخ الانتهاء
-                                        </div>
-                                        <div class="info-value">
-                                            ${formatDate(task.due_date)}
-                                            ${task.due_date < new Date().toISOString().split('T')[0] && task.status !== 'completed' ? 
-                                                '<span class="badge bg-danger ms-2">متأخرة</span>' : ''}
-                                        </div>
-                                    </div>
-                                ` : ''}
+            // فتح المودال
+            $('#bulkInviteMembersModal').modal('show');
+        }
 
-                                ${task.budget ? `
-                                    <div class="info-card">
-                                        <div class="info-label">
-                                            <i class="feather icon-dollar-sign me-1"></i>
-                                            الميزانية
-                                        </div>
-                                        <div class="info-value">${Number(task.budget).toLocaleString()} ريال</div>
-                                    </div>
-                                ` : ''}
+        function updateSelectedProjectsSummary() {
+            const count = selectedProjects.size;
+            $('#modalSelectedCount').text(count);
 
-                                ${task.estimated_hours ? `
-                                    <div class="info-card">
-                                        <div class="info-label">
-                                            <i class="feather icon-clock me-1"></i>
-                                            الساعات المقدرة
-                                        </div>
-                                        <div class="info-value">${task.estimated_hours} ساعة</div>
-                                    </div>
-                                ` : ''}
-                            </div>
+            let html = '';
+            selectedProjects.forEach(project => {
+                html += `<span class="project-chip">${project.title}</span>`;
+            });
 
-                            <!-- المستخدمون المكلفون -->
-                            ${task.assigned_users && task.assigned_users.length > 0 ? `
-                                <div class="mb-4">
-                                    <h6 class="text-muted mb-3">
-                                        <i class="feather icon-users me-1"></i>
-                                        الموظفين المكلفين (${task.assigned_users.length})
-                                    </h6>
-                                    <div class="row">
-                                        ${task.assigned_users.map(user => `
-                                            <div class="col-md-6 mb-3">
-                                                <div class="user-card">
-                                                    <div class="d-flex align-items-center">
-                                                        <img src="${user.avatar || '/default-avatar.png'}" 
-                                                             alt="${user.name}" 
-                                                             class="user-avatar">
-                                                        <div>
-                                                            <h6 class="mb-1">${user.name}</h6>
-                                                            <small class="text-muted">${user.job_title || 'موظف'}</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        `).join('')}
-                                    </div>
-                                </div>
-                            ` : ''}
-                        </div>
+            $('#selectedProjectsList').html(html);
+        }
+
+        // تحميل المستخدمين المتاحين للدعوة الجماعية
+        function loadBulkAvailableUsers() {
+            $('#bulkAvailableUsersList').html(`
+                <div class="text-center py-3">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">جاري التحميل...</span>
                     </div>
                 </div>
+            `);
 
-                <!-- إحصائيات ونسبة الإنجاز -->
-                <div class="col-lg-4">
-                    <div class="card border-0 shadow-sm mb-4">
-                        <div class="card-body text-center">
-                            <h6 class="card-title mb-4">
-                                <i class="feather icon-trending-up text-success me-1"></i>
-                                نسبة الإنجاز
-                            </h6>
-                            
-                            <div class="progress-circle-container mb-3">
-                                <svg width="120" height="120" class="progress-circle">
-                                    <circle cx="60" cy="60" r="50" fill="none" 
-                                            stroke="#e9ecef" stroke-width="8"/>
-                                    <circle cx="60" cy="60" r="50" fill="none" 
-                                            stroke="${progressColor}" stroke-width="8"
-                                            stroke-dasharray="${circumference}"
-                                            stroke-dashoffset="${offset}"
-                                            stroke-linecap="round"/>
-                                </svg>
-                                <div class="progress-text">
-                                    <div class="progress-percentage">${task.completion_percentage || 0}%</div>
-                                    <div class="progress-label">مكتمل</div>
-                                </div>
+            // جمع معرفات المشاريع المحددة
+            const projectIds = Array.from(selectedProjects).map(p => p.id);
+
+            $.ajax({
+                url: '/projects/bulk/available-users',
+                method: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    project_ids: projectIds
+                },
+                success: function(response) {
+                    if (response.success) {
+                        availableUsersForBulkInvite = response.data;
+                        displayBulkAvailableUsers(availableUsersForBulkInvite);
+                    } else {
+                        showBulkUserListError('لا توجد مستخدمين متاحين للدعوة');
+                    }
+                },
+                error: function(xhr) {
+                    console.error('Error loading bulk available users:', xhr);
+                    showBulkUserListError('حدث خطأ أثناء تحميل المستخدمين المتاحين');
+                }
+            });
+        }
+
+        function displayBulkAvailableUsers(users) {
+            if (users.length === 0) {
+                $('#bulkAvailableUsersList').html(`
+                    <div class="text-center py-4 text-muted">
+                        <i class="fas fa-users" style="font-size: 2rem;"></i>
+                        <div class="mt-2">لا يوجد مستخدمين متاحين للدعوة</div>
+                        <small>جميع المستخدمين إما أعضاء بالفعل في هذه المشاريع أو لديهم دعوات معلقة</small>
+                    </div>
+                `);
+                return;
+            }
+
+            let html = '';
+            users.forEach(user => {
+                const isSelected = selectedUsersForBulkInvite.has(user.id);
+                html += `
+                    <div class="user-selection-item ${isSelected ? 'selected' : ''}"
+                         onclick="toggleBulkUserSelection(${user.id})">
+                        <div class="d-flex align-items-center">
+                            <div class="user-avatar-invite">
+                                ${user.name.charAt(0).toUpperCase()}
                             </div>
-
-                            <div class="text-muted">
-                                <small>آخر تحديث: ${formatDateTime(task.updated_at)}</small>
+                            <div class="member-info">
+                                <div class="member-name">${user.name}</div>
+                                <div class="member-email">${user.email}</div>
+                                ${user.last_login_at ?
+                                    `<small class="text-success">آخر دخول: ${formatDate(user.last_login_at)}</small>` :
+                                    '<small class="text-muted">لم يسجل دخول بعد</small>'
+                                }
+                            </div>
+                            <div class="ms-auto">
+                                <input type="checkbox" ${isSelected ? 'checked' : ''}
+                                       onchange="toggleBulkUserSelection(${user.id})">
                             </div>
                         </div>
                     </div>
+                `;
+            });
 
-                    <!-- إحصائيات إضافية -->
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body">
-                            <h6 class="card-title mb-3">
-                                <i class="feather icon-bar-chart-2 text-info me-1"></i>
-                                إحصائيات
-                            </h6>
-                            
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="text-muted">منشئ المهمة:</span>
-                                <strong>${task.creator?.name || 'غير محدد'}</strong>
-                            </div>
-                            
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="text-muted">تاريخ الإنشاء:</span>
-                                <strong>${formatDate(task.created_at)}</strong>
-                            </div>
-                            
-                            ${task.completed_date ? `
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="text-muted">تاريخ الإكمال:</span>
-                                    <strong class="text-success">${formatDate(task.completed_date)}</strong>
-                                </div>
-                            ` : ''}
+            $('#bulkAvailableUsersList').html(html);
+        }
 
-                            ${task.sub_tasks && task.sub_tasks.length > 0 ? `
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="text-muted">المهام الفرعية:</span>
-                                    <strong>${task.sub_tasks.filter(st => st.status === 'completed').length}/${task.sub_tasks.length}</strong>
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                </div>
-            </div>
+        function toggleBulkUserSelection(userId) {
+            if (selectedUsersForBulkInvite.has(userId)) {
+                selectedUsersForBulkInvite.delete(userId);
+            } else {
+                selectedUsersForBulkInvite.add(userId);
+            }
 
-            <!-- قسم التعليقات -->
-            <div class="comments-section">
-                <div class="comments-header">
-                    <h5 class="mb-0">
-                        <i class="feather icon-message-circle me-2"></i>
-                        التعليقات
-                        <span class="comments-count" id="commentsCount">0</span>
-                    </h5>
-                    <button type="button" class="btn btn-add-comment" onclick="openCommentModal(${task.id})">
-                        <i class="feather icon-plus me-1"></i>
-                        إضافة تعليق
+            // تحديث العرض
+            displayBulkAvailableUsers(availableUsersForBulkInvite);
+        }
+
+        function showBulkUserListError(message) {
+            $('#bulkAvailableUsersList').html(`
+                <div class="text-center py-4 text-danger">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem;"></i>
+                    <div class="mt-2">${message}</div>
+                    <button class="btn btn-outline-primary btn-sm mt-2" onclick="loadBulkAvailableUsers()">
+                        <i class="fas fa-sync-alt me-1"></i>إعادة المحاولة
                     </button>
                 </div>
-                
-                <div id="commentsContainer">
-                    <div class="text-center py-4">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">جاري التحميل...</span>
-                        </div>
-                        <p class="mt-2 text-muted">جاري تحميل التعليقات...</p>
+            `);
+        }
+
+        // إرسال الدعوة الجماعية
+        function sendBulkInvite() {
+            const activeTab = $('.nav-tabs .nav-link.active').attr('href');
+            const projectIds = Array.from(selectedProjects).map(p => p.id);
+
+            let inviteData = {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                project_ids: projectIds
+            };
+
+            // تحديد طريقة الدعوة والبيانات
+            if (activeTab === '#bulk-email-invite') {
+                const email = $('#bulk_invite_email').val().trim();
+                const role = $('#bulk_invite_role').val();
+                const message = $('#bulk_invite_message').val().trim();
+
+                if (!email || !role) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'بيانات ناقصة',
+                        text: 'الرجاء إدخال البريد الإلكتروني واختيار الدور'
+                    });
+                    return;
+                }
+
+                inviteData.email = email;
+                inviteData.role = role;
+                inviteData.message = message;
+                inviteData.invite_type = 'email';
+
+            } else if (activeTab === '#bulk-users-invite') {
+                const role = $('#bulk_users_role').val();
+
+                if (selectedUsersForBulkInvite.size === 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'لم يتم تحديد مستخدمين',
+                        text: 'الرجاء اختيار مستخدم واحد على الأقل للدعوة'
+                    });
+                    return;
+                }
+
+                inviteData.user_ids = Array.from(selectedUsersForBulkInvite);
+                inviteData.role = role;
+                inviteData.invite_type = 'users';
+            }
+
+            // إرسال الدعوة
+            Swal.fire({
+                title: 'جاري الإرسال...',
+                html: `
+                    <div class="text-center">
+                        <div class="spinner-border text-primary mb-3" role="status"></div>
+                        <p>جاري إرسال الدعوات لـ <strong>${selectedProjects.size}</strong> مشروع...</p>
                     </div>
-                </div>
-            </div>
-        `;
-
-        $('#taskDetailsContent').html(detailsHtml);
-    }
-
-    // دوال مساعدة
-    function getStatusName(status) {
-        const statuses = {
-            'not_started': 'لم تبدأ',
-            'in_progress': 'قيد التنفيذ', 
-            'completed': 'مكتملة',
-            'overdue': 'متأخرة'
-        };
-        return statuses[status] || status;
-    }
-
-    function getStatusIcon(status) {
-        const icons = {
-            'not_started': '<i class="feather icon-pause-circle"></i>',
-            'in_progress': '<i class="feather icon-play-circle"></i>',
-            'completed': '<i class="feather icon-check-circle"></i>',
-            'overdue': '<i class="feather icon-alert-circle"></i>'
-        };
-        return icons[status] || '<i class="feather icon-circle"></i>';
-    }
-
-    function getPriorityName(priority) {
-        const priorities = {
-            'low': 'منخفضة',
-            'medium': 'متوسطة',
-            'high': 'عالية',
-            'urgent': 'عاجلة'
-        };
-        return priorities[priority] || priority;
-    }
-
-    function getPriorityIcon(priority) {
-        const icons = {
-            'low': '<i class="feather icon-arrow-down"></i>',
-            'medium': '<i class="feather icon-minus"></i>',
-            'high': '<i class="feather icon-arrow-up"></i>',
-            'urgent': '<i class="feather icon-zap"></i>'
-        };
-        return icons[priority] || '<i class="feather icon-flag"></i>';
-    }
-
-    function getProgressColor(percentage) {
-        if (percentage >= 70) return '#28c76f';
-        if (percentage >= 30) return '#ff9f43';
-        return '#ea5455';
-    }
-
-    function formatDate(dateString) {
-        if (!dateString) return 'غير محدد';
-        
-        try {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('ar-SA', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
+                `,
+                allowOutsideClick: false,
+                showConfirmButton: false
             });
-        } catch (e) {
-            return dateString;
-        }
-    }
 
-    function formatDateTime(dateString) {
-        if (!dateString) return 'غير محدد';
-        
-        try {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('ar-SA', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
+            $.ajax({
+                url: '/projects/bulk/invite',
+                method: 'POST',
+                data: inviteData,
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'تم إرسال الدعوات!',
+                            html: `
+                                <div class="text-center">
+                                    <p class="mb-2">${response.message}</p>
+                                    <div class="alert alert-info mt-3">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        تم إرسال <strong>${response.data.sent_count || selectedProjects.size}</strong> دعوة بنجاح
+                                    </div>
+                                </div>
+                            `,
+                            timer: 5000
+                        }).then(() => {
+                            $('#bulkInviteMembersModal').modal('hide');
+                            resetBulkInviteForm();
+                            clearSelection(); // مسح التحديد بعد إرسال الدعوات
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    let errorMsg = 'حدث خطأ أثناء إرسال الدعوات';
+
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMsg = xhr.responseJSON.message;
+                    } else if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        const errors = Object.values(xhr.responseJSON.errors).flat();
+                        errorMsg = errors.join('\n');
+                    }
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطأ!',
+                        text: errorMsg
+                    });
+                }
             });
-        } catch (e) {
-            return dateString;
         }
-    }
 
-    function showError(message) {
-        $('#taskDetailsContent').html(`
-            <div class="alert alert-danger text-center">
-                <i class="feather icon-alert-circle me-2"></i>
-                ${message}
-            </div>
-        `);
-    }
+        // إعادة تعيين نموذج الدعوة الجماعية
+        function resetBulkInviteForm() {
+            $('#bulk_invite_email').val('');
+            $('#bulk_invite_role').val('');
+            $('#bulk_invite_message').val('');
+            $('#bulk_users_role').val('member');
+            selectedUsersForBulkInvite.clear();
+        }
 
-    // فتح modal إضافة تعليق جديد
-    window.openCommentModal = function(taskId, parentId = null, parentUserName = null) {
-        if (window.commentsSystem) {
-            window.commentsSystem.openCommentModal(taskId, parentId, parentUserName);
-        }
-    };
+        // تحديث الحالة الجماعي
+        function bulkStatusUpdate() {
+            if (selectedProjects.size === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'لم يتم تحديد مشاريع',
+                    text: 'الرجاء تحديد مشروع واحد على الأقل للمتابعة'
+                });
+                return;
+            }
 
-    // دوال التعليقات العامة
-    window.replyToComment = function(commentId, userName, taskId) {
-        if (window.commentsSystem) {
-            window.commentsSystem.replyToComment(commentId, userName, taskId);
+            Swal.fire({
+                title: `تحديث حالة ${selectedProjects.size} مشروع`,
+                html: `
+                    <div class="text-start">
+                        <label class="form-label">الحالة الجديدة</label>
+                        <select id="new_status" class="form-control">
+                            <option value="new">جديد</option>
+                            <option value="in_progress">قيد التنفيذ</option>
+                            <option value="completed">مكتمل</option>
+                            <option value="on_hold">متوقف</option>
+                        </select>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'تحديث',
+                cancelButtonText: 'إلغاء',
+                width: 500,
+                preConfirm: () => {
+                    const status = $('#new_status').val();
+                    if (!status) {
+                        Swal.showValidationMessage('الرجاء اختيار الحالة');
+                        return false;
+                    }
+                    return { status };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    updateProjectsStatus(result.value.status);
+                }
+            });
         }
-    };
-    
-    window.editComment = function(commentId, content, taskId) {
-        if (window.commentsSystem) {
-            window.commentsSystem.editComment(commentId, content, taskId);
+
+        function updateProjectsStatus(newStatus) {
+            const projectIds = Array.from(selectedProjects).map(p => p.id);
+
+            Swal.fire({
+                title: 'جاري التحديث...',
+                text: 'يرجى الانتظار',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            $.ajax({
+                url: '/projects/bulk/status',
+                method: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    project_ids: projectIds,
+                    status: newStatus
+                },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'تم التحديث!',
+                            text: response.message,
+                            timer: 3000
+                        }).then(() => {
+                            // إعادة تحميل البيانات
+                            location.reload();
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    let errorMsg = 'حدث خطأ أثناء التحديث';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMsg = xhr.responseJSON.message;
+                    }
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطأ!',
+                        text: errorMsg
+                    });
+                }
+            });
         }
-    };
-    
-    window.deleteComment = function(commentId) {
-        if (window.commentsSystem) {
-            window.commentsSystem.deleteComment(commentId);
+
+        // دوال مساعدة
+        function formatDate(date) {
+            if (!date) return '';
+            return new Date(date).toLocaleDateString('ar-SA');
         }
-    };
-    
-    window.cancelReply = function() {
-        if (window.commentsSystem) {
-            window.commentsSystem.cancelReply();
+
+        // معالجة إغلاق المودال
+        $('#bulkInviteMembersModal').on('hidden.bs.modal', function() {
+            resetBulkInviteForm();
+        });
+
+        // البحث في المستخدمين
+        $('#bulkUserSearchInput').on('input', function() {
+            const searchTerm = $(this).val().toLowerCase();
+            if (searchTerm) {
+                const filteredUsers = availableUsersForBulkInvite.filter(user =>
+                    user.name.toLowerCase().includes(searchTerm) ||
+                    user.email.toLowerCase().includes(searchTerm)
+                );
+                displayBulkAvailableUsers(filteredUsers);
+            } else {
+                displayBulkAvailableUsers(availableUsersForBulkInvite);
+            }
+        });
+
+        // دوال إضافية للبحث والفلاتر
+        function toggleSearchFields(button) {
+            const fields = $('#basicSearchFields');
+            if (fields.is(':visible')) {
+                fields.hide();
+                $(button).find('.hide-button-text').text('إظهار');
+                $(button).find('i').removeClass('fa-times').addClass('fa-eye');
+            } else {
+                fields.show();
+                $(button).find('.hide-button-text').text('اخفاء');
+                $(button).find('i').removeClass('fa-eye').addClass('fa-times');
+            }
         }
-    };
-});
-</script>
+
+        function toggleSearchText(button) {
+            const text = $(button).find('.button-text');
+            if (text.text() === 'متقدم') {
+                text.text('بسيط');
+            } else {
+                text.text('متقدم');
+            }
+        }
+    </script>
 @endsection

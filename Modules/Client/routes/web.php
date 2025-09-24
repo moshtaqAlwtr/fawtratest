@@ -124,7 +124,7 @@ Route::prefix('api/clients')->middleware('auth')->group(function() {
             # Client routes
             Route::prefix('clients_management')->group(function () {
                 Route::get('/index', [ClientController::class, 'index'])->name('clients.index');
-                Route::get('/mang-client', [ClientController::class, 'mang_client'])->name('clients.management');
+
                 Route::get('/map', [ClientController::class, 'getMapDataWithBranch'])->name(name: 'clients.getMapDataWithBranch');
                 Route::get('/search', [ClientController::class, 'search'])->name('clients.search');
                 Route::get('/clients/data', [ClientController::class, 'getClientsData'])->name('clients.data');
@@ -178,8 +178,6 @@ Route::prefix('api/clients')->middleware('auth')->group(function() {
 
                 Route::get('/create', [ClientController::class, 'create'])->name('clients.create');
                 Route::post('/clients/import', [ClientController::class, 'import'])->name('clients.import');
-                Route::get('/mang_client', [ClientController::class, 'mang_client'])->name('clients.mang_client');
-                Route::post('/mang_client', [ClientController::class, 'mang_client_store'])->name('clients.mang_client_store');
 
                 Route::post('/addnotes', [ClientController::class, 'addnotes'])->name('clients.addnotes');
                 Route::post('/store', [ClientController::class, 'store'])->name('clients.store');
@@ -232,6 +230,11 @@ Route::prefix('api/clients')->middleware('auth')->group(function() {
                     Route::delete('/destroy/{id}', [LoyaltyPointsController::class, 'destroy'])->name('loyalty_points.destroy');
 
                     Route::get('/updateStatus/{id}', [LoyaltyPointsController::class, 'updateStatus'])->name('loyalty_points.updateStatus');
+                });
+
+                Route::prefix('CRM')->group(function () {
+                Route::get('/mang_client', [CRMController::class, 'mang_client'])->name('clients.mang_client');
+
                 });
 
                 Route::prefix('sittingLoyalty')->group(function () {

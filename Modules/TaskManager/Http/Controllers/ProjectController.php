@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
+use App\Mail\TestMail;
+use App\Models\Log as ModelsLog;
+use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
@@ -2010,9 +2015,9 @@ public function inviteMember(Request $request, $projectId)
                 'updated_at' => now(),
             ]);
 
-            // إرسال إشعار للمستخدم الموجود
+            // إرسال إشعار للمستخدم الموجود باستخدام TestMail
             try {
-                $this->sendExistingUserNotification($existingUser, $project, $request->role);
+                $this->sendExistingUserNotificationWithTestMail($existingUser, $project, $request->role);
             } catch (\Exception $e) {
                 Log::warning('Failed to send notification to existing user', [
                     'error' => $e->getMessage(),
@@ -2028,8 +2033,8 @@ public function inviteMember(Request $request, $projectId)
             ]);
         }
 
-        // التحقق من وجود دعوة معلقة
-        $existingInvite = DB::table('project_invites')
+        // التحقق من وجود دعوة معلقة في جدول project_user
+        $existingInvite = DB::table('project_user')
             ->where('project_id', $projectId)
             ->where('email', $request->email)
             ->where('status', 'pending')
@@ -2037,7 +2042,7 @@ public function inviteMember(Request $request, $projectId)
 
         if ($existingInvite) {
             // تحديث الدعوة الموجودة بدلاً من إنشاء واحدة جديدة
-            DB::table('project_invites')
+            DB::table('project_user')
                 ->where('id', $existingInvite->id)
                 ->update([
                     'role' => $request->role,
@@ -2047,9 +2052,9 @@ public function inviteMember(Request $request, $projectId)
                     'expires_at' => now()->addDays(7), // تمديد انتهاء الصلاحية
                 ]);
 
-            // إعادة إرسال الدعوة
+            // إعادة إرسال الدعوة باستخدام TestMail
             try {
-                $this->resendProjectInvite($existingInvite->id, $request->invite_message);
+                $this->resendProjectInviteWithTestMail($existingInvite->id, $request->invite_message);
 
                 return response()->json([
                     'success' => true,
@@ -2070,7 +2075,7 @@ public function inviteMember(Request $request, $projectId)
 
         // إنشاء دعوة جديدة
         try {
-            $inviteId = $this->createProjectInvite(
+            $this->createProjectInviteWithTestMail(
                 $request->email,
                 $projectId,
                 $request->role,
@@ -2116,26 +2121,264 @@ public function inviteMember(Request $request, $projectId)
     }
 }
 
-// Helper method for resending invites
-private function resendProjectInvite($inviteId, $message = null)
+/**
+ * إرسال إشعار للمستخدم الموجود باستخدام TestMail (نفس طريقة الموظفين)
+ */
+private function sendExistingUserNotificationWithTestMail($user, $project, $role)
 {
-    $invite = DB::table('project_invites')
-        ->join('projects', 'project_invites.project_id', '=', 'projects.id')
-        ->where('project_invites.id', $inviteId)
-        ->select('project_invites.*', 'projects.name as project_name')
+    $roleText = match($role) {
+        'manager' => 'مدير',
+        'member' => 'عضو',
+        'viewer' => 'مشاهد',
+        default => 'عضو'
+    };
+
+    // إعداد بيانات البريد بنفس طريقة الموظفين
+    $details = [
+        'name' => $user->name,
+        'email' => $user->email,
+        'project_title' => $project->title,
+        'role' => $roleText,
+        'type' => 'project_notification', // لتمييز نوع البريد
+        'message' => "تم إضافتك إلى مشروع: {$project->title} بدور {$roleText}"
+    ];
+
+    // إرسال البريد باستخدام TestMail
+    Mail::to($user->email)->send(new TestMail($details));
+
+    // تسجيل العملية في اللوج
+    ModelsLog::create([
+        'type' => 'project_log',
+        'type_id' => $project->id,
+        'type_log' => 'log',
+        'description' => 'تم إضافة المستخدم **' . $user->name . '** للمشروع **' . $project->title . '**',
+        'created_by' => auth()->id(),
+    ]);
+}
+
+/**
+ * إنشاء دعوة مشروع جديدة باستخدام TestMail
+ */
+private function createProjectInviteWithTestMail($email, $projectId, $role, $message = null)
+{
+    // التحقق من عدم وجود دعوة معلقة
+    $existingInvite = DB::table('project_user')
+        ->where('project_id', $projectId)
+        ->where('email', $email)
+        ->where('status', 'pending')
+        ->where('expires_at', '>', now())
+        ->first();
+
+    if ($existingInvite) {
+        throw new \Exception('توجد دعوة معلقة لهذا البريد الإلكتروني');
+    }
+
+    // إنشاء رمز دعوة فريد
+    $inviteToken = Str::random(64);
+    $expiresAt = now()->addDays(7);
+
+    // توليد كلمة مرور مؤقتة
+    $tempPassword = $this->generateRandomPassword();
+
+    // إدراج الدعوة
+    $inviteId = DB::table('project_user')->insertGetId([
+        'project_id' => $projectId,
+        'email' => $email,
+        'role' => $role,
+        'status' => 'pending',
+        'invite_token' => $inviteToken,
+        'invited_at' => now(),
+        'expires_at' => $expiresAt,
+        'invited_by' => Auth::id(),
+        'invite_message' => $message,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    // إرسال بريد الدعوة باستخدام TestMail
+    $this->sendProjectInviteEmailWithTestMail($email, $projectId, $inviteToken, $role, $message, $tempPassword);
+
+    // تسجيل العملية في اللوج
+    $project = DB::table('projects')->where('id', $projectId)->first();
+    ModelsLog::create([
+        'type' => 'project_log',
+        'type_id' => $projectId,
+        'type_log' => 'log',
+        'description' => 'تم إرسال دعوة للمشروع **' . $project->title . '** إلى **' . $email . '**',
+        'created_by' => auth()->id(),
+    ]);
+
+    return $inviteId;
+}
+
+/**
+ * إرسال بريد دعوة المشروع باستخدام TestMail
+ */
+private function sendProjectInviteEmailWithTestMail($email, $projectId, $token, $role, $message = null, $tempPassword)
+{
+    $project = DB::table('projects')
+        ->join('workspaces', 'projects.workspace_id', '=', 'workspaces.id')
+        ->select('projects.*', 'workspaces.title as workspace_title')
+        ->where('projects.id', $projectId)
+        ->first();
+
+    $inviterName = Auth::user()->name;
+    $acceptUrl = url("/projects/invite/{$token}/accept");
+
+    $roleText = match($role) {
+        'manager' => 'مدير',
+        'member' => 'عضو',
+        'viewer' => 'مشاهد',
+        default => 'عضو'
+    };
+
+    // إعداد بيانات البريد بنفس طريقة الموظفين
+    $details = [
+        'name' => 'مستخدم جديد',
+        'email' => $email,
+        'password' => $tempPassword,
+        'project_title' => $project->title,
+        'workspace_title' => $project->workspace_title,
+        'role' => $roleText,
+        'inviter_name' => $inviterName,
+        'accept_url' => $acceptUrl,
+        'invite_message' => $message,
+        'type' => 'project_invite', // لتمييز نوع البريد
+        'expires_at' => now()->addDays(7)->format('Y-m-d H:i')
+    ];
+
+    // إرسال البريد باستخدام TestMail
+    Mail::to($email)->send(new TestMail($details));
+}
+
+/**
+ * إعادة إرسال دعوة المشروع باستخدام TestMail
+ */
+private function resendProjectInviteWithTestMail($inviteId, $message = null)
+{
+    $invite = DB::table('project_user')
+        ->join('projects', 'project_user.project_id', '=', 'projects.id')
+        ->join('workspaces', 'projects.workspace_id', '=', 'workspaces.id')
+        ->where('project_user.id', $inviteId)
+        ->select(
+            'project_user.*',
+            'projects.title as project_title',
+            'workspaces.title as workspace_title'
+        )
         ->first();
 
     if (!$invite) {
         throw new \Exception('الدعوة غير موجودة');
     }
 
-    // إرسال البريد الإلكتروني
-    \Mail::to($invite->email)->send(new \App\Mail\ProjectInviteMail([
-        'project_name' => $invite->project_name,
-        'role' => $invite->role,
-        'invite_token' => $invite->token,
-        'message' => $message ?? $invite->invite_message,
-        'expires_at' => $invite->expires_at
-    ]));
+    // توليد كلمة مرور جديدة
+    $newPassword = $this->generateRandomPassword();
+
+    // إرسال البريد باستخدام TestMail
+    $this->sendProjectInviteEmailWithTestMail(
+        $invite->email,
+        $invite->project_id,
+        $invite->invite_token,
+        $invite->role,
+        $message ?? $invite->invite_message,
+        $newPassword
+    );
 }
+
+/**
+ * قبول الدعوة وإنشاء المستخدم (نفس طريقة الموظفين)
+ */
+public function acceptInvite(Request $request, $token)
+{
+    try {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'password' => 'required|string|min:8|confirmed',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        $invite = DB::table('project_user')
+            ->where('invite_token', $token)
+            ->where('status', 'pending')
+            ->first();
+
+        if (!$invite || now()->isAfter($invite->expires_at)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'الدعوة غير صحيحة أو منتهية الصلاحية'
+            ], 400);
+        }
+
+        DB::beginTransaction();
+
+        // إنشاء المستخدم الجديد (نفس طريقة الموظفين)
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $invite->email,
+            'password' => Hash::make($request->password),
+            'phone' => $request->phone,
+            'role' => 'employee', // الدور الافتراضي
+            'email_verified_at' => now(),
+        ]);
+
+        // تحديث سجل project_user
+        DB::table('project_user')
+            ->where('invite_token', $token)
+            ->update([
+                'user_id' => $user->id,
+                'status' => 'active',
+                'email' => null, // إزالة البريد لأن لدينا user_id الآن
+                'invite_token' => null,
+                'updated_at' => now(),
+            ]);
+
+        // تسجيل العملية في اللوج
+        $project = DB::table('projects')->where('id', $invite->project_id)->first();
+        ModelsLog::create([
+            'type' => 'project_log',
+            'type_id' => $invite->project_id,
+            'type_log' => 'log',
+            'description' => 'تم قبول الدعوة وإنشاء حساب جديد **' . $user->name . '** للمشروع **' . $project->title . '**',
+            'created_by' => $user->id,
+        ]);
+
+        DB::commit();
+
+        // تسجيل دخول المستخدم تلقائياً
+        Auth::login($user);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'مرحباً بك! تم إنشاء حسابك بنجاح وإضافتك للمشروع',
+            'redirect_url' => route('projects.show', $invite->project_id)
+        ]);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        DB::rollback();
+        return response()->json([
+            'success' => false,
+            'message' => 'خطأ في البيانات المدخلة',
+            'errors' => $e->errors()
+        ], 422);
+
+    } catch (\Exception $e) {
+        DB::rollback();
+        Log::error('Accept invite error: ' . $e->getMessage());
+
+        return response()->json([
+            'success' => false,
+            'message' => 'حدث خطأ أثناء قبول الدعوة. يرجى المحاولة مرة أخرى.'
+        ], 500);
+    }
+}
+
+/**
+ * دالة لتوليد كلمة مرور عشوائية (نفس طريقة الموظفين)
+ */
+private function generateRandomPassword($length = 10)
+{
+    return substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, $length);
+}
+
+
 }

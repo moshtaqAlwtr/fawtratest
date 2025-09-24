@@ -20,8 +20,24 @@ class TestMail extends Mailable
 
     public function build()
     {
-        return $this->subject('تفاصيل تسجيل الدخول')
-        ->view('emails.login_credentials')
-        ->with('details', $this->details);
+        // تحديد نوع البريد والموضوع والعرض المناسب
+        $type = $this->details['type'] ?? 'employee_credentials';
+
+        switch ($type) {
+            case 'project_invite':
+                return $this->subject('دعوة للانضمام إلى مشروع: ' . $this->details['project_title'])
+                    ->view('emails.project_invite')
+                    ->with('details', $this->details);
+
+            case 'project_notification':
+                return $this->subject('تم إضافتك إلى مشروع: ' . $this->details['project_title'])
+                    ->view('emails.project_notification')
+                    ->with('details', $this->details);
+
+            default: // employee_credentials
+                return $this->subject('تفاصيل تسجيل الدخول')
+                    ->view('emails.login_credentials')
+                    ->with('details', $this->details);
+        }
     }
 }

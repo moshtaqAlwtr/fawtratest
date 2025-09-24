@@ -25,12 +25,12 @@
         {{-- رأس البطاقة مع العنوان والمؤقت --}}
         <div class="task-header">
             <h6 class="task-title">{{ $task->title }}</h6>
-            
+
             {{-- المؤقت الدائري الصغير --}}
             @if($task->due_date)
-                <div class="task-countdown-mini" 
+                <div class="task-countdown-mini"
                      data-task-id="{{ $task->id }}"
-                     data-start="{{ $task->start_date ?? now() }}" 
+                     data-start="{{ $task->start_date ?? now() }}"
                      data-end="{{ $task->due_date }}">
                     <svg width="65" height="65" viewBox="0 0 65 65">
                         <circle class="countdown-bg" cx="32.5" cy="32.5" r="28"></circle>
@@ -117,7 +117,7 @@
                 <div class="assignees-grid">
                     @foreach($task->assignedUsers as $user)
                         <div class="assignee-card">
-                          
+
                             <div class="assignee-info">
                                 <div class="assignee-name">{{ $user->name }}</div>
                                 <div class="assignee-role">{{ $user->job_title ?? 'موظف' }}</div>
@@ -136,9 +136,9 @@
         {{-- أزرار الإجراءات --}}
         <div class="task-footer">
             <div class="task-actions">
-                <button class="action-btn btn-view" onclick="showTaskDetails({{ $task->id }})" title="عرض التفاصيل">
+                <a href="{{ route('tasks.show', $task->id) }}" class="action-btn btn-view" title="عرض التفاصيل">
                     <i class="feather icon-eye"></i>
-                </button>
+                </a>
                 <button class="action-btn btn-edit" onclick="openTaskModal({{ $task->id }})" title="تعديل">
                     <i class="feather icon-edit"></i>
                 </button>
@@ -673,7 +673,7 @@ $(document).ready(function() {
 
             const circle = $(`#task-circle-${taskId}`);
             const info = $(`#task-countdown-${taskId}`);
-            
+
             let days, hours, minutes, seconds, statusClass, progress;
 
             if (now < startDate) {
@@ -685,11 +685,11 @@ $(document).ready(function() {
                 seconds = Math.floor((diff % (1000 * 60)) / 1000);
                 statusClass = 'task-countdown-normal';
                 progress = 0;
-                
+
                 info.find('.countdown-number').text(days);
                 info.find('.countdown-unit').text('لبدء');
                 info.find('.countdown-time').text(`${pad(hours)}:${pad(minutes)}:${pad(seconds)}`);
-                
+
             } else if (now > endDate) {
                 // المهمة متأخرة
                 const diff = now - endDate;
@@ -699,11 +699,11 @@ $(document).ready(function() {
                 seconds = Math.floor((diff % (1000 * 60)) / 1000);
                 statusClass = 'task-countdown-danger';
                 progress = 100;
-                
+
                 info.find('.countdown-number').text(days);
                 info.find('.countdown-unit').text('متأخر');
                 info.find('.countdown-time').text(`${pad(hours)}:${pad(minutes)}:${pad(seconds)}`);
-                
+
             } else {
                 // المهمة جارية
                 const diff = endDate - now;
@@ -711,11 +711,11 @@ $(document).ready(function() {
                 hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 seconds = Math.floor((diff % (1000 * 60)) / 1000);
-                
+
                 const totalTime = endDate - startDate;
                 const elapsed = now - startDate;
                 progress = (elapsed / totalTime) * 100;
-                
+
                 if (days <= 2) {
                     statusClass = 'task-countdown-danger';
                 } else if (days <= 5) {
@@ -723,7 +723,7 @@ $(document).ready(function() {
                 } else {
                     statusClass = 'task-countdown-normal';
                 }
-                
+
                 info.find('.countdown-number').text(days);
                 info.find('.countdown-unit').text('يوم');
                 info.find('.countdown-time').text(`${pad(hours)}:${pad(minutes)}:${pad(seconds)}`);

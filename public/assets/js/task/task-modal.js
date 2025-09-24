@@ -144,8 +144,11 @@ function openTaskModal(taskId = null) {
     TaskModal.open(taskId);
 }
 
-// عرض تفاصيل المهمة
+// عرض تفاصيل المهمة - تم تعديلها للانتقال إلى صفحة العرض
 function showTaskDetails(taskId) {
+    // الانتقال إلى صفحة عرض المهمة
+    window.location.href = `/tasks/${taskId}`;
+}
     $('#taskDetailsContent').html(
         '<div class="text-center"><div class="spinner-border text-primary"></div></div>'
     );
