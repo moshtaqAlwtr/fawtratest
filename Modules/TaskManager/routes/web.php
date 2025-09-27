@@ -185,8 +185,15 @@ Route::get('/comments/task/{taskId}', [CommentController::class, 'getTaskComment
                     Route::get('/{project}', [ProjectController::class, 'show'])->name('show');
                     Route::post('/store', [ProjectController::class, 'store'])->name(name: 'store');
                     Route::get('/{project}/edit', [ProjectController::class, 'edit'])->name('edit');
-                       Route::put('/{project}/update', [ProjectController::class, 'update'])->name('update');
-Route::post('/{project}/invite', [WorkspaceController::class, 'inviteMember'])->name('invite');
+                    Route::put('/{project}/update', [ProjectController::class, 'update'])->name('update');
+                    Route::post('/{project}/invite', [ProjectController::class, 'inviteMember'])->name('invite');
+
+                    // ======================================
+                    // العمليات الجماعية (Bulk Operations)
+                    // ======================================
+                    Route::post('/bulk/available-users', [ProjectController::class, 'getAvailableUsersForBulkInvite'])->name('bulk.available-users');
+                    Route::post('/bulk/invite', [ProjectController::class, 'bulkInviteMembers'])->name('bulk.invite');
+                    Route::post('/bulk/status', [ProjectController::class, 'bulkUpdateStatus'])->name('bulk.status');
 
                     // ======================================
                     // APIs للبيانات (Ajax Endpoints)

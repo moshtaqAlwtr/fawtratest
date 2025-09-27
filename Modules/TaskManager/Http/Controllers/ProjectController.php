@@ -22,6 +22,379 @@ use Illuminate\Support\Str;
 class ProjectController extends Controller
 {
 
+/**
+ * جلب المستخدمين المتاحين للدعوة الجماعية
+ */
+public function getAvailableUsersForBulkInvite(Request $request)
+{
+    try {
+        // جلب المستخدمين الذين لديهم دور موظف أو مدير فقط
+        // وليسوا أعضاء في أي من المشاريع المحددة
+        $selectedProjects = $request->get('project_ids', []);
+
+        if (empty($selectedProjects)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'لم يتم تحديد أي مشاريع'
+            ], 400);
+        }
+
+        $availableUsers = User::select('users.id', 'users.name', 'users.email', 'users.role')
+            ->where('users.id', '!=', Auth::id()) // استبعاد المستخدم الحالي
+            ->whereIn('users.role', ['employee', 'manager']) // فقط الموظفين والمديرين
+            ->whereNotExists(function($query) use ($selectedProjects) {
+                $query->select(DB::raw(1))
+                      ->from('project_user')
+                      ->whereRaw('project_user.user_id = users.id')
+                      ->whereIn('project_user.project_id', $selectedProjects)
+                      ->where('project_user.status', 'active');
+            })
+            ->orderBy('users.name')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $availableUsers,
+            'count' => $availableUsers->count()
+        ]);
+
+    } catch (\Exception $e) {
+        Log::error('Error fetching available users for bulk invite: ' . $e->getMessage());
+
+        return response()->json([
+            'success' => false,
+            'message' => 'حدث خطأ في جلب المستخدمين المتاحين'
+        ], 500);
+    }
+}
+
+/**
+ * دعوة أعضاء جماعية للمشاريع
+ */
+public function bulkInviteMembers(Request $request)
+{
+    try {
+        $request->validate([
+            'project_ids' => 'required|array|min:1',
+            'project_ids.*' => 'exists:projects,id',
+            'invite_type' => 'required|in:email,users',
+            'role' => 'required|in:manager,member,viewer',
+            'message' => 'nullable|string|max:500',
+        ]);
+
+        $projectIds = $request->project_ids;
+        $role = $request->role;
+        $message = $request->message;
+        $inviteType = $request->invite_type;
+
+        $successCount = 0;
+        $errors = [];
+
+        DB::beginTransaction();
+
+        if ($inviteType === 'email') {
+            $request->validate([
+                'email' => 'required|email|max:255'
+            ]);
+
+            $email = $request->email;
+
+            foreach ($projectIds as $projectId) {
+                try {
+                    // التحقق من الصلاحيات لكل مشروع
+                    $project = Project::find($projectId);
+                    if (!$project) {
+                        $errors[] = "المشروع رقم {$projectId} غير موجود";
+                        continue;
+                    }
+
+                    $hasPermission = $this->checkProjectInvitePermission($projectId);
+                    if (!$hasPermission) {
+                        $errors[] = "غير مخول لدعوة أعضاء في مشروع: {$project->title}";
+                        continue;
+                    }
+
+                    // معالجة الدعوة لهذا المشروع
+                    $result = $this->processSingleProjectInvite($projectId, $email, $role, $message);
+                    if ($result['success']) {
+                        $successCount++;
+                    } else {
+                        $errors[] = "مشروع {$project->title}: {$result['message']}";
+                    }
+
+                } catch (\Exception $e) {
+                    $errors[] = "خطأ في مشروع رقم {$projectId}: " . $e->getMessage();
+                }
+            }
+
+        } elseif ($inviteType === 'users') {
+            $request->validate([
+                'user_ids' => 'required|array|min:1',
+                'user_ids.*' => 'exists:users,id'
+            ]);
+
+            $userIds = $request->user_ids;
+
+            foreach ($projectIds as $projectId) {
+                try {
+                    $project = Project::find($projectId);
+                    if (!$project) {
+                        $errors[] = "المشروع رقم {$projectId} غير موجود";
+                        continue;
+                    }
+
+                    $hasPermission = $this->checkProjectInvitePermission($projectId);
+                    if (!$hasPermission) {
+                        $errors[] = "غير مخول لدعوة أعضاء في مشروع: {$project->title}";
+                        continue;
+                    }
+
+                    foreach ($userIds as $userId) {
+                        try {
+                            $user = User::find($userId);
+                            if (!$user) continue;
+
+                            // التحقق من عدم وجود المستخدم في المشروع
+                            $alreadyMember = DB::table('project_user')
+                                ->where('project_id', $projectId)
+                                ->where('user_id', $userId)
+                                ->exists();
+
+                            if (!$alreadyMember) {
+                                // إضافة المستخدم للمشروع
+                                DB::table('project_user')->insert([
+                                    'project_id' => $projectId,
+                                    'user_id' => $userId,
+                                    'role' => $role,
+                                    'status' => 'active',
+                                    'created_at' => now(),
+                                    'updated_at' => now(),
+                                ]);
+
+                                // إرسال إشعار
+                                $this->sendExistingUserNotificationWithTestMail($user, $project, $role);
+                                $successCount++;
+                            }
+
+                        } catch (\Exception $e) {
+                            $errors[] = "خطأ في إضافة المستخدم {$userId} للمشروع {$projectId}";
+                        }
+                    }
+
+                } catch (\Exception $e) {
+                    $errors[] = "خطأ في مشروع رقم {$projectId}: " . $e->getMessage();
+                }
+            }
+        }
+
+        DB::commit();
+
+        return response()->json([
+            'success' => true,
+            'message' => "تم إرسال {$successCount} دعوة بنجاح",
+            'data' => [
+                'sent_count' => $successCount,
+                'errors' => $errors
+            ]
+        ]);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        DB::rollback();
+        return response()->json([
+            'success' => false,
+            'message' => 'خطأ في البيانات المدخلة',
+            'errors' => $e->errors()
+        ], 422);
+
+    } catch (\Exception $e) {
+        DB::rollback();
+        Log::error('Bulk invite error: ' . $e->getMessage());
+
+        return response()->json([
+            'success' => false,
+            'message' => 'حدث خطأ أثناء معالجة الدعوات الجماعية'
+        ], 500);
+    }
+}
+
+/**
+ * تحديث حالة المشاريع جماعياً
+ */
+public function bulkUpdateStatus(Request $request)
+{
+    try {
+        $request->validate([
+            'project_ids' => 'required|array|min:1',
+            'project_ids.*' => 'exists:projects,id',
+            'status' => 'required|in:planning,in_progress,on_hold,completed,cancelled'
+        ]);
+
+        $projectIds = $request->project_ids;
+        $status = $request->status;
+        $successCount = 0;
+        $errors = [];
+
+        DB::beginTransaction();
+
+        foreach ($projectIds as $projectId) {
+            try {
+                $project = Project::find($projectId);
+                if (!$project) {
+                    $errors[] = "المشروع رقم {$projectId} غير موجود";
+                    continue;
+                }
+
+                // التحقق من الصلاحيات
+                $hasPermission = $this->checkProjectUpdatePermission($projectId);
+                if (!$hasPermission) {
+                    $errors[] = "غير مخول لتحديث مشروع: {$project->title}";
+                    continue;
+                }
+
+                // تحديث الحالة
+                $project->update(['status' => $status]);
+                $successCount++;
+
+                // تسجيل العملية في اللوج
+                ModelsLog::create([
+                    'user_id' => Auth::id(),
+                    'action' => 'bulk_update_project_status',
+                    'description' => "تم تحديث حالة المشروع {$project->title} إلى {$status}",
+                    'model_type' => 'Project',
+                    'model_id' => $projectId,
+                    'ip_address' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
+
+            } catch (\Exception $e) {
+                $errors[] = "خطأ في تحديث مشروع رقم {$projectId}: " . $e->getMessage();
+            }
+        }
+
+        DB::commit();
+
+        return response()->json([
+            'success' => true,
+            'message' => "تم تحديث {$successCount} مشروع بنجاح",
+            'data' => [
+                'updated_count' => $successCount,
+                'errors' => $errors
+            ]
+        ]);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        DB::rollback();
+        return response()->json([
+            'success' => false,
+            'message' => 'خطأ في البيانات المدخلة',
+            'errors' => $e->errors()
+        ], 422);
+
+    } catch (\Exception $e) {
+        DB::rollback();
+        Log::error('Bulk status update error: ' . $e->getMessage());
+
+        return response()->json([
+            'success' => false,
+            'message' => 'حدث خطأ أثناء تحديث حالة المشاريع'
+        ], 500);
+    }
+}
+
+/**
+ * التحقق من صلاحية دعوة أعضاء للمشروع
+ */
+private function checkProjectInvitePermission($projectId)
+{
+    // التحقق من كون المستخدم مدير المشروع
+    $isProjectManager = DB::table('project_user')
+        ->where('project_id', $projectId)
+        ->where('user_id', Auth::id())
+        ->where('role', 'manager')
+        ->exists();
+
+    if ($isProjectManager) {
+        return true;
+    }
+
+    // التحقق من كون المستخدم مدير مساحة العمل
+    $isWorkspaceAdmin = DB::table('projects')
+        ->join('workspaces', 'projects.workspace_id', '=', 'workspaces.id')
+        ->where('projects.id', $projectId)
+        ->where('workspaces.admin_id', Auth::id())
+        ->exists();
+
+    return $isWorkspaceAdmin;
+}
+
+/**
+ * التحقق من صلاحية تحديث المشروع
+ */
+private function checkProjectUpdatePermission($projectId)
+{
+    // نفس منطق checkProjectInvitePermission
+    return $this->checkProjectInvitePermission($projectId);
+}
+
+/**
+ * معالجة دعوة واحدة لمشروع واحد
+ */
+private function processSingleProjectInvite($projectId, $email, $role, $message = null)
+{
+    try {
+        // التحقق من وجود المستخدم في النظام
+        $existingUser = User::where('email', $email)->first();
+
+        if ($existingUser) {
+            // التحقق من عدم وجوده في المشروع
+            $alreadyMember = DB::table('project_user')
+                ->where('project_id', $projectId)
+                ->where('user_id', $existingUser->id)
+                ->exists();
+
+            if ($alreadyMember) {
+                return [
+                    'success' => false,
+                    'message' => 'المستخدم عضو بالفعل في المشروع'
+                ];
+            }
+
+            // إضافة المستخدم مباشرة
+            DB::table('project_user')->insert([
+                'project_id' => $projectId,
+                'user_id' => $existingUser->id,
+                'role' => $role,
+                'status' => 'active',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            // إرسال إشعار
+            $project = Project::find($projectId);
+            $this->sendExistingUserNotificationWithTestMail($existingUser, $project, $role);
+
+            return [
+                'success' => true,
+                'message' => "تمت إضافة {$existingUser->name} للمشروع"
+            ];
+        }
+
+        // إنشاء دعوة للمستخدم الجديد
+        $this->createProjectInviteWithTestMail($email, $projectId, $role, $message);
+
+        return [
+            'success' => true,
+            'message' => "تم إرسال دعوة إلى {$email}"
+        ];
+
+    } catch (\Exception $e) {
+        return [
+            'success' => false,
+            'message' => $e->getMessage()
+        ];
+    }
+}
+
 
 
 

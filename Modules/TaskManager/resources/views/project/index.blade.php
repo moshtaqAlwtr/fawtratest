@@ -833,7 +833,8 @@
             const projectIds = Array.from(selectedProjects).map(p => p.id);
 
             $.ajax({
-                url: '/projects/bulk/available-users',
+                url: '{{ route("projects.bulk.available-users") }}',
+
                 method: 'POST',
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content'),
@@ -980,7 +981,7 @@
             });
 
             $.ajax({
-                url: '/projects/bulk/invite',
+                url: '{{ route("projects.bulk.invite") }}',
                 method: 'POST',
                 data: inviteData,
                 success: function(response) {
@@ -1090,7 +1091,7 @@
             });
 
             $.ajax({
-                url: '/projects/bulk/status',
+                url: '{{ route("projects.bulk.status") }}',
                 method: 'POST',
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content'),
