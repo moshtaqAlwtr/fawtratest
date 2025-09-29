@@ -97,11 +97,7 @@ class InvoicesController extends Controller
     }
 
 
-
-    /**
-     * Display a listing of invoices.
-     */
-    public function index(Request $request)
+public function index(Request $request)
     {
         // بدء بناء الاستعلام الأساسي حسب الصلاحيات
         $query = auth()->user()->hasAnyPermission(['sales_view_all_invoices'])
@@ -116,34 +112,39 @@ class InvoicesController extends Controller
         // تطبيق جميع شروط البحث
         $this->applySearchFilters($query, $request);
 
-        // جلب النتائج مع التقسيم (30 فاتورة لكل صفحة) مرتبة من الأحدث إلى الأقدم
-        // $invoices = $query->orderBy('created_at', 'desc')->paginate(30);
-        $invoices = $query->orderBy('created_at', 'desc')->get();
-        // البيانات الأخرى المطلوبة للواجهة
+        // التحقق من كون الطلب AJAX
+        if ($request->ajax()) {
+            $invoices = $query->orderBy('created_at', 'desc')->paginate(15);
+            $account_setting = AccountSetting::where('user_id', auth()->user()->id)->first();
+
+            return response()->json([
+                'success' => true,
+                'data' => view('sales::invoices.partials.table', compact('invoices', 'account_setting'))->render(),
+                'current_page' => $invoices->currentPage(),
+                'last_page' => $invoices->lastPage(),
+                'total' => $invoices->total(),
+                'from' => $invoices->firstItem(),
+                'to' => $invoices->lastItem()
+            ]);
+        }
+
+        // جلب البيانات الأخرى المطلوبة للواجهة
         $user = auth()->user();
 
         if ($user->role == 'employee' && optional($user->employee)->Job_role_id == 1) {
-            // موظف بوظيفة محددة → فقط عملاء نفس الفرع
             $clients = Client::where('branch_id', $user->branch_id)->get();
         } else {
-            // مدير أو موظف بوظيفة أخرى → كل العملاء
             $clients = Client::all();
         }
+
         $users = User::all();
-
-        //sales_person_user
-
-        $employees_sales_person  = Employee::all();
+        $employees_sales_person = Employee::all();
         $employees = User::whereIn('role', ['employee', 'manager'])->get();
-
-
         $invoice_number = $this->generateInvoiceNumber();
-
         $account_setting = AccountSetting::where('user_id', auth()->user()->id)->first();
         $client = Client::where('user_id', auth()->user()->id)->first();
 
         return view('sales::invoices.index', compact(
-            'invoices',
             'account_setting',
             'client',
             'employees_sales_person',
@@ -153,6 +154,62 @@ class InvoicesController extends Controller
             'employees'
         ));
     }
+
+    protected function applySearchFilters($query, $request)
+    {
+        // البحث حسب العميل
+        if ($request->filled('client_id')) {
+            $query->where('client_id', $request->client_id);
+        }
+
+        // البحث حسب رقم الفاتورة
+        if ($request->filled('invoice_number')) {
+            $query->where('id', $request->invoice_number);
+        }
+
+        // البحث حسب حالة الدفع
+        if ($request->filled('payment_status')) {
+            $query->where('payment_status', $request->payment_status);
+        }
+
+        // البحث حسب البند
+        if ($request->filled('item')) {
+            $query->whereHas('items', function ($q) use ($request) {
+                $q->where('item', 'like', '%' . $request->item . '%');
+            });
+        }
+
+        // البحث حسب الإجمالي (من)
+        if ($request->filled('total_from')) {
+            $query->where('grand_total', '>=', $request->total_from);
+        }
+
+        // البحث حسب الإجمالي (إلى)
+        if ($request->filled('total_to')) {
+            $query->where('grand_total', '<=', $request->total_to);
+        }
+
+        // البحث حسب التاريخ (من)
+        if ($request->filled('from_date')) {
+            $query->whereDate('created_at', '>=', $request->from_date);
+        }
+
+        // البحث حسب التاريخ (إلى)
+        if ($request->filled('to_date')) {
+            $query->whereDate('created_at', '<=', $request->to_date);
+        }
+
+        // البحث حسب "أضيفت بواسطة"
+        if ($request->filled('added_by_employee')) {
+            $query->where('created_by', $request->added_by_employee);
+        }
+
+        // البحث حسب مسؤول المبيعات
+        if ($request->filled('sales_person_user')) {
+            $query->where('employee_id', $request->sales_person_user);
+        }
+    }
+
 
 
     //اضافة الفاتورة لامر توريد امر شغل
@@ -333,135 +390,7 @@ class InvoicesController extends Controller
     /**
      * تطبيق شروط البحث على الاستعلام
      */
-    protected function applySearchFilters($query, $request)
-    {
-        // 1. البحث حسب العميل
-        if ($request->filled('client_id')) {
-            $query->where('client_id', $request->client_id);
-        }
 
-        // 2. البحث حسب رقم الفاتورة
-        if ($request->filled('invoice_number')) {
-            $query->where('id', $request->invoice_number);
-        }
-
-        // 3. البحث حسب حالة الفاتورة
-        if ($request->filled('status')) {
-            $query->where('payment_status', $request->status);
-        }
-
-        // 4. البحث حسب البند
-        if ($request->filled('item')) {
-            $query->whereHas('items', function ($q) use ($request) {
-                $q->where('item', 'like', '%' . $request->item . '%');
-            });
-        }
-
-        // 5. البحث حسب العملة
-        if ($request->filled('currency')) {
-            $query->where('currency', $request->currency);
-        }
-
-        // 6. البحث حسب الإجمالي (من)
-        if ($request->filled('total_from')) {
-            $query->where('grand_total', '>=', $request->total_from);
-        }
-
-        // 7. البحث حسب الإجمالي (إلى)
-        if ($request->filled('total_to')) {
-            $query->where('grand_total', '<=', $request->total_to);
-        }
-
-        // 8. البحث حسب حالة الدفع
-        if ($request->filled('payment_status')) {
-            $query->where('payment_status', $request->payment_status);
-        }
-
-        // 9. البحث حسب التخصيص (شهريًا، أسبوعيًا، يوميًا)
-        if ($request->filled('custom_period')) {
-            switch ($request->custom_period) {
-                case 'monthly':
-                    $query->whereMonth('created_at', now()->month);
-                    break;
-                case 'weekly':
-                    $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
-                    break;
-                case 'daily':
-                    $query->whereDate('created_at', now()->toDateString());
-                    break;
-            }
-        }
-
-        // 10. البحث حسب التاريخ (من)
-        if ($request->filled('from_date')) {
-            $query->whereDate('created_at', '>=', $request->from_date);
-        }
-
-        // 11. البحث حسب التاريخ (إلى)
-        if ($request->filled('to_date')) {
-            $query->whereDate('created_at', '<=', $request->to_date);
-        }
-
-        // 12. البحث حسب تاريخ الاستحقاق (من)
-        if ($request->filled('due_date_from')) {
-            $query->whereDate('due_date', '>=', $request->due_date_from);
-        }
-
-        // 13. البحث حسب تاريخ الاستحقاق (إلى)
-        if ($request->filled('due_date_to')) {
-            $query->whereDate('due_date', '<=', $request->due_date_to);
-        }
-
-        // 14. البحث حسب المصدر
-        if ($request->filled('source')) {
-            $query->where('source', $request->source);
-        }
-
-        // 15. البحث حسب الحقل المخصص
-        if ($request->filled('custom_field')) {
-            $query->where('custom_field', 'like', '%' . $request->custom_field . '%');
-        }
-
-        // 16. البحث حسب تاريخ الإنشاء (من)
-        if ($request->filled('created_at_from')) {
-            $query->whereDate('created_at', '>=', $request->created_at_from);
-        }
-
-        // 17. البحث حسب تاريخ الإنشاء (إلى)
-        if ($request->filled('created_at_to')) {
-            $query->whereDate('created_at', '<=', $request->created_at_to);
-        }
-
-        // 18. البحث حسب حالة التسليم
-        if ($request->filled('delivery_status')) {
-            $query->where('delivery_status', $request->delivery_status);
-        }
-
-        // 19. البحث حسب "أضيفت بواسطة" (الموظفين)
-        if ($request->filled('added_by_employee')) {
-            $query->where('created_by', $request->added_by_employee);
-        }
-
-        // 20. البحث حسب مسؤول المبيعات
-        if ($request->filled('sales_person_user')) {
-            $query->where('employee_id', $request->sales_person_user);
-        }
-
-        // 21. البحث حسب Post Shift
-        if ($request->filled('post_shift')) {
-            $query->where('post_shift', 'like', '%' . $request->post_shift . '%');
-        }
-
-        // 22. البحث حسب خيارات الشحن
-        if ($request->filled('shipping_option')) {
-            $query->where('shipping_option', $request->shipping_option);
-        }
-
-        // 23. البحث حسب مصدر الطلب
-        if ($request->filled('order_source')) {
-            $query->where('order_source', $request->order_source);
-        }
-    }
     public function create(Request $request)
     {
         // توليد رقم الفاتورة
@@ -472,13 +401,13 @@ class InvoicesController extends Controller
 
         $user = auth()->user();
 
-        if ($user->role == 'employee' && optional($user->employee)->Job_role_id == 1) {
-            // موظف بوظيفة محددة → فقط عملاء نفس الفرع
-            $clients = Client::where('branch_id', $user->branch_id)->get();
-        } else {
-            // مدير أو موظف بوظيفة أخرى → كل العملاء
-            $clients = Client::all();
-        }
+       if ($user->role == 'employee' && optional($user->employee)->Job_role_id == 1) {
+    // موظف → عملاء نفس الفرع
+    $clients = Client::with('account')->where('branch_id', $user->branch_id)->get();
+} else {
+    // مدير أو موظف آخر → كل العملاء
+    $clients = Client::with('account')->get();
+}
 
 
         $users = User::all();
@@ -2881,9 +2810,9 @@ if ($client) {
     }
 
     public function destroy($id)
-    {
-        return redirect()->route('invoices.index')->with('error', 'لا يمكنك حذف الفاتورة. طبقا لتعليمات هيئة الزكاة والدخل يمنع حذف أو تعديل الفاتورة بعد إصدارها وفقا لمتطلبات الفاتورة الإلكترونية، ولكن يمكن إصدار فاتورة مرتجعة أو إشعار دائن لإلغائها أو تعديلها.');
-    }
+{
+    return back()->with('error', 'لا يمكنك حذف الفاتورة. طبقا لتعليمات هيئة الزكاة والدخل يمنع حذف أو تعديل الفاتورة بعد إصدارها وفقا لمتطلبات الفاتورة الإلكترونية، ولكن يمكن إصدار فاتورة مرتجعة أو إشعار دائن لإلغائها أو تعديلها.');
+}
     public function update(Request $request, $id)
     {
         return redirect()->route('invoices.index')->with('error', 'لا يمكنك تعديل الفاتورة. طبقا لتعليمات هيئة الزكاة والدخل يمنع حذف أو تعديل الفاتورة بعد إصدارها وفقا لمتطلبات الفاتورة الإلكترونية، ولكن يمكن إصدار فاتورة مرتجعة أو إشعار دائن لإلغائها أو تعديلها.');

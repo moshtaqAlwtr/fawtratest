@@ -21,7 +21,7 @@
         </div>
     </div>
     <div class="content-header-right text-md-right col-md-3 col-12 d-md-block d-none">
-        <button type="button" class="btn btn-primary" id="btnAddTask">
+        <button type="button" class="btn btn-primary" id="btnAddTask" onclick="openTaskModal()">
             <i class="feather icon-plus"></i> إضافة مهمة جديدة
         </button>
     </div>
