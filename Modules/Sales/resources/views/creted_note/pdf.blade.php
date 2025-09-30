@@ -1,203 +1,300 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>إشعار دائن</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إشعار دائن #{{ $credit->credit_number }}</title>
     <style>
-        * {
-            font-family: Arial, sans-serif !important;
-            direction: rtl;
-            unicode-bidi: embed;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
 
         body {
-            font-family: Arial, sans-serif !important;
-            direction: rtl;
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f0f0f0;
             padding: 20px;
-            font-size: 13px;
-            line-height: 1.6;
-            unicode-bidi: embed;
+            direction: rtl;
+            font-weight: bold;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
+        .receipt-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
         }
 
-        table, th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: right;
+        .receipt {
+            width: 80mm;
+            max-width: 100%;
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
         }
 
-        .header {
+        .receipt-header {
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
+            margin-bottom: 10px;
             text-align: center;
-            margin-bottom: 30px;
         }
 
-        .company-info {
-            margin-bottom: 20px;
+        .receipt-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .mb-0 {
+            margin-bottom: 0;
+        }
+
+        .invoice-to {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .invoice-to h1 {
+            font-size: 28px;
             text-align: center;
+            margin: 8px 0;
         }
 
         .invoice-details {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
         }
 
-        .footer {
-            margin-top: 30px;
+        .invoice-items {
+            margin-bottom: 10px;
+        }
+
+        .table {
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 12px;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
             text-align: center;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .text-right {
-            text-align: right;
-        }
-
-        .bold {
-            font-weight: bold;
-        }
-
-        .section-title {
-            background-color: #f5f5f5;
             padding: 5px;
-            margin: 10px 0;
-            font-weight: bold;
+            border-bottom: 1px dashed #ddd;
         }
 
-        .numbers {
-            font-family: Arial, sans-serif !important;
-            direction: ltr;
-            display: inline-block;
+        .table th {
+            background-color: #f5f5f5;
+            border-bottom: 1px solid #333;
         }
 
-        @page {
-            margin: 1cm;
-            size: A4 portrait;
+        .invoice-summary {
+            border-top: 1px dashed #ccc;
+            padding-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .notes {
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .qr-code {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .signature {
+            margin: 15px auto 0;
+            padding-top: 10px;
+            border-top: 1px dashed #333;
+            width: 90%;
+            text-align: center;
+        }
+
+        .thank-you {
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                margin: 0;
+                display: block !important;
+                width: 80mm !important;
+                font-weight: bold !important;
+            }
+
+            .receipt {
+                width: 100%;
+                box-shadow: none;
+                border: none;
+                padding: 0;
+                margin: 0 auto !important;
+            }
+
+            .receipt-container {
+                min-height: auto;
+            }
+
+            .qr-code canvas {
+                width: 70px !important;
+                height: 70px !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .receipt {
+                width: 100%;
+            }
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 </head>
 <body>
-    <div class="company-info">
-        @if(isset($company_logo))
-            <img src="{{ $company_logo }}" alt="شعار الشركة">
-        @endif
-        <h2>مؤسسة اعمال خاصة للتجارة</h2>
-        <p>الرياض</p>
-        <p>هاتف: <span class="numbers">0509992803</span></p>
-    </div>
+    <div class="container">
+        <div class="receipt-container">
+            <div class="receipt">
+                <div class="receipt-header">
+                    <h1 class="receipt-title">إشعار دائن</h1>
+                    <p class="mb-0">مؤسسة أعمال خاصة للتجارة</p>
+                    <p class="mb-0">الرياض - الرياض</p>
+                    <p>رقم المسؤول: 0509992803</p>
+                </div>
 
-    <div class="header">
-        <h1>إشعار دائن</h1>
-        <p>{{ $credit->client->trade_name ?? $credit->client->first_name . ' ' . $credit->client->last_name }}</p>
-        <p>{{ $credit->client->street1 ?? 'غير متوفر' }}</p>
-        <p>{{ $credit->client->mobile ?? 'غير متوفر' }}</p>
-    </div>
+                <div class="invoice-to">
+                    <p class="mb-0">فاتورة الى: {{ $credit->client->trade_name ?? $credit->client->first_name . ' ' . $credit->client->last_name }}</p>
+                    <p class="mb-0">{{ $credit->client->street1 ?? 'غير متوفر' }}</p>
+                    <h1 class="mb-0">{{ $credit->client->code ?? 'غير متوفر' }}</h1>
+                    <p class="mb-0">الرقم الضريبي: {{ $credit->client->tax_number ?? 'غير متوفر' }}</p>
+                    @if($credit->client->mobile)
+                        <p class="mb-0">رقم جوال العميل: {{ $credit->client->mobile }}</p>
+                    @endif
+                </div>
 
+                <div class="invoice-details">
+                    <div class="summary-row">
+                        <span>رقم الإشعار:</span>
+                        <span>{{ $credit->credit_number }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>تاريخ الإشعار:</span>
+                        <span>{{ $credit->created_at->format('Y/m/d') }}</span>
+                    </div>
+                    @if($credit->reference_invoice_number)
+                    <div class="summary-row">
+                        <span>الفاتورة المرجعية:</span>
+                        <span>{{ $credit->reference_invoice_number }}</span>
+                    </div>
+                    @endif
+                </div>
 
-    <h3 class="section-title">تفاصيل الإشعار الدائن:</h3>
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>البند</th>
-                <th>الوصف</th>
-                <th>الكمية</th>
-                <th>سعر الوحدة</th>
-                <th>الخصم</th>
-                <th>المجموع</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($credit->items as $item)
-            <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $item->item }}</td>
-                <td>{{ $item->description ?? '-' }}</td>
-                <td>{{ $item->quantity }}</td>
-                <td>{{ number_format($item->unit_price, 2) }}</td>
-                <td>{{ number_format($item->discount, 2) }}</td>
-                <td>{{ number_format($item->total, 2) }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+                <div class="invoice-items">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="5%">#</th>
+                                <th width="45%">المنتج</th>
+                                <th width="15%">الكمية</th>
+                                <th width="15%">السعر</th>
+                                <th width="20%">المجموع</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($credit->items as $index => $item)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td style="text-align: right;">{{ $item->item }}</td>
+                                <td>{{ $item->quantity }}</td>
+                                <td>{{ number_format($item->unit_price, 2) }}</td>
+                                <td>{{ number_format($item->total, 2) }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
-    <div class="totals">
-         @php
-        $currency = $account_setting->currency ?? 'SAR';
-        $currencySymbol =
-            $currency == 'SAR' || empty($currency)
-                ? '<img src="' . asset('assets/images/Saudi_Riyal.svg') . '" alt="ريال سعودي" width="15">'
-                : $currency;
-    @endphp
-        <p>المجموع الفرعي: {{ number_format($credit->subtotal ?? 0, 2) }} {!! $currencySymbol !!}</p>
+                @php
+                    $currency = $account_setting->currency ?? 'SAR';
+                    $currencySymbol = $currency == 'SAR' || empty($currency) ? 'ر.س' : $currency;
+                @endphp
 
-        @if(($credit->total_discount ?? 0) > 0)
-            <p>الخصم: {{ number_format($credit->total_discount, 2) }} {!! $currencySymbol !!}</p>
-        @endif
+                <div class="invoice-summary">
+                    <div class="summary-row">
+                        <span>المجموع الكلي:</span>
+                        <span>{{ number_format($credit->subtotal ?? 0, 2) }} {{ $currencySymbol }}</span>
+                    </div>
 
-            @if($TaxsInvoice->isNotEmpty())
-    @foreach($TaxsInvoice as $TaxInvoice)
-        <p> {{ $TaxInvoice->name }} ({{ $TaxInvoice->rate }}%): 
-            {{ number_format($TaxInvoice->value ?? 0, 2) }} {!! $currencySymbol !!}
-        </p>
-    @endforeach
-@else
-    {{-- <p>الضريبة: 0.00 {!! $currencySymbol !!}</p> --}}
-@endif
-        <p style="font-size: 14px; margin-top: 10px;">المجموع الكلي: {{ number_format($credit->grand_total ?? 0, 2) }} {!! $currencySymbol !!}</p>
-        <p>{{ $amount_in_words ?? '' }}</p>
-    </div>
+                    @if(($credit->total_discount ?? 0) > 0)
+                    <div class="summary-row">
+                        <span>الخصم:</span>
+                        <span>{{ number_format($credit->total_discount, 2) }} {{ $currencySymbol }}</span>
+                    </div>
+                    @endif
 
-    @if($credit->notes)
-    <div class="notes">
-        <h3 class="section-title">ملاحظات:</h3>
-        <p>{{ $credit->notes }}</p>
-    </div>
-    @endif
+                    @if($TaxsInvoice->isNotEmpty())
+                        @foreach($TaxsInvoice as $TaxInvoice)
+                        <div class="summary-row">
+                            <span>{{ $TaxInvoice->name }} ({{ $TaxInvoice->rate }}%):</span>
+                            <span>{{ number_format($TaxInvoice->value ?? 0, 2) }} {{ $currencySymbol }}</span>
+                        </div>
+                        @endforeach
+                    @endif
 
-    <div class="qrcode">
-        <canvas id="qrcode"></canvas>
-    </div>
+                    <div class="summary-row">
+                        <span><strong>المبلغ المستحق:</strong></span>
+                        <span><strong>{{ number_format($credit->grand_total ?? 0, 2) }} {{ $currencySymbol }}</strong></span>
+                    </div>
+{{--
+                    @if($amount_in_words)
+                    <div style="margin-top: 8px; font-size: 11px; text-align: center;">
+                        {{ $amount_in_words }}
+                    </div>
+                    @endif --}}
+                </div>
 
-    <div class="signatures">
-        <div class="signature-box">
-            <div class="signature-line">توقيع المحاسب</div>
+                @if($credit->notes)
+                <div class="notes">
+                    <strong>ملاحظات:</strong><br>
+                    {{ $credit->notes }}
+                </div>
+                @endif
+
+                <div class="signature">
+                    <p>الاسم: ________________</p>
+                    <p>التوقيع: _______________</p>
+                    <p class="thank-you">شكراً لتعاملكم معنا</p>
+                </div>
+
+                <div class="qr-code">
+                    <canvas id="qrcode"></canvas>
+                </div>
+            </div>
         </div>
-        <div class="signature-box">
-            <div class="signature-line">توقيع المدير المالي</div>
-        </div>
-        <div class="signature-box">
-            <div class="signature-line">ختم الشركة</div>
-        </div>
     </div>
-
-
 
     <script>
-        const creditData = `
-            رقم الإشعار الدائن: {{ $credit->credit_number }}
-            التاريخ: {{ $credit->created_at->format('Y/m/d') }}
-            العميل: {{ $credit->client->trade_name ?? $credit->client->first_name . ' ' . $credit->client->last_name }}
-            الإجمالي: {{ number_format($credit->grand_total, 2) }} ر.س
-            رقم الفاتورة المرجعية: {{ $credit->reference_invoice_number ?? 'غير متوفر' }}
-            الرقم الضريبي: {{ $credit->client->tax_number ?? 'غير متوفر' }}
-        `;
+        const creditData = `رقم الإشعار الدائن: {{ $credit->credit_number }}
+التاريخ: {{ $credit->created_at->format('Y/m/d') }}
+العميل: {{ $credit->client->trade_name ?? $credit->client->first_name . ' ' . $credit->client->last_name }}
+الإجمالي: {{ number_format($credit->grand_total, 2) }} ر.س
+رقم الفاتورة المرجعية: {{ $credit->reference_invoice_number ?? 'غير متوفر' }}
+الرقم الضريبي: {{ $credit->client->tax_number ?? 'غير متوفر' }}`;
 
-        QRCode.toCanvas(document.getElementById('qrcode'), creditData, {
-            width: 150,
-            margin: 1
-        }, function (error) {
-            if (error) console.error(error);
-            console.log('QR Code generated successfully!');
-        });
+
     </script>
 </body>
 </html>

@@ -38,7 +38,7 @@ class CreditNotificationController extends Controller
 {
 public function index(Request $request)
 {
-    $query = CreditNotification::with(['client', 'createdBy']);
+    $query = CreditNotification::with(['client','createdBy']);
 
     // Apply filters based on request parameters
     if ($request->filled('client_id')) {
@@ -126,7 +126,7 @@ public function index(Request $request)
 
     // إذا كان الطلب AJAX، نرجع البيانات فقط
     if ($request->ajax()) {
-        $html = view('sales::credit_notes.partials.table', compact('credits', 'account_setting'))->render();
+        $html = view('sales::creted_note.partials.table', compact('credits', 'account_setting'))->render();
 
         return response()->json([
             'success' => true,
@@ -140,7 +140,7 @@ public function index(Request $request)
     }
 
     // إذا كان طلب عادي، نرجع الصفحة كاملة
-    return view('sales::credit_notes.index', compact(
+    return view('sales::creted_note.index', compact(
         'credits',
         'account_setting',
         'users',

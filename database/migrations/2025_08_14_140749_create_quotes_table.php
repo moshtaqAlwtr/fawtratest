@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -18,7 +17,11 @@ return new class extends Migration
             $table->date('quote_date')->nullable();
             $table->string('quote_number')->nullable();
             $table->decimal('subtotal', 10)->nullable();
-            $table->tinyInteger('status')->nullable()->default(1)->comment('1:Draft, 2:Pending, 3:Approved, 4:Converted to Invoice, 5:Cancelled');
+            $table
+                ->enum('status', ['Draft', 'Pending', 'Approved', 'Converted_to_Invoice', 'Cancelled'])
+                ->default('Draft')
+                ->comment('Draft, Pending, Approved, Converted to Invoice, Cancelled');
+
             $table->decimal('total_discount', 10)->nullable();
             $table->decimal('due_value', 10)->nullable();
             $table->decimal('total_tax', 10)->nullable();

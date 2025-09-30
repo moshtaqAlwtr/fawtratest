@@ -1,231 +1,256 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>عرض سعر #{{ $quote->quotes_number }}</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
+
         body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
             direction: rtl;
-            font-family: 'Cairo', sans-serif;
-            padding: 10px;
-            margin: 0;
-            font-size: 12px;
-        }
-      
-    @media print {
-        body {
-            background: white !important;
-            color: black !important;
-            font-size: 12pt;
-        }
-        .no-print {
-            display: none !important;
-        }
-        .print-only {
-            display: block !important;
-        }
-        /* أي أنماط إضافية تحتاجها للطباعة */
-    }
-
-        .header {
-            text-align: center;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #000;
-            padding-bottom: 10px;
-        }
-
-        .header h1 {
-            margin: 0;
-            padding: 0;
-            font-size: 16px;
-        }
-
-        .header p {
-            margin: 3px 0;
-        }
-
-        .info-grid {
-            width: 100%;
-            margin: 10px 0;
-        }
-
-        .info-grid td {
-            padding: 3px;
-        }
-
-        .info-label {
             font-weight: bold;
-            width: 100px;
         }
 
-        .info-value {
-            border-bottom: 1px dotted #000;
+        .receipt-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
         }
 
-        table.data-table {
+        .receipt {
+            width: 80mm;
+            max-width: 100%;
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+        }
+
+        .receipt-header {
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .receipt-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .invoice-to {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .invoice-details {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .invoice-items {
+            margin-bottom: 10px;
+        }
+
+        .table {
             width: 100%;
+            margin-bottom: 10px;
+            font-size: 12px;
             border-collapse: collapse;
-            margin: 10px 0;
         }
 
-        .data-table th, .data-table td {
-            border: 1px solid #000;
+        .table th,
+        .table td {
+            text-align: center;
             padding: 5px;
-            text-align: center;
+            border-bottom: 1px dashed #ddd;
         }
 
-        .data-table th {
+        .table th {
             background-color: #f5f5f5;
+            border-bottom: 1px solid #333;
         }
 
-        .section-title {
-            margin: 10px 0 5px;
-            border-bottom: 1px solid #000;
-            padding-bottom: 3px;
-            font-size: 14px;
+        .invoice-summary {
+            border-top: 1px dashed #ccc;
+            padding-top: 10px;
+            margin-bottom: 15px;
         }
 
-        .footer {
-            margin-top: 15px;
-            text-align: center;
-        }
-
-        .signatures {
-            margin-top: 20px;
+        .summary-row {
             display: flex;
             justify-content: space-between;
+            margin-bottom: 5px;
         }
 
-        .signature-box {
-            width: 150px;
-            text-align: center;
-        }
-
-        .signature-line {
-            border-top: 1px solid #000;
-            margin-top: 20px;
-            padding-top: 3px;
-        }
-
-        .qrcode {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .qrcode img {
-            max-width: 100px;
-            height: auto;
-        }
-
-        .totals {
+        .qr-code {
             margin: 15px 0;
-            text-align: left;
+            text-align: center;
         }
 
-        .totals p {
-            margin: 5px 0;
-            font-weight: bold;
+        .signature {
+            margin: 15px auto 0;
+            padding-top: 10px;
+            border-top: 1px dashed #333;
+            width: 90%;
+            text-align: center;
+        }
+
+        .thank-you {
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                margin: 0;
+                display: block !important;
+                width: 80mm !important;
+                font-weight: bold !important;
+            }
+
+            .receipt {
+                width: 100%;
+                box-shadow: none;
+                border: none;
+                padding: 0;
+                margin: 0 auto !important;
+            }
+
+            .receipt-container {
+                min-height: auto;
+            }
+
+            .qr-code svg {
+                width: 70px !important;
+                height: 70px !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .receipt {
+                width: 100%;
+            }
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 </head>
 <body>
-    <div class="header">
-        <h1>عرض سعر</h1>
-        <p>{{ $quote->client->trade_name ?? $quote->client->first_name . ' ' . $quote->client->last_name }}</p>
-        <p>{{ $quote->client->street1 ?? 'غير متوفر' }}</p>
-        <p>{{ $quote->client->mobile ?? 'غير متوفر' }}</p>
-    </div>
+    <div class="container">
+        <div class="receipt-container">
+            <div class="receipt">
+                <div class="receipt-header">
+                    <h1 class="receipt-title">عرض سعر</h1>
+                    <p class="mb-0">مؤسسة اعمال خاصة للتجارة</p>
+                    <p class="mb-0">الرياض - الرياض</p>
+                    <p>رقم المسؤول: 0509992803</p>
+                </div>
 
-    <table class="info-grid" cellpadding="0" cellspacing="0">
-        <tr>
-            <td class="info-label">رقم عرض السعر:</td>
-            <td class="info-value">{{ str_pad($quote->quotes_number, 5, '0', STR_PAD_LEFT) }}</td>
-            <td class="info-label">تاريخ العرض:</td>
-            <td class="info-value">{{ $quote->quote_date }}</td>
-        </tr>
-        <tr>
-            <td class="info-label">العميل:</td>
-            <td class="info-value">{{ $quote->client->trade_name ?? $quote->client->first_name . ' ' . $quote->client->last_name }}</td>
-            <td class="info-label">العنوان:</td>
-            <td class="info-value">{{ $quote->client->street2 ?? 'غير متوفر' }}</td>
-        </tr>
-    </table>
+                <div class="invoice-to">
+                    <p class="mb-0">عرض سعر الى:
+                        {{ $quote->client->trade_name ?? $quote->client->first_name . ' ' . $quote->client->last_name }}
+                    </p>
+                    <p class="mb-0">{{ $quote->client->street1 ?? 'غير متوفر' }}</p>
+                    <p class="mb-0">الرقم الضريبي: {{ $quote->client->tax_number ?? 'غير متوفر' }}</p>
+                    @if ($quote->client->mobile)
+                        <p class="mb-0">رقم الجوال: {{ $quote->client->mobile }}</p>
+                    @endif
+                </div>
 
-    <h3 class="section-title">تفاصيل عرض السعر:</h3>
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>البند</th>
-                <th>الكمية</th>
-                <th>سعر الوحدة</th>
-                <th>الخصم</th>
-                <th>المجموع</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($quote->items as $item)
-            <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $item->item }}</td>
-                <td>{{ $item->quantity }}</td>
-                <td>{{ number_format($item->unit_price, 2) }}</td>
-                <td>{{ number_format($item->discount, 2) }}</td>
-                <td>{{ number_format($item->total, 2) }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+                <div class="invoice-details">
+                    <div class="summary-row">
+                        <span>رقم عرض السعر:</span>
+                        <span>{{ str_pad($quote->quotes_number, 5, '0', STR_PAD_LEFT) }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>تاريخ العرض:</span>
+                        <span>{{ $quote->quote_date }}</span>
+                    </div>
+                </div>
 
-    <div class="totals">
-         @php
-        $currency = $account_setting->currency ?? 'SAR';
-        $currencySymbol =
-            $currency == 'SAR' || empty($currency)
-                ? '<img src="' . asset('assets/images/Saudi_Riyal.svg') . '" alt="ريال سعودي" width="15">'
-                : $currency;
-    @endphp
-        <!-- الضريبة -->
-        @if($TaxsInvoice->isNotEmpty())
-    @foreach($TaxsInvoice as $TaxInvoice)
-        <p> {{ $TaxInvoice->name }} ({{ $TaxInvoice->rate }}%): 
-            {{ number_format($TaxInvoice->value ?? 0, 2) }} {!! $currencySymbol !!}
-        </p>
-    @endforeach
-@else
-    {{-- <p>الضريبة: 0.00 {!! $currencySymbol !!}</p> --}}
-@endif
+                <div class="invoice-items">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="5%">#</th>
+                                <th width="40%">البند</th>
+                                <th width="15%">الكمية</th>
+                                <th width="20%">السعر</th>
+                                <th width="20%">المجموع</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($quote->items as $index => $item)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td style="text-align: right;">{{ $item->item }}</td>
+                                <td>{{ $item->quantity }}</td>
+                                <td>{{ number_format($item->unit_price, 2) }}</td>
+                                <td>{{ number_format($item->total, 2) }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
-        <!-- الشحن -->
-        @if(($quote->shipping_cost ?? 0) > 0)
-            <p>تكلفة الشحن: {{ number_format($quote->shipping_cost, 2) }} {!! $currencySymbol !!}</p>
-        @endif
+                <div class="invoice-summary">
+                    @php
+                    $currency = $account_setting->currency ?? 'SAR';
+                    $currencySymbol = $currency == 'SAR' || empty($currency)
+                        ? '<img src="' . asset('assets/images/Saudi_Riyal.svg') . '" alt="ريال سعودي" width="15">'
+                        : $currency;
+                    @endphp
 
-        <!-- الخصم -->
-        @if(($quote->total_discount ?? 0) > 0)
-            <p>الخصم: {{ number_format($quote->total_discount, 2) }} {!! $currencySymbol !!}</p>
-        @endif
+                    @if(($quote->total_discount ?? 0) > 0)
+                    <div class="summary-row">
+                        <span>الخصم:</span>
+                        <span>{{ number_format($quote->total_discount, 2) }} ر.س</span>
+                    </div>
+                    @endif
 
-        <!-- المجموع الكلي -->
-        <p>المجموع الكلي: {{ number_format($quote->grand_total ?? 0, 2) }} {!! $currencySymbol !!}</p>
-    </div>
+                    @if(($quote->shipping_cost ?? 0) > 0)
+                    <div class="summary-row">
+                        <span>تكلفة الشحن:</span>
+                        <span>{{ number_format($quote->shipping_cost, 2) }} ر.س</span>
+                    </div>
+                    @endif
 
-    <!-- قسم QR Code -->
-    <div class="qrcode">
-        <canvas id="qrcode"></canvas>
-    </div>
+                    @if($TaxsInvoice->isNotEmpty())
+                        @foreach($TaxsInvoice as $TaxInvoice)
+                        <div class="summary-row">
+                            <span>{{ $TaxInvoice->name }} ({{ $TaxInvoice->rate }}%):</span>
+                            <span>{{ number_format($TaxInvoice->value ?? 0, 2) }} ر.س</span>
+                        </div>
+                        @endforeach
+                    @endif
 
-    <div class="signatures">
-        <div class="signature-box">
-            <div class="signature-line">توقيع البائع</div>
-        </div>
-        <div class="signature-box">
-            <div class="signature-line">توقيع العميل</div>
-        </div>
-        <div class="signature-box">
-            <div class="signature-line">ختم الشركة</div>
+                    <div class="summary-row">
+                        <span>المجموع الكلي:</span>
+                        <span>{{ number_format($quote->grand_total ?? 0, 2) }} ر.س</span>
+                    </div>
+                </div>
+
+                <div class="qr-code">
+                    <canvas id="qrcode"></canvas>
+                </div>
+
+                <div class="signature">
+                    <p>الاسم: ________________</p>
+                    <p>التوقيع: _______________</p>
+                    <p class="thank-you">شكراً لتعاملكم معنا</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -244,6 +269,12 @@
             if (error) console.error(error);
             console.log('QR Code generated successfully!');
         });
+
+        window.onload = function() {
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        };
     </script>
 </body>
 </html>

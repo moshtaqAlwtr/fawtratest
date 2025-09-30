@@ -64,12 +64,12 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div class="d-flex gap-2">
-                        
 
 
-                      
 
-                       
+
+
+
 
 
                     </div>
@@ -98,7 +98,7 @@
                                                 <div class="card-body bg-white p-4"
                                                     style="min-height: 400px; overflow: auto;">
                                                     <div style="transform: scale(0.8); transform-origin: top center;">
-                                                        @include('sales.creted_note.pdf', [
+                                                        @include('sales::creted_note.pdf', [
                                                             'credit' => $credit,
                                                         ])
                                                     </div>
@@ -146,10 +146,10 @@
     function printCreditNote() {
         // احصل على محتوى الـ div الذي تريد طباعته
         var printContent = document.querySelector('div[style*="transform: scale(0.8);"]').innerHTML;
-        
+
         // أنشئ نافذة جديدة للطباعة
         var printWindow = window.open('', '_blank', 'width=800,height=600');
-        
+
         // اكتب محتوى الصفحة الجديدة
         printWindow.document.write(`
             <!DOCTYPE html>
@@ -157,7 +157,7 @@
             <head>
                 <title>طباعة الإشعار الدائن</title>
                 <style>
-                    body { 
+                    body {
                         font-family: Arial, sans-serif;
                         direction: rtl;
                     }
@@ -179,7 +179,7 @@
             </body>
             </html>
         `);
-        
+
         printWindow.document.close();
     }
 
