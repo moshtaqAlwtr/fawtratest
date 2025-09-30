@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\TestMail;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\QuoteViewMail;
+use App\Models\Tax;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -34,102 +35,92 @@ use Illuminate\Http\Request;
 class QuoteController extends Controller
 {
     public function index(Request $request)
-    {
-        $query = Quote::with(['client', 'creator', 'items']);
+{
+    // بدء بناء الاستعلام الأساسي
+    $query = Quote::with(['client', 'creator', 'items']);
 
-        // البحث حسب العميل
-        if ($request->filled('client_id')) {
-            $query->where('client_id', $request->client_id);
-        }
+    // تطبيق جميع شروط البحث
+    $this->applySearchFilters($query, $request);
 
-        // البحث حسب رقم عرض السعر
-        if ($request->filled('id')) {
-            $query->where('id', 'LIKE', '%' . $request->id . '%');
-        }
-
-        // البحث حسب الحالة
-        if ($request->filled('status')) {
-            $query->where('status', intval($request->status)); // تحويل القيمة إلى integer
-        }
-
-        // البحث حسب العملة
-        if ($request->filled('currency')) {
-            $query->where('currency', $request->currency);
-        }
-
-        // البحث حسب المبلغ الإجمالي
-        if ($request->filled('total_from')) {
-            $query->where('grand_total', '>', $request->total_from);
-        }
-        if ($request->filled('total_to')) {
-            $query->where('grand_total', '<', $request->total_to);
-        }
-
-        // البحث حسب التاريخ الأول (تاريخ العرض)
-       if ($request->filled('from_date_1') && $request->filled('to_date_1')) {
-    $from = Carbon::parse($request->from_date_1)->startOfDay();
-    $to = Carbon::parse($request->to_date_1)->endOfDay();
-
-    $query->whereBetween('created_at', [$from, $to]);
-}
-
-        if ($request->filled('date_type_2')) {
-            switch ($request->date_type_2) {
-                case 'monthly':
-                    $query->whereMonth('created_at', now()->month)
-                          ->whereYear('created_at', now()->year);
-                    break;
-                case 'weekly':
-                    $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
-                    break;
-                case 'daily':
-                    $query->whereDate('created_at', Carbon::today());
-                    break;
-                default:
-                    if ($request->filled('from_date_2') && $request->filled('to_date_2')) {
-                        $from_date = Carbon::parse($request->from_date_2)->startOfDay();
-                        $to_date = Carbon::parse($request->to_date_2)->endOfDay();
-                        $query->whereBetween('created_at', [$from_date, $to_date]);
-                    }
-            }
-        }
-        // البحث في البنود
-        if ($request->filled('item_search')) {
-            $query->whereHas('items', function ($q) use ($request) {
-                $q->where('item', 'LIKE', '%' . $request->item_search . '%')
-                  ->orWhere('description', 'LIKE', '%' . $request->item_search . '%');
-            });
-        }
-
-        // البحث حسب من أضاف عرض السعر
-        if ($request->filled('created_by')) {
-            $query->where('created_by', $request->created_by);
-        }
-
-        // البحث حسب مسؤول المبيعات
-        if ($request->filled('sales_representative')) {
-            $query->where('created_by', $request->sales_representative);
-        }
-
-        // البحث حسب حالة الدفع
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        // ترتيب النتائج حسب تاريخ الإنشاء تنازلياً
-        $quotes = $query->orderBy('created_at', 'desc')->paginate(10); // استبدل get() بـ paginate()
-
-        // جلب البيانات الأخرى المطلوبة للصفحة
-        $quotes_number = $this->generateInvoiceNumber();
-        $clients = Client::all();
-        $users = User::all();
-        $employees = User::whereIn('role', ['employee', 'manager'])->get();
+    // التحقق من كون الطلب AJAX
+    if ($request->ajax()) {
+        $quotes = $query->orderBy('created_at', 'desc')->paginate(15);
         $account_setting = AccountSetting::where('user_id', auth()->user()->id)->first();
 
-        // إرجاع البيانات مع المتغيرات المطلوبة للعرض
-        return view('sales::qoution.index', compact('quotes','account_setting', 'quotes_number', 'clients', 'users', 'employees'))
-            ->with('search_params', $request->all()); // إرجاع معاملات البحث للحفاظ على حالة النموذج
+        return response()->json([
+            'success' => true,
+            'data' => view('sales::qoution.partials.table', compact('quotes', 'account_setting'))->render(),
+            'current_page' => $quotes->currentPage(),
+            'last_page' => $quotes->lastPage(),
+            'total' => $quotes->total(),
+            'from' => $quotes->firstItem(),
+            'to' => $quotes->lastItem()
+        ]);
     }
+
+    // جلب البيانات الأخرى المطلوبة للواجهة
+    $quotes_number = $this->generateInvoiceNumber();
+    $clients = Client::all();
+    $users = User::all();
+    $employees = User::whereIn('role', ['employee', 'manager'])->get();
+    $account_setting = AccountSetting::where('user_id', auth()->user()->id)->first();
+
+    return view('sales::qoution.index', compact(
+        'account_setting',
+        'quotes_number',
+        'clients',
+        'users',
+        'employees'
+    ));
+}
+
+protected function applySearchFilters($query, $request)
+{
+    // البحث حسب العميل
+    if ($request->filled('client_id')) {
+        $query->where('client_id', $request->client_id);
+    }
+
+    // البحث حسب رقم عرض السعر
+    if ($request->filled('id')) {
+        $query->where('id', 'LIKE', '%' . $request->id . '%');
+    }
+
+    // البحث حسب الحالة
+    if ($request->filled('status')) {
+        $query->where('status', intval($request->status));
+    }
+
+    // البحث حسب المبلغ الإجمالي (من)
+    if ($request->filled('total_from')) {
+        $query->where('grand_total', '>=', $request->total_from);
+    }
+
+    // البحث حسب المبلغ الإجمالي (إلى)
+    if ($request->filled('total_to')) {
+        $query->where('grand_total', '<=', $request->total_to);
+    }
+
+    // البحث حسب التاريخ
+    if ($request->filled('from_date_1') && $request->filled('to_date_1')) {
+        $from = Carbon::parse($request->from_date_1)->startOfDay();
+        $to = Carbon::parse($request->to_date_1)->endOfDay();
+        $query->whereBetween('created_at', [$from, $to]);
+    }
+
+    // البحث في البنود
+    if ($request->filled('item_search')) {
+        $query->whereHas('items', function ($q) use ($request) {
+            $q->where('item', 'LIKE', '%' . $request->item_search . '%')
+              ->orWhere('description', 'LIKE', '%' . $request->item_search . '%');
+        });
+    }
+
+    // البحث حسب من أضاف عرض السعر
+    if ($request->filled('created_by')) {
+        $query->where('created_by', $request->created_by);
+    }
+}
     private function generateInvoiceNumber()
     {
         $lastQuote = Quote::latest()->first();
@@ -317,7 +308,7 @@ public function sendQuoteLink($id)
                 'discount_type' => $discountType === 'percentage' ? 2 : 1,
                 'shipping_cost' => $shipping_cost,
                 'shipping_tax' => $shipping_tax,
-                'tax_type' => $tax_type, // نحفظ الرقم في قاعدة البيانات
+                'tax_type' => $validated['tax_type'] ?? $quote->tax_type,
                 'tax_rate' => $tax_type == 1 ? ($validated['tax_rate'] ?? 0) : null, // نحفظ نسبة الضريبة إذا كانت مفعلة
                 'subtotal' => $total_amount,
                 'total_discount' => $final_total_discount,
@@ -517,11 +508,12 @@ $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=".$q
     {
         $quote = Quote::with(['client', 'employee', 'items'])->findOrFail($id);
         $items = Product::all();
+$taxs=Tax::all();
         $clients = Client::all();
         $quotes_number = $this->generateInvoiceNumber();
         $users = User::all();
 
-        return view('sales::qoution.edit', compact('quote', 'clients', 'users', 'items', 'quotes_number'));
+        return view('sales::qoution.edit', compact('quote' ,'taxs','clients', 'users', 'items', 'quotes_number'));
     }
 
     public function update(Request $request, $id)
@@ -691,77 +683,135 @@ $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=".$q
         return redirect()->route('questions.index')->with('success', 'تم حذف عرض السعر بنجاح');
     }
 
-    public function convertToInvoice($id)
-    {
+ public function convertToInvoice($id)
+{
+    try {
+        // جلب عرض الأسعار مع العلاقات
+        $quote = Quote::with(['client', 'items'])->findOrFail($id);
+
+        // بدء معاملة قاعدة البيانات
         DB::beginTransaction();
 
-        try {
-            // جلب عرض الأسعار مع العلاقات
-            $quote = Quote::with(['client', 'items'])->findOrFail($id);
+        // الحصول على الرقم التسلسلي للفاتورة
+        $serialSetting = SerialSetting::where('section', 'invoice')->first();
+        $currentNumber = $serialSetting ? $serialSetting->current_number : 1;
 
-            // إنشاء الفاتورة يدويًا
-            $invoice = Invoice::create([
-                'client_id' => $quote->client_id,
-                'invoice_date' => now(),
-                'type' => 'normal',
-                'notes' => $quote->notes,
-                'discount_amount' => $quote->discount_amount,
-                'discount_type' => $quote->discount_type,
-                'shipping_cost' => $quote->shipping_cost,
-                'shipping_tax' => $quote->shipping_tax,
-                'tax_type' => $quote->tax_type,
-                'subtotal' => $quote->subtotal,
-                'total_discount' => $quote->total_discount,
-                'tax_total' => $quote->tax_total,
-                'grand_total' => $quote->grand_total,
-            ]);
-            $invoice->qrcode = $this->generateTlvContent($invoice->created_at, $invoice->grand_total, $invoice->tax_total);
-            $invoice->save();
-            // إضافة عناصر الفاتورة
-            foreach ($quote->items as $item) {
-                $invoice->items()->create([
-                    'product_id' => $item->product_id,
-                    'item' => $item->item,
-                    'description' => $item->description,
-                    'quantity' => $item->quantity,
-                    'unit_price' => $item->unit_price,
-                    'discount' => $item->discount,
-                    'discount_type' => $item->discount_type,
-                    'tax_1' => $item->tax_1,
-                    'tax_2' => $item->tax_2,
-                    'total' => $item->total,
-                ]);
-            }
-
-            // تحديث حالة عرض الأسعار إلى "تم التحويل"
-            $quote->update(['status' => 4]); // 4: تم التحويل إلى فاتورة
-
-            DB::commit();
-
-            // توجيه المستخدم إلى صفحة الفاتورة مع رسالة نجاح
-            return redirect()
-                ->route('invoices.show', $invoice->id)
-                ->with('success', 'تم تحويل عرض الأسعار إلى فاتورة بنجاح.');
-        } catch (\Exception $e) {
-            DB::rollback();
-            Log::error('حدث خطأ أثناء تحويل عرض الأسعار إلى فاتورة: ' . $e->getMessage());
-            return redirect()
-                ->back()
-                ->with('error', 'حدث خطأ أثناء التحويل: ' . $e->getMessage());
+        // التحقق من أن الرقم فريد
+        while (Invoice::where('id', $currentNumber)->exists()) {
+            $currentNumber++;
         }
+
+        // إنشاء الفاتورة
+        $invoice = Invoice::create([
+            'id' => $currentNumber,
+            'client_id' => $quote->client_id,
+            'invoice_date' => now()->format('Y-m-d'),
+            'type' => 'normal',
+            'notes' => $quote->notes,
+            'discount_amount' => $quote->discount_amount ?? 0,
+            'discount_type' => $quote->discount_type ?? 1,
+            'shipping_cost' => $quote->shipping_cost ?? 0,
+            'shipping_tax' => $quote->shipping_tax ?? 0,
+            'tax_type' => $quote->tax_type ?? 1,
+            'tax_rate' => $quote->tax_rate ?? 0,
+            'subtotal' => $quote->subtotal,
+            'total_discount' => $quote->total_discount,
+            'tax_total' => $quote->tax_total,
+            'grand_total' => $quote->grand_total,
+            'payment_type' => 'credit',
+            'payment_amount' => 0,
+            'created_by' => Auth::id(),
+            'status' => 1, // فاتورة غير مدفوعة
+        ]);
+
+        // إنشاء وحفظ QR Code للفاتورة
+        $invoice->qrcode = $this->generateTlvContent(
+            $invoice->created_at,
+            $invoice->grand_total,
+            $invoice->tax_total
+        );
+        $invoice->save();
+
+        // نسخ عناصر عرض السعر إلى الفاتورة
+        foreach ($quote->items as $item) {
+            InvoiceItem::create([
+                'invoice_id' => $invoice->id,
+                'product_id' => $item->product_id,
+                'item' => $item->item,
+                'description' => $item->description,
+                'quantity' => $item->quantity,
+                'unit_price' => $item->unit_price,
+                'discount' => $item->discount ?? 0,
+                'discount_type' => $item->discount_type ?? 1,
+                'tax_1' => $item->tax_1 ?? 0,
+                'tax_2' => $item->tax_2 ?? 0,
+                'total' => $item->total,
+            ]);
+        }
+
+        // نسخ الضرائب إذا كانت موجودة
+        $quoteTaxes = TaxInvoice::where('invoice_id', $quote->id)
+            ->where('type_invoice', 'quote')
+            ->get();
+
+        foreach ($quoteTaxes as $tax) {
+            TaxInvoice::create([
+                'name' => $tax->name,
+                'invoice_id' => $invoice->id,
+                'type' => $tax->type,
+                'rate' => $tax->rate,
+                'value' => $tax->value,
+                'type_invoice' => 'invoice',
+            ]);
+        }
+
+        // تحديث الرقم التسلسلي
+        if ($serialSetting) {
+            $serialSetting->update(['current_number' => $currentNumber + 1]);
+        } else {
+            SerialSetting::create([
+                'section' => 'invoice',
+                'current_number' => $currentNumber + 1,
+            ]);
+        }
+
+        // تحديث حالة عرض الأسعار إلى "تم التحويل"
+        $quote->update(['status' => 4]);
+
+        DB::commit();
+
+        return redirect()
+            ->route('invoices.show', $invoice->id)
+            ->with('success', 'تم تحويل عرض الأسعار إلى فاتورة بنجاح.');
+
+    } catch (\Exception $e) {
+        DB::rollback();
+        Log::error('حدث خطأ أثناء تحويل عرض الأسعار إلى فاتورة: ' . $e->getMessage());
+        return redirect()
+            ->back()
+            ->with('error', 'حدث خطأ أثناء التحويل: ' . $e->getMessage());
     }
+}
+
+// إضافة دالة generateTlvContent في QuoteController
+private function generateTlvContent($timestamp, $totalAmount, $vatAmount)
+{
+    $tlvContent = $this->getTlv(1, 'مؤسسة اعمال خاصة للتجارة')
+        . $this->getTlv(2, '000000000000000')
+        . $this->getTlv(3, $timestamp)
+        . $this->getTlv(4, number_format($totalAmount, 2, '.', ''))
+        . $this->getTlv(5, number_format($vatAmount, 2, '.', ''));
+
+    return base64_encode($tlvContent);
+}
+
+private function getTlv($tag, $value)
+{
+    $value = (string) $value;
+    return pack('C', $tag) . pack('C', strlen($value)) . $value;
+}
     public  function   logsaction(Request $request){
         return view('test');
     }
-    private function generateTlvContent($timestamp, $totalAmount, $vatAmount)
-    {
-        $tlvContent = $this->getTlv(1, 'مؤسسة اعمال خاصة للتجارة') . $this->getTlv(2, '000000000000000') . $this->getTlv(3, $timestamp) . $this->getTlv(4, number_format($totalAmount, 2, '.', '')) . $this->getTlv(5, number_format($vatAmount, 2, '.', ''));
 
-        return base64_encode($tlvContent);
-    }
-    private function getTlv($tag, $value)
-    {
-        $value = (string) $value;
-        return pack('C', $tag) . pack('C', strlen($value)) . $value;
-    }
 }

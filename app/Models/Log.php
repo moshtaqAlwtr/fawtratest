@@ -57,6 +57,11 @@ public function  purchase_request()
     return $this->belongsTo(PurchaseInvoice::class, 'type_id');
 }
 
+public function  sales()
+{
+    return $this->belongsTo(Invoice::class, 'type_id');
+}
+
 public function  purchase_invoice()
 {
     return $this->belongsTo(PurchaseInvoice::class, 'type_id');

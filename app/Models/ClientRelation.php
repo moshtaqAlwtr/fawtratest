@@ -9,7 +9,7 @@ class ClientRelation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['client_id', 'status','quotation_id', 'process', 'time', 'date', 'employee_id', 'description', 'location_id','type', 'deposit_count', 'employee_view_status', 'site_type', 'competitor_documents', 'additional_data'];
+    protected $fillable = ['client_id', 'status','quotation_id', 'process', 'time', 'date', 'employee_id', 'description', 'location_id','type', 'deposit_count', 'employee_view_status', 'site_type','invoice_id', 'competitor_documents', 'additional_data'];
 
     protected $casts = [
         'additional_data' => 'array',

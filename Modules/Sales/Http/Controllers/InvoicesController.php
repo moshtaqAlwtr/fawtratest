@@ -97,6 +97,24 @@ class InvoicesController extends Controller
     }
 
 
+
+
+    //اضافة الفاتورة لامر توريد امر شغل
+    public function supply_add($id)
+    {
+        $SupplyOrders = SupplyOrder::all();
+
+        return view('sales.invoices.supply_add', compact('SupplyOrders', 'id'));
+    }
+
+    public function supply_add_store(Request $request)
+    {
+        $invoice = Invoice::find($request->id);
+        $invoice->supply_id = $request->supply_order_id;
+        $invoice->save();
+
+        return redirect()->back()->with('success', 'تمت إضافة أمر التوريد إلى الفاتورة بنجاح.');
+    }
 public function index(Request $request)
     {
         // بدء بناء الاستعلام الأساسي حسب الصلاحيات
@@ -210,24 +228,6 @@ public function index(Request $request)
         }
     }
 
-
-
-    //اضافة الفاتورة لامر توريد امر شغل
-    public function supply_add($id)
-    {
-        $SupplyOrders = SupplyOrder::all();
-
-        return view('sales.invoices.supply_add', compact('SupplyOrders', 'id'));
-    }
-
-    public function supply_add_store(Request $request)
-    {
-        $invoice = Invoice::find($request->id);
-        $invoice->supply_id = $request->supply_order_id;
-        $invoice->save();
-
-        return redirect()->back()->with('success', 'تمت إضافة أمر التوريد إلى الفاتورة بنجاح.');
-    }
 
 
     public function ajaxInvoices(Request $request)
@@ -2709,32 +2709,27 @@ if ($client) {
 
 
     public function show(Request $request, $id)
-
     {
         $clients = Client::all();
         $employees = Employee::all();
 
-
         $search = $request->input('search');
 
-        $actives_logs = ModelsLog::where('type_log', 'log')->where('type', 'sales')->where('type_id', $id)
-            ->when($search, function ($query) use ($search) {
-                return $query->where('description', 'like', '%' . $search . '%');
-            })
+                $logs = ModelsLog::where('type', 'sales')
+            ->where('type_id', $id)
+            ->whereHas('sales') // التأكد من وجود علاقة مع سند الصرف
+            ->with('user')
             ->orderBy('created_at', 'desc')
-            ->get()->unique('id')
-            ->filter(function ($log) {
-                return !is_null($log) && !is_bool($log); // التأكد من أن السجل ليس null أو false
-            })
-            ->groupBy(function ($log) {
-                return optional($log->created_at)->format('Y-m-d'); // التأكد أن created_at ليس null
+            ->get()
+            ->groupBy(function ($item) {
+                return $item->created_at->format('Y-m-d');
             });
 
 
         //
         $invoice = Invoice::find($id);
         $return_invoices = Invoice::where('reference_number', $id)->get();
-        $invoice_notes = ClientRelation::where('invoice_id', $id)->get();
+        $invoice_notes = ClientRelation::where('invoice_id', $id)->where('type', 'invoice')->get();
         $renderer = new ImageRenderer(
             new RendererStyle(150), // تحديد الحجم
             new SvgImageBackEnd(), // تحديد نوع الصورة (SVG)
@@ -2760,7 +2755,7 @@ if ($client) {
             $nextCode++;
         }
         // تغيير اسم المتغير من qrCodeImage إلى barcodeImage
-        return view('sales::invoices.show', compact('invoice_number', 'account_setting', 'nextCode', 'client', 'clients', 'employees', 'invoice', 'barcodeImage', 'TaxsInvoice', 'qrCodeSvg', 'invoice_notes', 'return_invoices', 'actives_logs'));
+        return view('sales::invoices.show', compact('invoice_number', 'account_setting', 'nextCode', 'client', 'clients', 'employees', 'invoice', 'barcodeImage', 'TaxsInvoice', 'qrCodeSvg', 'invoice_notes', 'return_invoices', 'logs'));
     }
 
     public function print($id)
@@ -3264,5 +3259,156 @@ public function markAsPaidSilently($id)
 }
 
 
+    public function addNote(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'description' => 'required|string|max:1000',
+                'process' => 'required|string|max:255',
+                'date' => 'required|date',
+                'time' => 'required|string',
+                'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120', // 5MB max
+            ]);
 
+            $invoices = invoice::findOrFail($id);
+
+            // التعامل مع المرفق إذا تم رفعه
+            $attachmentPath = null;
+            if ($request->hasFile('attachment')) {
+                $file = $request->file('attachment');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $attachmentPath = $file->storeAs('invoices/notes', $fileName, 'public');
+            }
+
+            // إنشاء الملاحظة باستخدام ClientRelation
+            $clientRelation = ClientRelation::create([
+                'process' => $request->process,
+                'time' => $request->time,
+                'date' => $request->date,
+                'invoice_id' => $id,
+                'employee_id' => auth()->user()->id,
+                'description' => $request->description,
+                'attachment' => $attachmentPath,
+                'type' => 'invoice', // نوع مختلف للفواتير
+            ]);
+
+            // إرسال إشعار
+            notifications::create([
+                'user_id' => $invoices->user_id,
+                'receiver_id' => $invoices->user_id,
+                'title' => 'ملاحظة جديدة',
+                'description' => 'تم إضافة ملاحظة جديدة فاتورة مبيعات  رقم ' . $invoices->code,
+            ]);
+
+            // تسجيل النشاط في سجل الأنشطة
+            ModelsLog::create([
+                'type' => 'sales',
+                'type_id' => $invoices->id,
+                'type_log' => 'log',
+                'icon' => 'create',
+                'description' => sprintf(
+                    'تم إضافة ملاحظة جديدة لفاتورة الشراء رقم **%s** بعنوان: %s',
+                    $invoices->code ?? '',
+                    $request->process
+                ),
+                'created_by' => auth()->id(),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'تم حفظ الملاحظة بنجاح',
+                'note' => [
+                    'id' => $clientRelation->id,
+                    'description' => $clientRelation->description,
+                    'process' => $clientRelation->process,
+                    'date' => $clientRelation->date,
+                    'time' => $clientRelation->time,
+                    'employee_name' => auth()->user()->name,
+                    'has_attachment' => $attachmentPath ? true : false,
+                    'attachment_url' => $attachmentPath ? asset('storage/' . $attachmentPath) : null,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'حدث خطأ أثناء حفظ الملاحظة: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    // جلب الملاحظات
+public function getNotes($id)
+{
+    try {
+        $notes = ClientRelation::where('invoice_id', $id)
+            ->where('type', 'invoice')
+            ->with('employee')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $formattedNotes = $notes->map(function ($note) {
+            $attachmentUrl = $note->attachment ? asset('storage/'.$note->attachment) : null;
+
+            return [
+                'id'            => $note->id,
+                'description'   => $note->description,
+                'process'       => $note->process,
+                'date'          => $note->date,
+                'time'          => $note->time,
+                'employee_name' => optional($note->employee)->name ?? 'غير محدد',
+                'has_attachment'=> !empty($note->attachment),
+                'attachment_url'=> $attachmentUrl,
+                'created_at'    => optional($note->created_at)->format('Y-m-d H:i:s'),
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'notes'   => $formattedNotes,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'حدث خطأ أثناء جلب الملاحظات: '.$e->getMessage(),
+        ], 500);
+    }
+}
+
+    // حذف الملاحظة
+    public function deleteNote($noteId)
+    {
+        try {
+            $note = ClientRelation::findOrFail($noteId);
+
+            // حذف المرفق إذا كان موجود
+            if ($note->attachment && Storage::disk('public')->exists($note->attachment)) {
+                Storage::disk('public')->delete($note->attachment);
+            }
+
+            $quotationId = $note->invoice_id;
+            $process = $note->process;
+
+            $note->delete();
+
+            // تسجيل النشاط
+            ModelsLog::create([
+                'type' => 'sales',
+                'type_id' => $quotationId,
+                'type_log' => 'log',
+                'icon' => 'delete',
+                'description' => sprintf('تم حذف ملاحظة "%s" من فاتورة البيع رقم %s', $process, $quotationId),
+                'created_by' => auth()->id(),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'تم حذف الملاحظة بنجاح',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'حدث خطأ أثناء حذف الملاحظة: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
 }

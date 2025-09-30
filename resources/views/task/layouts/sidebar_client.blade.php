@@ -21,17 +21,17 @@
 
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
             {{-- الرئيسيه --}}
-           
+
 
             {{-- المبيعات --}}
-          
-          
 
 
-             
-              
-         
-                
+
+
+
+
+
+
                     <ul class="menu-content">
                         <li>
                             <a href="{{ route('clients.invoice_client') }}">
@@ -51,14 +51,14 @@
                                 <span class="menu-item" data-i18n="POS Reports">اوامر الشغل</span>
                             </a>
                         </li>
-                        <li>  
+                        <li>
                             <a href="{{ route('clients.appointments_client') }}">
                                 <i class="feather icon-circle"></i>
                                 <span class="menu-item"
                                     data-i18n="POS Settings">المواعيد</span>
                             </a>
                         </li>
-                
+
 
 
             <!-- نقاط  البيع -->
@@ -85,25 +85,25 @@
                 </a>
                 <ul class="menu-content">
                     <li>
-                        <a href="{{ route('POS.sales_start.index') }}">
+                        <a href="">
                             <i class="feather icon-circle"></i>
                             <span class="menu-item" data-i18n="Start Sale">{{ trans('main_trans.Start_Sale') }}</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('pos.sessions.index') }}">
+                        <a href="">
                             <i class="feather icon-circle"></i>
                             <span class="menu-item" data-i18n="Sessions">{{ trans('main_trans.Sessions') }}</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('pos_reports.index') }}">
+                        <a href="">
                             <i class="feather icon-circle"></i>
                             <span class="menu-item" data-i18n="POS Reports">{{ trans('main_trans.POS_Reports') }}</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('pos.settings.index') }}">
+                        <a href="">
                             <i class="feather icon-circle"></i>
                             <span class="menu-item"
                                 data-i18n="POS Settings">{{ trans('main_trans.POS_Settings') }}</span>
@@ -433,7 +433,7 @@
                                     data-i18n="eCommerce">{{ trans('main_trans.Customer_relationship_management') }}</span>
                             </a>
                         </li>
-                       
+
                         @can('clients_edit_client_settings')
                             <li><a href="{{ route('clients.setting') }}"><i class="feather icon-circle"></i><span class="menu-item"
                                         data-i18n="eCommerce">{{ trans('main_trans.Client_settings') }}</span>
@@ -1212,7 +1212,7 @@
             @endif
             @endif
 
-         
+
 
 
             @if (

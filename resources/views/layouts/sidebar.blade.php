@@ -369,28 +369,28 @@
                         </a>
                         <ul class="menu-content">
                             <li>
-                                <a href="{{ route('POS.sales_start.index') }}">
+                                <a href="">
                                     <i class="feather icon-circle"></i>
                                     <span class="menu-item"
                                         data-i18n="Start Sale">{{ trans('main_trans.Start_Sale') }}</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('pos.sessions.index') }}">
+                                <a href="">
                                     <i class="feather icon-circle"></i>
                                     <span class="menu-item"
                                         data-i18n="Sessions">{{ trans('main_trans.Sessions') }}</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('pos_reports.index') }}">
+                                <a href="">
                                     <i class="feather icon-circle"></i>
                                     <span class="menu-item"
                                         data-i18n="POS Reports">{{ trans('main_trans.POS_Reports') }}</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('pos.settings.index') }}">
+                                <a href="">
                                     <i class="feather icon-circle"></i>
                                     <span class="menu-item"
                                         data-i18n="POS Settings">{{ trans('main_trans.POS_Settings') }}</span>
@@ -1630,7 +1630,7 @@
                             <a href="{{ route('workspaces.index') }}">
                                 <i class="feather icon-folder"></i>
                                 <span class="menu-item" data-i18n="eCommerce">
-                                ادارة مساحات العمل 
+                                ادارة مساحات العمل
                                 </span>
                             </a>
                         </li>
@@ -1646,7 +1646,7 @@
                         </li>
 
                         <!-- الفئات (الأقسام) -->
-                     
+
                         <!-- الإعدادات -->
                         <li>
                             <a href="">

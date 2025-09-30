@@ -110,6 +110,10 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/invoices/import', [InvoicesController::class, 'import'])->name('invoices.import');
                     Route::get('/edit/{id}', [InvoicesController::class, 'edit'])->name('invoices.edit');
                     Route::post('/store', [InvoicesController::class, 'store'])->name('invoices.store');
+                        Route::post('/{id}/add-note-sales', [InvoicesController::class, 'addNote'])->name('invoices.addNote');
+    Route::get('/{id}/get-notes-sales', [InvoicesController::class, 'getNotes'])->name('invoices.getNotes');
+    Route::delete('/note-sales/{noteId}', [InvoicesController::class, 'deleteNote'])->name('invoices.deleteNote');
+
                     Route::delete('/delete/{id}', [InvoicesController::class, 'destroy'])->name('invoices.destroy');
                     Route::get('/{id}/generatePdf', [InvoicesController::class, 'generatePdf'])->name('invoices.generatePdf');
 

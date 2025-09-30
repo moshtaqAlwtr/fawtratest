@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-    عرض عرض الأسعار
+تفاصيل عرض السعرٍٍ
 @stop
 
 @section('content')
@@ -18,7 +18,7 @@
                         <span>العميل: {{ $quote->client->trade_name }}</span>
                     </div>
                     <div class="d-flex gap-2">
-                        <form action="{{ route('questions.convertToInvoice', $quote->id) }}" method="POST">
+                        <form action="{{ route('questions.convert-to-invoice', $quote->id) }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-sm btn-success d-inline-flex align-items-center">
                                 <i class="fas fa-dollar-sign me-1"></i> تحويل لفاتورة
@@ -45,8 +45,8 @@
                         </button>
 
                         <!-- PDF -->
-                     
-                        <a href="{{ route('quotes.pdf', $quote->id) }}"
+
+                        <a href=""
                             class="btn btn-sm btn-outline-info d-inline-flex align-items-center">
                             <i class="fas fa-file-pdf me-1"></i> PDF
                         </a>
@@ -54,7 +54,7 @@
                         <!-- إرسال عبر -->
                         <div class="btn-group">
                             <div class="dropdown">
-                                <button      
+                                <button
                                     class="btn btn-sm btn-outline-success dropdown-toggle d-flex align-items-center custom-btn"
                                     type="button" id="dropdownMenuButton200" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
@@ -71,7 +71,7 @@
                                                         "\n\n" .
                                                         'يسعدنا إعلامكم بأن فاتورتكم أصبحت جاهزة. يمكنكم الاطلاع عليها من خلال الرابط التالي:' .
                                                         "\n" .
-                                                        route('questions.print', ['id' => $quote->id, 'embed' => true]) .
+
                                                         "\n\n" .
                                                         'مع أطيب التحيات،' .
                                                         "\n" .
@@ -79,19 +79,19 @@
                                                 ) }}">
                                                 <i class="fab fa-whatsapp me-2 text-success"></i> واتساب
                                             </a>
-    
+
                                         </li>
-    
-    
-    
-    
+
+
+
+
                                     </ul>
                                 </div>
                             </div>
                         </div>
 
                         <!-- خيارات أخر>ى -->
-                      
+
                     </div>
                 </div>
                 <div class="card">
@@ -122,7 +122,7 @@
                                                 <div class="card-body bg-white p-4"
                                                     style="min-height: 400px; overflow: auto;">
                                                     <div style="transform: scale(0.8); transform-origin: top center;">
-                                                        @include('sales.qoution.pdf', [
+                                                        @include('sales::qoution.pdf', [
                                                             'quote' => $quote,
                                                         ])
                                                     </div>
