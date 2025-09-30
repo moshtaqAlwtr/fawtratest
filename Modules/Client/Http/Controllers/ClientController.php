@@ -794,7 +794,7 @@ private function getAjaxResponse($baseQuery, $request, $noClients, $user)
             'query' => $request->query(),
         ]
     );
-
+ 
     // حساب البيانات المالية للصفحة الحالية فقط
     $clientsData = $this->calculateClientData($pagedClients, now()->year);
     $clientDueBalances = $this->getClientDueBalances($pagedClients);

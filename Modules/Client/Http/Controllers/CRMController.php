@@ -13,14 +13,27 @@ use App\Models\Region_groub;
 class CRMController extends Controller
 {
 
-    // ... existing methods ...
-public function mang_client(Request $request)
+    public function mang_client(Request $request)
     {
         $clientGroups=Region_groub::all();
-        $invoices=Invoice::all();
+        
+        // جلب الفواتير مع علاقاتها
+        $invoices = Invoice::with([
+            'client', 
+            'employee', 
+            'payments', 
+            'treasury',
+            'items.product'
+        ])->get();
+        
+        // جلب جميع الملاحظات
         $notes=ClientRelation::all();
+
+        // جلب العملاء مع علاقاتهم
         $clients = Client::with([
-            'invoices',
+            'invoices' => function($query) {
+                $query->with(['employee', 'payments', 'treasury', 'items.product']);
+            },
             'appointmentNotes.employee',
             'clientRelations' => function ($query) {
                 $query->with(['employee', 'location'])->orderBy('date', 'desc');
@@ -38,13 +51,29 @@ public function mang_client(Request $request)
                             'id' => $invoice->id,
                             'number' => $invoice->code,
                             'date' => $invoice->invoice_date->format('Y-m-d'),
+                            'issue_date' => $invoice->issue_date ? $invoice->issue_date->format('Y-m-d') : null,
                             'amount' => $invoice->grand_total,
+                            'subtotal' => $invoice->subtotal,
+                            'tax_total' => $invoice->tax_total,
+                            'discount_amount' => $invoice->discount_amount,
                             'status' => $invoice->payment_status,
                             'remaining' => $invoice->remaining_amount,
                             'paymentMethod' => $invoice->payment_method,
+                            'employee' => $invoice->employee->name ?? 'غير محدد',
+                            'treasury' => $invoice->treasury->name ?? 'غير محدد',
+                            'currency' => $invoice->currency,
+                            'notes' => $invoice->notes,
+                            'is_paid' => $invoice->is_paid,
+                            'payment_terms' => $invoice->payment_terms,
+                            'reference_number' => $invoice->reference_number,
+                            'type' => $invoice->type,
+                            'items_count' => $invoice->items->count(),
+                            'total_payments' => $invoice->payments->sum('amount'),
+                            'created_at' => $invoice->created_at->format('Y-m-d H:i'),
+                            'updated_at' => $invoice->updated_at->format('Y-m-d H:i'),
                         ];
                     }),
-                    'notes' => $client->appointmentNotes->map(function ($note) {
+                    'appointmentNotes' => $client->appointmentNotes->map(function ($note) {
                         return [
                             'id' => $note->id,
                             'date' => $note->date,
@@ -53,25 +82,21 @@ public function mang_client(Request $request)
                             'status' => $note->status,
                         ];
                     }),
-                    'relations' => $client->clientRelations->map(function ($relation) {
+                    // ملاحظات العلاقات (ClientRelation)
+                    'clientRelations' => $client->clientRelations->map(function ($relation) {
                         return [
                             'id' => $relation->id,
-                            'status' => $relation->status,
-                            'process' => $relation->process,
-                            'time' => $relation->time,
-                            'date' => $relation->date,
-                            'employee' => $relation->employee->name ?? 'غير محدد',
                             'description' => $relation->description,
-                            'location' => $relation->location
-                                ? [
-                                    'id' => $relation->location->id,
-                                    'address' => $relation->location->address,
-                                    'coordinates' => $relation->location->coordinates,
-                                ]
-                                : null,
-                            'site_type' => $relation->site_type,
-                            'competitor_documents' => $relation->competitor_documents,
+                            'process' => $relation->process,
+                            'date' => $relation->date,
+                            'time' => $relation->time,
+                            'employee' => $relation->employee->name ?? 'غير محدد',
+                            'created_at' => $relation->created_at,
                             'additional_data' => $relation->additional_data,
+                            'site_type' => $relation->site_type_text,
+                            'status' => $relation->status,
+                            'site_type_raw' => $relation->site_type,
+                            'competitor_documents' => $relation->competitor_documents,
                         ];
                     }),
                 ];
