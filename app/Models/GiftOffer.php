@@ -25,7 +25,7 @@ class GiftOffer extends Model
     {
         return $this->belongsToMany(Client::class, 'client_gift_offer');
     }
-   
+
 public function users()
 {
     return $this->belongsToMany(User::class, 'employee_gift_offer', 'gift_id', 'user_id');
@@ -43,7 +43,7 @@ public function users()
 
     public function excludedClients()
 {
-    return $this->belongsToMany(Client::class, 'gift_offer_excluded_clients', 'offer_id', 'client_id');
+    return $this->belongsToMany(Client::class, 'client_gift_offer', 'gift_offer_id', 'client_id');
 }
 
 }

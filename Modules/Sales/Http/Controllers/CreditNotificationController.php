@@ -36,103 +36,118 @@ use function Ramsey\Uuid\v1;
 
 class CreditNotificationController extends Controller
 {
-    public function index(Request $request)
-    {
-        $query = CreditNotification::with(['client', 'createdBy']);
+public function index(Request $request)
+{
+    $query = CreditNotification::with(['client', 'createdBy']);
 
-        // Apply filters based on request parameters
-        if ($request->filled('client_id')) {
-            $query->where('client_id', $request->client_id);
-        }
-
-        if ($request->filled('invoice_number')) {
-            $query->where('credit_number', 'LIKE', '%' . $request->invoice_number . '%');
-        }
-
-        if ($request->filled('item_search')) {
-            $query->whereHas('items', function ($q) use ($request) {
-                $q->where('item', 'LIKE', '%' . $request->item_search . '%')
-                    ->orWhere('description', 'LIKE', '%' . $request->item_search . '%');
-            });
-        }
-
-        if ($request->filled('currency')) {
-            $query->where('currency', $request->currency);
-        }
-
-        if ($request->filled('total_from')) {
-            $query->where('grand_total', '>', $request->total_from);
-        }
-        if ($request->filled('total_to')) {
-            $query->where('grand_total', '<', $request->total_to);
-        }
-
-        if ($request->filled('from_date_1') && $request->filled('to_date_1')) {
-    $from = Carbon::parse($request->from_date_1)->startOfDay();
-    $to = Carbon::parse($request->to_date_1)->endOfDay();
-
-    $query->whereBetween('created_at', [$from, $to]);
-}
-
-        if ($request->filled('date_type_2')) {
-            switch ($request->date_type_2) {
-                case 'monthly':
-                    $query->whereMonth('due_date', now()->month);
-                    break;
-                case 'weekly':
-                    $query->whereBetween('due_date', [now()->startOfWeek(), now()->endOfWeek()]);
-                    break;
-                case 'daily':
-                    $query->whereDate('due_date', now());
-                    break;
-                default:
-                    if ($request->filled('from_date_2') && $request->filled('to_date_2')) {
-                        $query->whereBetween('due_date', [$request->from_date_2, $request->to_date_2]);
-                    }
-            }
-        }
-
-        if ($request->filled('source')) {
-            $query->where('source', $request->source);
-        }
-
-        if ($request->filled('custom_field')) {
-            $query->where('custom_field', 'LIKE', '%' . $request->custom_field . '%');
-        }
-
-        if ($request->filled('created_by')) {
-            $query->where('created_by', $request->created_by);
-        }
-
-        if ($request->filled('shipping_option')) {
-            $query->where('shipping_option', $request->shipping_option);
-        }
-
-        if ($request->filled('post_shift')) {
-            $query->where('post_shift', 'LIKE', '%' . $request->post_shift . '%');
-        }
-
-        if ($request->filled('order_source')) {
-            $query->where('order_source', $request->order_source);
-        }
-
-        // Paginate the results instead of using get()
-        $credits = $query->orderBy('created_at', 'desc')->get(); // Adjust the number of items per page as needed
-
-        // Fetch other required data for the page
-        $Credits_number = $this->generateInvoiceNumber();
-        $clients = Client::all();
-        $users = User::whereIn('role', ['employee', 'manager'])->get();
- $account_setting = AccountSetting::where('user_id', auth()->user()->id)->first();
-        return view('sales::creted_note.index', compact(
-            'credits',
-            'account_setting',
-            'users',
-            'Credits_number',
-            'clients'
-        ))->with('search_params', $request->all()); // Return search parameters to maintain form state
+    // Apply filters based on request parameters
+    if ($request->filled('client_id')) {
+        $query->where('client_id', $request->client_id);
     }
 
+    if ($request->filled('invoice_number')) {
+        $query->where('credit_number', 'LIKE', '%' . $request->invoice_number . '%');
+    }
+
+    if ($request->filled('item_search')) {
+        $query->whereHas('items', function ($q) use ($request) {
+            $q->where('item', 'LIKE', '%' . $request->item_search . '%')
+                ->orWhere('description', 'LIKE', '%' . $request->item_search . '%');
+        });
+    }
+
+    if ($request->filled('currency')) {
+        $query->where('currency', $request->currency);
+    }
+
+    if ($request->filled('total_from')) {
+        $query->where('grand_total', '>', $request->total_from);
+    }
+
+    if ($request->filled('total_to')) {
+        $query->where('grand_total', '<', $request->total_to);
+    }
+
+    if ($request->filled('from_date_1') && $request->filled('to_date_1')) {
+        $from = Carbon::parse($request->from_date_1)->startOfDay();
+        $to = Carbon::parse($request->to_date_1)->endOfDay();
+        $query->whereBetween('created_at', [$from, $to]);
+    }
+
+    if ($request->filled('date_type_2')) {
+        switch ($request->date_type_2) {
+            case 'monthly':
+                $query->whereMonth('due_date', now()->month);
+                break;
+            case 'weekly':
+                $query->whereBetween('due_date', [now()->startOfWeek(), now()->endOfWeek()]);
+                break;
+            case 'daily':
+                $query->whereDate('due_date', now());
+                break;
+            default:
+                if ($request->filled('from_date_2') && $request->filled('to_date_2')) {
+                    $query->whereBetween('due_date', [$request->from_date_2, $request->to_date_2]);
+                }
+        }
+    }
+
+    if ($request->filled('source')) {
+        $query->where('source', $request->source);
+    }
+
+    if ($request->filled('custom_field')) {
+        $query->where('custom_field', 'LIKE', '%' . $request->custom_field . '%');
+    }
+
+    if ($request->filled('created_by')) {
+        $query->where('created_by', $request->created_by);
+    }
+
+    if ($request->filled('shipping_option')) {
+        $query->where('shipping_option', $request->shipping_option);
+    }
+
+    if ($request->filled('post_shift')) {
+        $query->where('post_shift', 'LIKE', '%' . $request->post_shift . '%');
+    }
+
+    if ($request->filled('order_source')) {
+        $query->where('order_source', $request->order_source);
+    }
+
+    // Paginate the results
+    $credits = $query->orderBy('created_at', 'desc')->paginate(15);
+
+    $Credits_number = $this->generateInvoiceNumber();
+    $clients = Client::all();
+    $users = User::whereIn('role', ['employee', 'manager'])->get();
+    $account_setting = AccountSetting::where('user_id', auth()->user()->id)->first();
+
+    // إذا كان الطلب AJAX، نرجع البيانات فقط
+    if ($request->ajax()) {
+        $html = view('sales::credit_notes.partials.table', compact('credits', 'account_setting'))->render();
+
+        return response()->json([
+            'success' => true,
+            'data' => $html,
+            'current_page' => $credits->currentPage(),
+            'last_page' => $credits->lastPage(),
+            'total' => $credits->total(),
+            'from' => $credits->firstItem(),
+            'to' => $credits->lastItem()
+        ]);
+    }
+
+    // إذا كان طلب عادي، نرجع الصفحة كاملة
+    return view('sales::credit_notes.index', compact(
+        'credits',
+        'account_setting',
+        'users',
+        'Credits_number',
+        'clients'
+    ));
+}
 // public function sendCreditNotification($id)
 // {
 //     $credit = CreditNotification::with(['client', 'createdBy'])->findOrFail($id);

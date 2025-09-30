@@ -689,21 +689,8 @@ $taxs=Tax::all();
         // جلب عرض الأسعار مع العلاقات
         $quote = Quote::with(['client', 'items'])->findOrFail($id);
 
-        // بدء معاملة قاعدة البيانات
-        DB::beginTransaction();
-
-        // الحصول على الرقم التسلسلي للفاتورة
-        $serialSetting = SerialSetting::where('section', 'invoice')->first();
-        $currentNumber = $serialSetting ? $serialSetting->current_number : 1;
-
-        // التحقق من أن الرقم فريد
-        while (Invoice::where('id', $currentNumber)->exists()) {
-            $currentNumber++;
-        }
-
-        // إنشاء الفاتورة
-        $invoice = Invoice::create([
-            'id' => $currentNumber,
+        // تحضير البيانات لدالة store في InvoicesController
+        $invoiceData = [
             'client_id' => $quote->client_id,
             'invoice_date' => now()->format('Y-m-d'),
             'type' => 'normal',
@@ -714,28 +701,14 @@ $taxs=Tax::all();
             'shipping_tax' => $quote->shipping_tax ?? 0,
             'tax_type' => $quote->tax_type ?? 1,
             'tax_rate' => $quote->tax_rate ?? 0,
-            'subtotal' => $quote->subtotal,
-            'total_discount' => $quote->total_discount,
-            'tax_total' => $quote->tax_total,
-            'grand_total' => $quote->grand_total,
             'payment_type' => 'credit',
             'payment_amount' => 0,
-            'created_by' => Auth::id(),
-            'status' => 1, // فاتورة غير مدفوعة
-        ]);
+            'items' => []
+        ];
 
-        // إنشاء وحفظ QR Code للفاتورة
-        $invoice->qrcode = $this->generateTlvContent(
-            $invoice->created_at,
-            $invoice->grand_total,
-            $invoice->tax_total
-        );
-        $invoice->save();
-
-        // نسخ عناصر عرض السعر إلى الفاتورة
+        // تحويل عناصر عرض السعر إلى صيغة مناسبة لدالة store
         foreach ($quote->items as $item) {
-            InvoiceItem::create([
-                'invoice_id' => $invoice->id,
+            $invoiceData['items'][] = [
                 'product_id' => $item->product_id,
                 'item' => $item->item,
                 'description' => $item->description,
@@ -746,46 +719,47 @@ $taxs=Tax::all();
                 'tax_1' => $item->tax_1 ?? 0,
                 'tax_2' => $item->tax_2 ?? 0,
                 'total' => $item->total,
-            ]);
+                'store_house_id' => 1 // افتراضي - يمكن تعديله حسب الحاجة
+            ];
         }
 
-        // نسخ الضرائب إذا كانت موجودة
+        // نسخ الضرائب من عرض السعر
         $quoteTaxes = TaxInvoice::where('invoice_id', $quote->id)
             ->where('type_invoice', 'quote')
             ->get();
 
+        $invoiceData['taxes'] = [];
         foreach ($quoteTaxes as $tax) {
-            TaxInvoice::create([
+            $invoiceData['taxes'][] = [
                 'name' => $tax->name,
-                'invoice_id' => $invoice->id,
                 'type' => $tax->type,
                 'rate' => $tax->rate,
-                'value' => $tax->value,
-                'type_invoice' => 'invoice',
-            ]);
+                'value' => $tax->value
+            ];
         }
 
-        // تحديث الرقم التسلسلي
-        if ($serialSetting) {
-            $serialSetting->update(['current_number' => $currentNumber + 1]);
-        } else {
-            SerialSetting::create([
-                'section' => 'invoice',
-                'current_number' => $currentNumber + 1,
-            ]);
+        // إنشاء request object مؤقت لتمريره لدالة store
+        $request = new \Illuminate\Http\Request();
+        $request->merge($invoiceData);
+
+        // استخدام Laravel's Service Container لإنشاء InvoicesController مع dependencies
+        $invoicesController = app(\Modules\Sales\Http\Controllers\InvoicesController::class);
+
+        // استدعاء دالة store
+        $result = $invoicesController->store($request);
+
+        // إذا تم إنشاء الفاتورة بنجاح، تحديث حالة عرض السعر
+        if ($result instanceof \Illuminate\Http\RedirectResponse) {
+            // تحديث حالة عرض الأسعار إلى "تم التحويل"
+            $quote->update(['status' => 4]); // 4: تم التحويل إلى فاتورة
+
+            // تعديل رسالة النجاح لتشير إلى التحويل
+            return $result->with('success', 'تم تحويل عرض الأسعار إلى فاتورة بنجاح.');
         }
 
-        // تحديث حالة عرض الأسعار إلى "تم التحويل"
-        $quote->update(['status' => 4]);
-
-        DB::commit();
-
-        return redirect()
-            ->route('invoices.show', $invoice->id)
-            ->with('success', 'تم تحويل عرض الأسعار إلى فاتورة بنجاح.');
+        return $result;
 
     } catch (\Exception $e) {
-        DB::rollback();
         Log::error('حدث خطأ أثناء تحويل عرض الأسعار إلى فاتورة: ' . $e->getMessage());
         return redirect()
             ->back()

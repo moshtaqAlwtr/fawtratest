@@ -1,346 +1,422 @@
 @extends('master')
 
 @section('title')
-    الاشعارات الدائنة
+    الإشعارات الدائنة
 @stop
+
+@section('css')
 <style>
-    .table td, .table th {
-    white-space: normal !important;
-    word-break: break-word;
-    vertical-align: middle;
-}
+    .form-control {
+        margin-bottom: 10px;
+    }
 
+    #loading-indicator {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 0.375rem;
+    }
+
+    .spinner-border {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .content-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .content-header-title {
+            font-size: 1.5rem;
+        }
+
+        .btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            margin: 10px;
+            padding: 10px;
+        }
+
+        .table {
+            font-size: 0.8rem;
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .table th,
+        .table td {
+            white-space: nowrap;
+        }
+
+        .form-check {
+            margin-bottom: 10px;
+        }
+
+        .form-control {
+            width: 100%;
+        }
+
+        .dropdown-menu {
+            min-width: 200px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .table th,
+        .table td {
+            font-size: 0.7rem;
+        }
+    }
 </style>
-
+@endsection
 
 @section('content')
-    <div class="content-header row">
-        <div class="content-header-left col-md-9 col-12 mb-2">
-            <div class="row breadcrumbs-top">
-                <div class="col-12">
-                    <h2 class="content-header-title float-left mb-0">ادارة الاشعارات الدائنة </h2>
-                    <div class="breadcrumb-wrapper col-12">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="">الرئيسيه</a>
-                            </li>
-                            <li class="breadcrumb-item active">عرض
-                            </li>
-                        </ol>
-
-                    </div>
-
+<div class="content-header row">
+    <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+            <div class="col-12">
+                <h2 class="content-header-title float-left mb-0">إدارة الإشعارات الدائنة</h2>
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard_sales.index') }}">الرئيسية</a></li>
+                        <li class="breadcrumb-item active">عرض</li>
+                    </ol>
                 </div>
             </div>
         </div>
     </div>
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+</div>
 
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 
-    <div class="content-body">
+@if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        @foreach ($errors->all() as $error)
+            <p class="mb-0">{{ $error }}</p>
+        @endforeach
+    </div>
+@endif
+
+<div class="content-body">
+    <div class="container-fluid">
+        <!-- شريط الأدوات العلوي -->
         <div class="card shadow-sm">
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center flex-wrap">
-                    <!-- Checkbox لتحديد الكل -->
-                    
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2">
+                        <!-- معلومات الترقيم -->
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination pagination-sm mb-0">
+                                <li class="page-item mx-2">
+                                    <span class="text-muted pagination-info">صفحة 1 من 1</span>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- عداد النتائج -->
+                        <span class="text-muted mx-2 results-info">0 نتيجة</span>
+                    </div>
 
-                    <!-- زر اشعة دائنة جديدة -->
-                    <a href="{{ route('CreditNotes.create') }}" class="btn btn-success btn-sm d-flex align-items-center rounded-pill px-3">
-                        <i class="fas fa-plus-circle me-1"></i>اشعة دائنة جديدة
-                    </a>
-
-                  
-                    <!-- زر استيراد -->
-                    <button class="btn btn-outline-primary btn-sm d-flex align-items-center rounded-pill px-3">
-                        <i class="fas fa-cloud-upload-alt me-1"></i>استيراد
-                    </button>
-
-                    <!-- جزء التنقل بين الصفحات -->
-                 
+                    <div class="d-flex flex-wrap justify-content-between">
+                        <a href="{{ route('CreditNotes.create') }}" class="btn btn-success btn-sm flex-fill me-1 mb-1">
+                            <i class="fas fa-plus-circle me-1"></i>إشعار دائن جديد
+                        </a>
+                        <button class="btn btn-outline-primary btn-sm flex-fill mb-1">
+                            <i class="fas fa-cloud-upload-alt me-1"></i>استيراد
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- نموذج البحث -->
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center p-2">
                 <div class="d-flex gap-2">
-                    <span class="hide-button-text">
-                        بحث وتصفية
-                    </span>
+                    <span class="hide-button-text">بحث وتصفية</span>
                 </div>
                 <div class="d-flex align-items-center gap-2">
                     <button class="btn btn-outline-secondary btn-sm" onclick="toggleSearchFields(this)">
                         <i class="fa fa-times"></i>
-                        <span class="hide-button-text">اخفاء</span>
+                        <span class="hide-button-text">إخفاء</span>
                     </button>
                     <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="collapse"
                         data-bs-target="#advancedSearchForm" onclick="toggleSearchText(this)">
                         <i class="fa fa-filter"></i>
                         <span class="button-text">متقدم</span>
                     </button>
+                    <button type="button" id="resetSearch" class="btn btn-outline-warning btn-sm">
+                        <i class="fa fa-refresh"></i>
+                        إعادة تعيين
+                    </button>
                 </div>
             </div>
+
             <div class="card-body">
-                <form   id="searchForm"  action="{{ route('CreditNotes.index') }}" method="GET" class="form">
+                <form class="form" id="searchForm">
+                    @csrf
                     <div class="row g-3">
-                        <!-- 1. العميل -->
+                        <!-- الحقول الأساسية -->
                         <div class="col-md-6">
-                            <label for="client_id">العميل</label>
-                            <select name="client_id" class="form-control select2" id="client_id">
-                                <option value="">اي العميل</option>
+                            <select name="client_id" class="form-control select2">
+                                <option value="">أي العميل</option>
                                 @foreach ($clients as $client)
-                                    <option value="{{ $client->id }}" {{ request('client_id') == $client->id ? 'selected' : '' }}>
-                                        {{ $client->trade_name }} - {{ $client->code }}
+                                    <option value="{{ $client->id }}">
+                                        {{ $client->trade_name }} ({{ $client->code }})
                                     </option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <!-- 2. رقم الإشعار -->
                         <div class="col-md-6">
-                            <label for="invoice_number">رقم الإشعار</label>
-                            <input type="text" id="invoice_number" class="form-control"
-                                placeholder="رقم الإشعار" name="invoice_number" value="{{ request('invoice_number') }}">
+                            <input type="text" name="invoice_number" class="form-control"
+                                placeholder="رقم الإشعار">
                         </div>
                     </div>
 
                     <!-- البحث المتقدم -->
-                    <div class="collapse {{ request()->hasAny(['item_search', 'currency', 'total_from', 'total_to', 'date_type_1', 'date_type_2', 'source', 'custom_field', 'created_by', 'shipping_option', 'post_shift', 'order_source']) ? 'show' : '' }}" id="advancedSearchForm">
+                    <div class="collapse" id="advancedSearchForm">
                         <div class="row g-3 mt-2">
-                         
-
-
-                            <!-- 5. الإجمالي أكبر من -->
                             <div class="col-md-3">
-                                <label for="total_from">الإجمالي أكبر من</label>
-                                <input type="number" id="total_from" class="form-control" step="0.01"
-                                    placeholder="الإجمالي أكبر من" name="total_from" value="{{ request('total_from') }}">
+                                <input type="text" name="total_from" class="form-control"
+                                    placeholder="الإجمالي أكبر من">
                             </div>
 
-                            <!-- 6. الإجمالي أصغر من -->
                             <div class="col-md-3">
-                                <label for="total_to">الإجمالي أصغر من</label>
-                                <input type="number" id="total_to" class="form-control" step="0.01"
-                                    placeholder="الإجمالي أصغر من" name="total_to" value="{{ request('total_to') }}">
+                                <input type="text" name="total_to" class="form-control"
+                                    placeholder="الإجمالي أصغر من">
                             </div>
-                        
 
-                    
-                         
-                            
+                            <div class="col-md-3">
+                                <input type="date" name="from_date_1" class="form-control"
+                                    placeholder="التاريخ من">
+                            </div>
 
-                              <div class="col-md-3">
-        <label for="from_date_1" class="form-label fw-bold">التاريخ من</label>
-        <input type="date" class="form-control" name="from_date_1"
-               value="{{ request('from_date_1') }}">
-    </div>
+                            <div class="col-md-3">
+                                <input type="date" name="to_date_1" class="form-control"
+                                    placeholder="التاريخ إلى">
+                            </div>
 
-    <!-- التاريخ إلى -->
-    <div class="col-md-3">
-        <label for="to_date_1" class="form-label fw-bold">التاريخ إلى</label>
-        <input type="date" class="form-control" name="to_date_1"
-               value="{{ request('to_date_1') }}">
-    </div>
-
-                           </div>
-
-                    
-
-                        <div class="row g-3 mt-2">
-                         
-
-                            <!-- 15. أضيفت بواسطة -->
                             <div class="col-md-12">
-                                <label for="created_by">أضيفت بواسطة</label>
-                                <select name="created_by" class="form-control select2" id="created_by">
-                                    <option value="">اختر المستخدم</option>
+                                <select name="created_by" class="form-control select2">
+                                    <option value="">أضيفت بواسطة</option>
                                     @foreach ($users as $user)
-                                        <option value="{{ $user->id }}" {{ request('created_by') == $user->id ? 'selected' : '' }}>
-                                            {{ $user->name }}
-                                        </option>
+                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-
-                    
                     </div>
 
-                    <!-- الأزرار -->
                     <div class="form-actions mt-2">
                         <button type="submit" class="btn btn-primary">بحث</button>
-                        <a href="{{ route('CreditNotes.index') }}" type="reset" class="btn btn-outline-warning">إلغاء</a>
+                        <button type="button" id="resetSearch" class="btn btn-outline-warning">إلغاء</button>
                     </div>
                 </form>
             </div>
         </div>
+
+        <!-- جدول النتائج -->
         <div class="card">
-    <div class="table-responsive">
-        <table id="creditsTable" class="table table-hover nowrap text-center" style="width:100%">
-            <thead class="bg-light" style="background-color: #BABFC7 !important;">
-                <tr class="bg-gradient-light text-center">
-                    <th style="min-width: 60px;">رقم الإشعار</th>
-                    <th style="min-width: 150px;">العميل</th>
-                    <th style="min-width: 120px;">الرقم الضريبي</th>
-                    <th style="min-width: 200px;">العنوان</th>
-                    <th style="min-width: 150px;">تاريخ الإشعار</th>
-                    <th style="min-width: 120px;">المبلغ</th>
-                    <th style="min-width: 100px;">الحالة</th>
-                    <th style="min-width: 120px;">بواسطة</th>
-                    <th style="min-width: 80px;">الخيارات</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($credits as $credit)
-                    @php
-                        $currency = $account_setting->currency ?? 'SAR';
-                        $currencySymbol = $currency == 'SAR' || empty($currency)
-                            ? '<img src="' . asset('assets/images/Saudi_Riyal.svg') . '" alt="ريال سعودي" width="15" style="vertical-align: middle;">'
-                            : $currency;
-
-                        $statusMap = [
-                            1 => ['مسودة', 'bg-success'],
-                            2 => ['قيد الانتظار', 'bg-warning'],
-                            3 => ['معتمد', 'bg-primary'],
-                            4 => ['تم التحويل إلى فاتورة', 'bg-info'],
-                            5 => ['ملغى', 'bg-danger'],
-                        ];
-
-                        $statusText = $statusMap[$credit->status][0] ?? 'غير معروف';
-                        $statusClass = $statusMap[$credit->status][1] ?? 'bg-secondary';
-                    @endphp
-                    <tr>
-                        <td><strong>#{{ $credit->credit_number }}</strong></td>
-                        <td>
-                            {{ $credit->client ? ($credit->client->trade_name ?: $credit->client->first_name . ' ' . $credit->client->last_name) : 'عميل غير معروف' }}
-                        </td>
-                        <td>{{ $credit->client->tax_number ?? '-' }}</td>
-                        <td>{{ $credit->client->full_address ?? '-' }}</td>
-                        <td>{{ $credit->credit_date ?? '--' }}</td>
-                        <td>
-                            <strong class="text-danger fs-6">
-                                {{ number_format($credit->grand_total, 2) }}
-                                {!! $currencySymbol !!}
-                            </strong>
-                        </td>
-                        <td>
-                            <span class="badge {{ $statusClass }}">
-                                <i class="fas fa-circle me-1"></i> {{ $statusText }}
-                            </span>
-                        </td>
-                        <td>{{ $credit->createdBy->name ?? 'غير محدد' }}</td>
-                        <td>
-                            <div class="dropdown">
-                                <button class="btn bg-gradient-info fa fa-ellipsis-v" type="button"
-                                    id="dropdownMenuButton{{ $credit->id }}" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $credit->id }}">
-                                    <a class="dropdown-item" href="{{ route('CreditNotes.edit', $credit->id) }}">
-                                        <i class="fa fa-edit me-2 text-success"></i>تعديل
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('CreditNotes.show', $credit->id) }}">
-                                        <i class="fa fa-eye me-2 text-primary"></i>عرض
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('CreditNotes.send', $credit->id) }}">
-                                        <i class="fa fa-envelope me-2 text-warning"></i>إرسال إلى العميل
-                                    </a>
-                                    <form action="{{ route('CreditNotes.destroy', $credit->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="dropdown-item text-danger">
-                                            <i class="fa fa-trash me-2"></i>حذف
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="9">
-                            <div class="alert alert-warning m-0">
-                                <i class="fas fa-exclamation-circle me-2"></i> لا توجد إشعارات دائنة
-                            </div>
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+            <div class="card-body">
+                <div id="results-container">
+                    <!-- سيتم تحميل الجدول هنا عبر AJAX -->
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
-
-
-
-
-
-    </div>
-
-
-
-
 @endsection
+
 @section('scripts')
-
-
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-    <script src="{{ asset('assets/js/search.js') }}"></script>
-    <script></script>
-
-<!-- jQuery و DataTables -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-<!-- DataTables الأساسية -->
-<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-
-<!-- أزرار التصدير -->
-<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/vfs_fonts.js"></script>
-
-<!-- تعريب -->
-<script src="https://cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json"></script>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <script>
-    $(document).ready(function () {
-        $('#creditsTable').DataTable({
-            language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
-            },
-            // dom: 'Bfrtip',
-            // buttons: [
-            //     {
-            //         extend: 'excel',
-            //         text: 'تصدير إلى Excel',
-            //         className: 'btn btn-success btn-sm'
-            //     },
-            //     {
-            //         extend: 'print',
-            //         text: 'طباعة',
-            //         className: 'btn btn-warning btn-sm'
-            //     },
-            //     {
-            //         extend: 'copy',
-            //         text: 'نسخ',
-            //         className: 'btn btn-info btn-sm'
-            //     }
-            // ]
-        });
+$(document).ready(function() {
+    // تحميل البيانات الأولية
+    loadData();
+
+    // البحث عند إرسال النموذج
+    $('#searchForm').on('submit', function(e) {
+        e.preventDefault();
+        loadData();
     });
+
+    // البحث الفوري عند تغيير قيم المدخلات
+    $('#searchForm input, #searchForm select').on('change input', function() {
+        clearTimeout(window.searchTimeout);
+        window.searchTimeout = setTimeout(function() {
+            loadData();
+        }, 500);
+    });
+
+    // إعادة تعيين الفلاتر
+    $('#resetSearch').on('click', function() {
+        $('#searchForm')[0].reset();
+        loadData();
+    });
+
+    // التعامل مع الترقيم
+    $(document).on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        let url = $(this).attr('href');
+        if (url) {
+            let page = new URL(url).searchParams.get('page');
+            loadData(page);
+        }
+    });
+
+    // دالة تحميل البيانات
+    function loadData(page = 1) {
+        showLoading();
+
+        let formData = $('#searchForm').serialize();
+        if (page > 1) {
+            formData += '&page=' + page;
+        }
+
+        $.ajax({
+            url: '{{ route("CreditNotes.index") }}',
+            method: 'GET',
+            data: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response) {
+                if (response.success) {
+                    $('#results-container').html(response.data);
+                    updatePaginationInfo(response);
+                    initializeEvents();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('خطأ في تحميل البيانات:', error);
+                $('#results-container').html(
+                    '<div class="alert alert-danger text-center">' +
+                    '<p class="mb-0">حدث خطأ في تحميل البيانات. يرجى المحاولة مرة أخرى.</p>' +
+                    '</div>'
+                );
+            },
+            complete: function() {
+                hideLoading();
+            }
+        });
+    }
+
+    function showLoading() {
+        $('#results-container').css('opacity', '0.6');
+        if ($('#loading-indicator').length === 0) {
+            $('#results-container').prepend(`
+                <div id="loading-indicator" class="text-center p-3">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+            `);
+        }
+    }
+
+    function hideLoading() {
+        $('#loading-indicator').remove();
+        $('#results-container').css('opacity', '1');
+    }
+
+    function updatePaginationInfo(response) {
+        $('.pagination-info').text(`صفحة ${response.current_page} من ${response.last_page}`);
+        if (response.total > 0) {
+            $('.results-info').text(`${response.from}-${response.to} من ${response.total}`);
+        } else {
+            $('.results-info').text('لا توجد نتائج');
+        }
+    }
+
+    function initializeEvents() {
+        // أحداث الحذف
+        $('.delete-credit').off('click').on('click', function(e) {
+            e.preventDefault();
+            const creditId = $(this).data('id');
+
+            if (confirm('هل أنت متأكد من حذف هذا الإشعار الدائن؟')) {
+                deleteCredit(creditId);
+            }
+        });
+
+        // تحديد الكل
+        $('#selectAll').off('change').on('change', function() {
+            $('.credit-checkbox').prop('checked', $(this).prop('checked'));
+        });
+
+        $('.credit-checkbox').off('change').on('change', function() {
+            let totalCheckboxes = $('.credit-checkbox').length;
+            let checkedCheckboxes = $('.credit-checkbox:checked').length;
+            $('#selectAll').prop('checked', totalCheckboxes === checkedCheckboxes);
+        });
+    }
+
+    function deleteCredit(creditId) {
+        const row = $(`.delete-credit[data-id="${creditId}"]`).closest('tr');
+        row.css('opacity', '0.5');
+
+        $.ajax({
+            url: `/credit-notes/${creditId}`,
+            type: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                alert('تم حذف الإشعار الدائن بنجاح');
+                loadData();
+            },
+            error: function() {
+                row.css('opacity', '1');
+                alert('حدث خطأ أثناء حذف الإشعار الدائن');
+            }
+        });
+    }
+
+    initializeEvents();
+});
+
+// دوال التحكم في البحث المتقدم
+function toggleSearchText(button) {
+    const buttonText = button.querySelector('.button-text');
+    const advancedFields = document.querySelectorAll('.advanced-field');
+
+    if (buttonText.textContent.trim() === 'متقدم') {
+        buttonText.textContent = 'بحث بسيط';
+        advancedFields.forEach(field => field.style.display = 'block');
+    } else {
+        buttonText.textContent = 'متقدم';
+        advancedFields.forEach(field => field.style.display = 'none');
+    }
+}
+
+function toggleSearchFields(button) {
+    const searchForm = document.getElementById('searchForm');
+    const buttonText = button.querySelector('.hide-button-text');
+    const icon = button.querySelector('i');
+
+    if (buttonText.textContent === 'إخفاء') {
+        searchForm.style.display = 'none';
+        buttonText.textContent = 'إظهار';
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-eye');
+    } else {
+        searchForm.style.display = 'block';
+        buttonText.textContent = 'إخفاء';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-times');
+    }
+}
 </script>
 @endsection
