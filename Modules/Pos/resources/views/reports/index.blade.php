@@ -26,7 +26,7 @@
 
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-6 mb-4">
+        <div class="col-md-12 mb-4">
             <div class="card shadow">
                 <div class="card-body">
                     <h5 class="card-title text-primary mb-4">
@@ -54,7 +54,7 @@
                                 <i class="bi bi-clock-history text-primary"></i> مبيعات الورديات
                             </span>
                             <div>
-                                <a href="{{ route('pos_reports.Shift') }}" class="btn btn-link">عرض</a>
+                                <a href="{{ route('pos.reports.shift') }}" class="btn btn-link">عرض</a>
                             </div>
                         </li>
                         <li class="mb-3 d-flex justify-content-between align-items-center">
@@ -70,41 +70,41 @@
             </div>
         </div>
 
-        <div class="col-md-6 mb-4">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h5 class="card-title text-primary mb-4">
-                        <i class="bi bi-currency-exchange"></i> الأرباح - نقاط البيع
-                    </h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-3 d-flex justify-content-between align-items-center">
-                            <span>
-                                <i class="bi bi-cash-coin text-primary"></i> ربحية الورديات
-                            </span>
-                            <div>
-                                <a href="{{ route('pos_reports.Shift_Profitability') }}" class="btn btn-link">عرض</a>
-                            </div>
-                        </li>
-                        <li class="mb-3 d-flex justify-content-between align-items-center">
-                            <span>
-                                <i class="bi bi-pie-chart text-primary"></i> ربحية التصنيفات
-                            </span>
-                            <div>
-                                <a href="{{ route('pos_reports.Category_Profitability') }}" class="btn btn-link">عرض</a>
-                            </div>
-                        </li>
-                        <li class="mb-3 d-flex justify-content-between align-items-center">
-                            <span>
-                                <i class="bi bi-bar-chart-line text-primary"></i> ربحية المنتجات
-                            </span>
-                            <div>
-                                <a href="{{ route('pos_reports.Product_Profitabilit') }}" class="btn btn-link">عرض</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <!--<div class="col-md-6 mb-4">-->
+        <!--    <div class="card shadow">-->
+        <!--        <div class="card-body">-->
+        <!--            <h5 class="card-title text-primary mb-4">-->
+        <!--                <i class="bi bi-currency-exchange"></i> الأرباح - نقاط البيع-->
+        <!--            </h5>-->
+        <!--            <ul class="list-unstyled">-->
+        <!--                <li class="mb-3 d-flex justify-content-between align-items-center">-->
+        <!--                    <span>-->
+        <!--                        <i class="bi bi-cash-coin text-primary"></i> ربحية الورديات-->
+        <!--                    </span>-->
+        <!--                    <div>-->
+        <!--                        <a href="{{ route('pos_reports.Shift_Profitability') }}" class="btn btn-link">عرض</a>-->
+        <!--                    </div>-->
+        <!--                </li>-->
+        <!--                <li class="mb-3 d-flex justify-content-between align-items-center">-->
+        <!--                    <span>-->
+        <!--                        <i class="bi bi-pie-chart text-primary"></i> ربحية التصنيفات-->
+        <!--                    </span>-->
+        <!--                    <div>-->
+        <!--                        <a href="{{ route('pos_reports.Category_Profitability') }}" class="btn btn-link">عرض</a>-->
+        <!--                    </div>-->
+        <!--                </li>-->
+        <!--                <li class="mb-3 d-flex justify-content-between align-items-center">-->
+        <!--                    <span>-->
+        <!--                        <i class="bi bi-bar-chart-line text-primary"></i> ربحية المنتجات-->
+        <!--                    </span>-->
+        <!--                    <div>-->
+        <!--                        <a href="{{ route('pos_reports.Product_Profitabilit') }}" class="btn btn-link">عرض</a>-->
+        <!--                    </div>-->
+        <!--                </li>-->
+        <!--            </ul>-->
+        <!--        </div>-->
+        <!--    </div>-->
+        <!--</div>-->
     </div>
 </div>
 
