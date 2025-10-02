@@ -1,7 +1,8 @@
+
 @extends('master')
 
 @section('title')
-أضافة جهاز جديد
+تعديل الجهاز - {{ $device->device_name }}
 @stop
 
 @section('content')
@@ -12,11 +13,12 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-left mb-0">اضافة جهاز جديد</h2>
+                <h2 class="content-header-title float-left mb-0">تعديل الجهاز: {{ $device->device_name }}</h2>
                 <div class="breadcrumb-wrapper col-12">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">الرئيسية</li>
-                        <li class="breadcrumb-item active">الإعدادات</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/') }}">الرئيسية</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('pos.settings.devices.index') }}">الأجهزة</a></li>
+                        <li class="breadcrumb-item active">تعديل</li>
                     </ol>
                 </div>
             </div>
@@ -43,8 +45,9 @@
     </div>
 @endif
 
-<form action="{{ route('pos.settings.devices.store') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ url('POS/Devices/update/' . $device->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
+    @method('PUT')
     
     <div class="card">
         <div class="card-body">
@@ -58,14 +61,14 @@
                         <i class="fa fa-ban"></i> الغاء
                     </a>
                     <button type="submit" class="btn btn-outline-primary">
-                        <i class="fa fa-save"></i> حفظ
+                        <i class="fa fa-save"></i> حفظ التغييرات
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="card mt-5">
+    <div class="card mt-3">
         <div class="card-body">
             <div class="row mb-3">
                 <!-- الاسم -->
@@ -78,7 +81,7 @@
                            name="device_name" 
                            class="form-control @error('device_name') is-invalid @enderror" 
                            placeholder="أدخل اسم الجهاز"
-                           value="{{ old('device_name') }}"
+                           value="{{ old('device_name', $device->device_name) }}"
                            required>
                     @error('device_name')
                         <div class="invalid-feedback">
@@ -100,8 +103,8 @@
                         @if(isset($storehouses))
                             @foreach($storehouses as $storehouse)
                                 <option value="{{ $storehouse->id }}" 
-                                        {{ old('store_id') == $storehouse->id ? 'selected' : '' }}>
-                                    {{ $storehouse->name ?? "" }}
+                                        {{ (old('store_id', $device->store_id) == $storehouse->id) ? 'selected' : '' }}>
+                                    {{ $storehouse->name }}
                                 </option>
                             @endforeach
                         @endif
@@ -118,18 +121,17 @@
                 <!-- التصنيف الرئيسي -->
                 <div class="col-md-6">
                     <label for="main_category_id" class="form-label">
-                        التصنيف الرئيسي <span style="color: red">*</span>
+                        التصنيف الرئيسي
                     </label>
                     <select id="main_category_id" 
                             name="main_category_id" 
-                            class="form-control @error('main_category_id') is-invalid @enderror"
-                            >
+                            class="form-control @error('main_category_id') is-invalid @enderror">
                         <option value="">اختر التصنيف</option>
                         @if(isset($devices))
-                            @foreach($devices as $device)
-                                <option value="{{ $device->id }}" 
-                                        {{ old('main_category_id') == $device->id ? 'selected' : '' }}>
-                                    {{ $device->device_name ?? $device->name ?? "" }}
+                            @foreach($devices as $deviceOption)
+                                <option value="{{ $deviceOption->id }}" 
+                                        {{ (old('main_category_id', $device->main_category_id) == $deviceOption->id) ? 'selected' : '' }}>
+                                    {{ $deviceOption->device_name }}
                                 </option>
                             @endforeach
                         @endif
@@ -154,12 +156,10 @@
                         @if(isset($statusOptions) && is_array($statusOptions))
                             @foreach($statusOptions as $value => $label)
                                 <option value="{{ $value }}" 
-                                        {{ old('device_status') == $value ? 'selected' : '' }}>
+                                        {{ (old('device_status', $device->device_status) == $value) ? 'selected' : '' }}>
                                     {{ $label }}
                                 </option>
                             @endforeach
-                        @else
-                            <option value="" disabled>خطأ في تحميل خيارات الحالة</option>
                         @endif
                     </select>
                     @error('device_status')
@@ -174,6 +174,18 @@
                 <!-- الصورة -->
                 <div class="col-md-12">
                     <label for="device_image" class="form-label">الصورة</label>
+                    
+                    <!-- عرض الصورة الحالية -->
+                    @if($device->device_image)
+                        <div class="current-image mb-2">
+                            <label class="form-label">الصورة الحالية:</label>
+                            <br>
+                            <img src="{{ $device->image_url }}" 
+                                 alt="{{ $device->device_name }}" 
+                                 style="max-width: 200px; max-height: 200px; object-fit: cover; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                    @endif
+                    
                     <div class="d-flex align-items-center">
                         <input type="file" 
                                name="device_image" 
@@ -182,6 +194,7 @@
                                accept="image/jpeg,image/jpg,image/png">
                         <small class="ms-3 text-muted">
                             صيغ الملفات (jpeg,jpg,png) أقصى حجم للملف: 20MB
+                            <br><small>اتركه فارغاً للاحتفاظ بالصورة الحالية</small>
                         </small>
                     </div>
                     @error('device_image')
@@ -190,8 +203,9 @@
                         </div>
                     @enderror
                     
-                    <!-- معاينة الصورة -->
+                    <!-- معاينة الصورة الجديدة -->
                     <div id="image-preview" class="mt-2" style="display: none;">
+                        <label>معاينة الصورة الجديدة:</label><br>
                         <img id="preview-img" src="" alt="معاينة الصورة" 
                              style="max-width: 200px; max-height: 200px; object-fit: cover; border: 1px solid #ddd; border-radius: 4px;">
                     </div>
@@ -206,7 +220,7 @@
                               name="description" 
                               class="form-control @error('description') is-invalid @enderror" 
                               rows="4" 
-                              placeholder="أدخل وصف الجهاز (اختياري)">{{ old('description') }}</textarea>
+                              placeholder="أدخل وصف الجهاز (اختياري)">{{ old('description', $device->description) }}</textarea>
                     @error('description')
                         <div class="invalid-feedback">
                             <i class="fa fa-exclamation-circle"></i> {{ $message }}
@@ -220,7 +234,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // معاينة الصورة قبل الرفع
+    // معاينة الصورة الجديدة قبل الرفع
     const imageInput = document.getElementById('device_image');
     const imagePreview = document.getElementById('image-preview');
     const previewImg = document.getElementById('preview-img');
@@ -304,13 +318,10 @@ document.addEventListener('DOMContentLoaded', function() {
     border-left: 4px solid #28a745;
 }
 
-.alert ul {
-    margin-bottom: 0;
-    padding-left: 1.5rem;
-}
-
-.alert li {
-    margin-bottom: 0.25rem;
+.current-image {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
 }
 </style>
 

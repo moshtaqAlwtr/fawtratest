@@ -1,11 +1,8 @@
-{{-- =============================================
--- صفحة الإنشاء - pos/settings/shift/create.blade.php
--- ============================================= --}}
 
 @extends('master')
 
 @section('title')
-وردية جديدة
+تعديل الوردية - {{ $shift->name }}
 @stop
 
 @section('content')
@@ -16,12 +13,12 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-left mb-0">إضافة وردية جديدة</h2>
+                <h2 class="content-header-title float-left mb-0">تعديل الوردية: {{ $shift->name }}</h2>
                 <div class="breadcrumb-wrapper col-12">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/') }}">الرئيسية</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('pos.settings.shift.index') }}">الورديات</a></li>
-                        <li class="breadcrumb-item active">إضافة جديدة</li>
+                        <li class="breadcrumb-item active">تعديل</li>
                     </ol>
                 </div>
             </div>
@@ -48,8 +45,9 @@
     </div>
 @endif
 
-<form action="{{ route('pos.settings.shift.store') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ url('/POS/Shift/update/' . $shift->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
+    @method('PUT')
     
     <div class="card">
         <div class="card-body">
@@ -63,7 +61,7 @@
                         <i class="fa fa-ban"></i> إلغاء
                     </a>
                     <button type="submit" class="btn btn-outline-primary">
-                        <i class="fa fa-save"></i> حفظ
+                        <i class="fa fa-save"></i> حفظ التغييرات
                     </button>
                 </div>
             </div>
@@ -83,7 +81,7 @@
                            name="name" 
                            class="form-control @error('name') is-invalid @enderror" 
                            placeholder="أدخل اسم الوردية"
-                           value="{{ old('name') }}"
+                           value="{{ old('name', $shift->name) }}"
                            required>
                     @error('name')
                         <div class="invalid-feedback">
@@ -104,7 +102,7 @@
                         @if(isset($parentShifts))
                             @foreach($parentShifts as $parentShift)
                                 <option value="{{ $parentShift->id }}" 
-                                        {{ old('parent_id') == $parentShift->id ? 'selected' : '' }}>
+                                        {{ (old('parent_id', $shift->parent_id) == $parentShift->id) ? 'selected' : '' }}>
                                     {{ $parentShift->name }}
                                 </option>
                             @endforeach
@@ -122,6 +120,23 @@
                 <!-- المرفقات -->
                 <div class="col-md-6">
                     <label for="attachment" class="form-label">المرفقات</label>
+                    
+                    <!-- عرض المرفق الحالي -->
+                    @if($shift->attachment)
+                        <div class="current-attachment mb-2 p-2 border rounded">
+                            <label class="form-label">المرفق الحالي:</label>
+                            <div class="d-flex align-items-center">
+                                <i class="fa fa-file text-primary me-2"></i>
+                                <a href="{{ Storage::url($shift->attachment) }}" target="_blank" class="text-decoration-none">
+                                    {{ basename($shift->attachment) }}
+                                </a>
+                                <a href="{{ Storage::url($shift->attachment) }}" download class="btn btn-sm btn-outline-primary ms-2">
+                                    <i class="fa fa-download"></i>
+                                </a>
+                            </div>
+                        </div>
+                    @endif
+                    
                     <div class="upload-area border rounded p-4 text-center @error('attachment') is-invalid @enderror" 
                          onclick="document.getElementById('attachment').click()" 
                          style="cursor: pointer; border-style: dashed !important;">
@@ -133,7 +148,10 @@
                         <div id="upload-content">
                             <i class="fa fa-cloud-upload fa-2x text-muted mb-2"></i>
                             <p class="mb-0">اسحب الملف هنا أو انقر للاختيار</p>
-                            <small class="text-muted">PDF, DOC, DOCX, JPG, PNG (حتى 10MB)</small>
+                            <small class="text-muted">
+                                PDF, DOC, DOCX, JPG, PNG (حتى 10MB)<br>
+                                <small>اتركه فارغاً للاحتفاظ بالمرفق الحالي</small>
+                            </small>
                         </div>
                         <div id="file-info" style="display: none;">
                             <i class="fa fa-file text-primary fa-2x mb-2"></i>
@@ -155,7 +173,7 @@
                               name="description" 
                               class="form-control @error('description') is-invalid @enderror" 
                               rows="5" 
-                              placeholder="أدخل وصف الوردية (اختياري)">{{ old('description') }}</textarea>
+                              placeholder="أدخل وصف الوردية (اختياري)">{{ old('description', $shift->description) }}</textarea>
                     @error('description')
                         <div class="invalid-feedback">
                             <i class="fa fa-exclamation-circle"></i> {{ $message }}
@@ -255,6 +273,10 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .upload-area:hover {
+    background-color: #f8f9fa;
+}
+
+.current-attachment {
     background-color: #f8f9fa;
 }
 
