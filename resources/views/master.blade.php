@@ -253,10 +253,7 @@
 <body class="vertical-layout vertical-menu-modern 2-columns  navbar-floating footer-static   menu-collapsed" data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
 
     <!-- رسالة التحميل -->
-    <div class="loading-message">
-        <div class="loading-spinner"></div>
-        <p>جاري تحميل التطبيق...</p>
-    </div>
+
 
     <!-- طبقة حجب التطبيق حتى يتم تفعيل الموقع -->
     <div id="location-permission-overlay">

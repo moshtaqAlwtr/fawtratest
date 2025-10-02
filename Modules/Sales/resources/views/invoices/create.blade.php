@@ -807,7 +807,7 @@
                                 </div>
                             </div>
 
-                            <div class="advance-payment-fields mt-3" style="display: none;">
+                            {{-- <div class="advance-payment-fields mt-3" style="display: none;">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label for="advance_payment_method">وسيلة الدفع</label>
@@ -823,7 +823,7 @@
                                         <input type="text" class="form-control" name="advance_reference_number">
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

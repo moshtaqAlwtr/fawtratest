@@ -691,39 +691,45 @@ class VisitController extends Controller
 public function tracktaff(Request $request)
 {
     $currentYear = $request->get('year', now()->year);
-    // استخدام الدالة المحسنة لتوليد الأسابيع مع البدء من الأسبوع الحالي
-    $allWeeks = $this->generateYearWeeks($currentYear, true);
 
-    // استخدام التواريخ الأصلية للاستعلامات
-    $originalStartDate = Carbon::createFromDate($currentYear, 1, 1)->startOfWeek();
-    $originalEndDate = Carbon::createFromDate($currentYear, 12, 31)->endOfWeek();
+    // توليد أسابيع السنة
+    $allWeeks = array_reverse($this->generateYearWeeks($currentYear, true));
 
+    // تحديد الأسبوع الحالي
+    $currentWeekNumber = now()->weekOfYear;
+    $isCurrentYear = $currentYear == now()->year;
+
+    // تصفية الأسابيع - إظهار الأسابيع حتى الأسبوع الحالي فقط
+    if ($isCurrentYear) {
+        $allWeeks = array_filter($allWeeks, function($week) use ($currentWeekNumber) {
+            return $week['week_number'] <= $currentWeekNumber;
+        });
+        $allWeeks = array_values($allWeeks);
+    }
+
+    // جلب الفروع والمجموعات والأحياء والعملاء فقط بدون علاقات ثقيلة
     $branches = Branch::with([
-        'regionGroups.neighborhoods.client' => function ($query) use ($originalStartDate, $originalEndDate) {
-            $query->with([
-                'invoices' => fn($q) => $q->whereBetween('invoices.created_at', [$originalStartDate, $originalEndDate]),
-                'appointmentNotes' => fn($q) => $q->whereBetween('client_relations.created_at', [$originalStartDate, $originalEndDate]),
-                'visits' => fn($q) => $q->whereBetween('visits.created_at', [$originalStartDate, $originalEndDate]),
-                'accounts.receipts' => fn($q) => $q->whereBetween('receipts.created_at', [$originalStartDate, $originalEndDate]),
-                'payments' => fn($q) => $q->whereBetween('payments_process.created_at', [$originalStartDate, $originalEndDate]),
-                'status_client'
-            ]);
+        'regionGroups.neighborhoods.client' => function ($query) {
+            $query->select('id', 'trade_name', 'code', 'status_id')
+                  ->with('status_client:id,name,color');
         }
     ])->get();
 
-    // جهز جميع العملاء في النظام (أو عملاء الفروع فقط حسب الحاجة)
+    // جهز جميع العملاء
     $clients = [];
+    $clientIds = [];
     foreach ($branches as $branch) {
         foreach ($branch->regionGroups as $group) {
             foreach ($group->neighborhoods as $neigh) {
                 if ($neigh->client) {
                     $clients[$neigh->client->id] = $neigh->client;
+                    $clientIds[] = $neigh->client->id;
                 }
             }
         }
     }
 
-    // حساب الفواتير المستثناة (المرتجعة أو التي لها reference_number)
+    // حساب الفواتير المستثناة
     $excludedInvoiceIds = \App\Models\Invoice::whereNotNull('reference_number')
         ->pluck('reference_number')
         ->merge(
@@ -732,64 +738,133 @@ public function tracktaff(Request $request)
         ->unique()
         ->toArray();
 
-    // 🟢 التحصيل الأسبوعي الدقيق عبر loop على كل أسبوع
+    // إحصائيات أسبوعية للعملاء
     $clientWeeklyStats = [];
+
     foreach ($allWeeks as $week) {
         $weekStart = $week['start']->copy()->startOfDay();
         $weekEnd = $week['end']->copy()->endOfDay();
         $weekNumber = $week['week_number'];
 
-        // مدفوعات هذا الأسبوع
+        // الفواتير لهذا الأسبوع
+        $invoices = DB::table('invoices')
+            ->where('type', 'normal')
+            ->whereNotIn('id', $excludedInvoiceIds)
+            ->whereIn('client_id', $clientIds)
+            ->whereBetween('created_at', [$weekStart, $weekEnd])
+            ->select('client_id', DB::raw('COUNT(*) as invoice_count'))
+            ->groupBy('client_id')
+            ->get();
+
+        foreach ($invoices as $row) {
+            $clientWeeklyStats[$row->client_id][$weekNumber]['invoice_count'] = $row->invoice_count;
+        }
+
+        // الملاحظات لهذا الأسبوع مع التفاصيل
+        $notes = DB::table('client_relations')
+            ->whereIn('client_id', $clientIds)
+            ->whereBetween('created_at', [$weekStart, $weekEnd])
+            ->select('client_id', 'status', 'process', 'time', 'date', 'description', 'created_at')
+            ->get();
+
+        foreach ($notes as $row) {
+            if (!isset($clientWeeklyStats[$row->client_id][$weekNumber]['notes'])) {
+                $clientWeeklyStats[$row->client_id][$weekNumber]['notes'] = [];
+            }
+            $clientWeeklyStats[$row->client_id][$weekNumber]['notes'][] = [
+                'status' => $row->status,
+                'process' => $row->process,
+                'time' => $row->time,
+                'date' => $row->date,
+                'description' => $row->description,
+                'created_at' => $row->created_at,
+            ];
+            $clientWeeklyStats[$row->client_id][$weekNumber]['note_count'] =
+                ($clientWeeklyStats[$row->client_id][$weekNumber]['note_count'] ?? 0) + 1;
+        }
+
+        // الزيارات من employee_client_visits
+        $visits = DB::table('employee_client_visits')
+            ->whereIn('client_id', $clientIds)
+            ->where('year', $currentYear)
+            ->where('week_number', $weekNumber)
+            ->where('status', 1)
+            ->select('client_id', 'employee_id', DB::raw('COUNT(DISTINCT day_of_week) as visit_days'))
+            ->groupBy('client_id', 'employee_id')
+            ->get();
+
+        foreach ($visits as $row) {
+            if (!isset($clientWeeklyStats[$row->client_id][$weekNumber]['visits'])) {
+                $clientWeeklyStats[$row->client_id][$weekNumber]['visits'] = [];
+            }
+            $clientWeeklyStats[$row->client_id][$weekNumber]['visits'][] = [
+                'employee_id' => $row->employee_id,
+                'days' => $row->visit_days
+            ];
+        }
+
+        // 🟢 المدفوعات لهذا الأسبوع (للتحصيل)
         $payments = DB::table('payments_process')
             ->join('invoices', 'payments_process.invoice_id', '=', 'invoices.id')
             ->where('invoices.type', 'normal')
             ->whereNotIn('invoices.id', $excludedInvoiceIds)
+            ->whereIn('invoices.client_id', $clientIds)
             ->whereBetween('payments_process.created_at', [$weekStart, $weekEnd])
             ->select('invoices.client_id', DB::raw('SUM(payments_process.amount) as payment_total'))
             ->groupBy('invoices.client_id')
             ->get();
 
         foreach ($payments as $row) {
-            $clientWeeklyStats[$row->client_id][$weekNumber]['collection'] = ($clientWeeklyStats[$row->client_id][$weekNumber]['collection'] ?? 0) + $row->payment_total;
+            $clientWeeklyStats[$row->client_id][$weekNumber]['collection'] =
+                ($clientWeeklyStats[$row->client_id][$weekNumber]['collection'] ?? 0) + $row->payment_total;
         }
 
-        // سندات القبض لهذا الأسبوع
+        // 🟢 سندات القبض لهذا الأسبوع (للتحصيل)
         $receipts = DB::table('receipts')
             ->join('accounts', 'receipts.account_id', '=', 'accounts.id')
+            ->whereIn('accounts.client_id', $clientIds)
             ->whereBetween('receipts.created_at', [$weekStart, $weekEnd])
             ->select('accounts.client_id', DB::raw('SUM(receipts.amount) as receipt_total'))
             ->groupBy('accounts.client_id')
             ->get();
 
         foreach ($receipts as $row) {
-            $clientWeeklyStats[$row->client_id][$weekNumber]['collection'] = ($clientWeeklyStats[$row->client_id][$weekNumber]['collection'] ?? 0) + $row->receipt_total;
-        }
-
-        // إضافة عدد الزيارات لكل عميل في هذا الأسبوع
-        $visits = DB::table('visits')
-            ->whereBetween('created_at', [$weekStart, $weekEnd])
-            ->selectRaw('client_id, COUNT(DISTINCT DATE_FORMAT(created_at, "%Y-%m-%d %H")) as visit_count')
-            ->groupBy('client_id')
-            ->get();
-
-        foreach ($visits as $row) {
-            $clientWeeklyStats[$row->client_id][$weekNumber]['visits'] = $row->visit_count;
+            $clientWeeklyStats[$row->client_id][$weekNumber]['collection'] =
+                ($clientWeeklyStats[$row->client_id][$weekNumber]['collection'] ?? 0) + $row->receipt_total;
         }
     }
 
-    // إجمالي العملاء (مميزين)
+    // جلب بيانات الموظفين للزيارات
+    $employeeIds = [];
+    foreach ($clientWeeklyStats as $clientStats) {
+        foreach ($clientStats as $weekStats) {
+            if (isset($weekStats['visits'])) {
+                foreach ($weekStats['visits'] as $visit) {
+                    $employeeIds[] = $visit['employee_id'];
+                }
+            }
+        }
+    }
+
+    $employees = \App\Models\User::select('id', 'name', 'role')
+        ->with('employee:id,user_id,Job_role_id')
+        ->whereIn('id', array_unique($employeeIds))
+        ->get()
+        ->keyBy('id');
+
+    // إجمالي العملاء
     $totalClients = count($clients);
 
-    return view('reports.sals.traffic_analytics', [
+    return view('reports::sals.traffic_analytics', [
         'branches' => $branches,
         'weeks' => $allWeeks,
         'totalClients' => $totalClients,
         'clientWeeklyStats' => $clientWeeklyStats,
         'currentYear' => $currentYear,
         'clients' => $clients,
+        'employees' => $employees,
     ]);
 }
-
 
 public function generateYearWeeks( $currentYear = null)
 {

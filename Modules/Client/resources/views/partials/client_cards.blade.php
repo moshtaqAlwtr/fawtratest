@@ -168,8 +168,11 @@
                         <div class="date-separator"></div>
                         <div class="date-item">
                             <div class="date-label">آخر فاتورة</div>
-                            <div class="date-value">{{ $client->invoices->last()->invoice_date ?? 'لا توجد' }}</div>
+                            <div class="date-value">
+                                {{ optional($client->invoices->last())->invoice_date ? \Carbon\Carbon::parse($client->invoices->last()->invoice_date)->diffForHumans() : 'لا توجد' }}
+                            </div>
                         </div>
+
                     </div>
 
                     <!-- الإحصائيات المالية -->
@@ -195,28 +198,41 @@
                             <h4>التصنيف الشهري {{ $currentYear }}</h4>
                         </div>
                         <div class="months-container">
-                            @foreach ($months as $monthName => $monthNumber)
-                                @continue($monthNumber > now()->month)
+                          @foreach ($months as $monthName => $monthNumber)
+    @continue($monthNumber > now()->month)
 
-                                @php
-                                    $monthData = $clientsData[$client->id]['monthly'][$monthName] ?? null;
-                                    $group = strtoupper($monthData['group'] ?? 'D');
-                                    $groupClass = $monthData['group_class'] ?? 'secondary';
-                                    $collected = $monthData['collected'] ?? 0;
-                                    $percentage = $monthData['percentage'] ?? 0;
-                                    $paymentsTotal = $monthData['payments_total'] ?? 0;
-                                    $receiptsTotal = $monthData['receipts_total'] ?? 0;
-                                @endphp
+    @php
+        $monthData = $clientsData[$client->id]['monthly'][$monthName] ?? null;
+        $group = strtoupper($monthData['group'] ?? 'D');
+        $groupClass = $monthData['group_class'] ?? 'secondary';
+        $collected = $monthData['collected'] ?? 0;
+        $percentage = $monthData['percentage'] ?? 0;
+        $paymentsTotal = $monthData['payments_total'] ?? 0;
+        $receiptsTotal = $monthData['receipts_total'] ?? 0;
+    @endphp
 
-                                <div class="month-item" data-bs-toggle="tooltip"
-                                    title="تفاصيل {{ $monthName }}: تحصيلات {{ number_format($collected) }} - مدفوعات {{ number_format($paymentsTotal) }} - نسبة {{ $percentage }}%">
-                                    <div class="month-badge month-{{ $groupClass }}">{{ $group }}</div>
-                                    <div class="month-name">{{ $monthName }}</div>
-                                    @if ($collected > 0)
-                                        <div class="month-amount">{{ number_format($collected / 1000, 0) }}k</div>
-                                    @endif
-                                </div>
-                            @endforeach
+    <div class="month-item" data-bs-toggle="tooltip" data-bs-placement="top"
+        title="تفاصيل {{ $monthName }}:
+        التحصيلات {{ number_format($collected) }} |
+        المدفوعات {{ number_format($paymentsTotal) }} |
+        سندات القبض {{ number_format($receiptsTotal) }} |
+        النسبة {{ $percentage }}%">
+
+        <!-- تصنيف الشهر -->
+        <div class="month-badge month-{{ $groupClass }}">{{ $group }}</div>
+
+        <!-- اسم الشهر -->
+        <div class="month-name">{{ $monthName }}</div>
+
+        <!-- التحصيلات -->
+        @if ($collected > 0)
+            <div class="month-amount">{{ number_format($collected, 0) }}</div>
+        @else
+            <div class="month-amount text-muted">0</div>
+        @endif
+    </div>
+@endforeach
+
                         </div>
                     </div>
 

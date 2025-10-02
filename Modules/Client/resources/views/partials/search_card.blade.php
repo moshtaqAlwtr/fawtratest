@@ -79,23 +79,15 @@
                         <label for="date_to" class="form-label">تاريخ الى</label>
                         <input type="date" name="date_to" id="date_to" class="form-control" value="{{ request('date_to') }}">
                     </div>
-                </div>
-            </div>
-
-            <div class="collapse" id="advancedSearchForm">
-                <div class="row g-3 mt-2">
-                    <!-- التصنيف -->
-                    <div class="col-md-4 col-12">
+<div class="col-md-4 col-12">
                         <label for="classifications" class="form-label">التصنيف</label>
-                        <select name="categories" id="classifications" class="form-control">
+                        <select name="categories" id="classifications" class="form-control select2">
                             <option value="">اختر التصنيف</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}" {{ request('categories') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                             @endforeach
                         </select>
                     </div>
-
-                    <!-- أضيفت بواسطة -->
                     <div class="col-md-4 col-12">
                         <label for="user" class="form-label">أضيفت بواسطة</label>
                         <select name="user" id="user" class="form-control select2">
@@ -116,6 +108,16 @@
                             @endforeach
                         </select>
                     </div>
+                </div>
+            </div>
+
+            <div class="collapse" id="advancedSearchForm">
+                <div class="row g-3 mt-2">
+                    <!-- التصنيف -->
+
+
+                    <!-- أضيفت بواسطة -->
+
                 </div>
             </div>
 

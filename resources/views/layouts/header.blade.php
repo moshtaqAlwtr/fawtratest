@@ -436,7 +436,13 @@
                                     @endif
                                 </a>
                             @endif
-
+@if(auth()->user()->branch_id)
+    <span class="badge badge-primary">
+        {{ auth()->user()->currentBranch()->name ?? 'بدون فرع' }}
+    </span>
+@else
+    <span class="badge badge-success">جميع الفروع</span>
+@endif
                             @foreach (App\Models\Branch::all() as $branch)
                                 <a class="dropdown-item branch-item {{ auth()->user()->branch_id == $branch->id ? 'active' : '' }}"
                                     href="{{ route('branch.switch', $branch->id) }}">
