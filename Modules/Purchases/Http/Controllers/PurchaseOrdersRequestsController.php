@@ -968,19 +968,20 @@ public function convertToInvoice($id)
                 'type_id' => $purchaseInvoice->id,
                 'type_log' => 'log',
                 'icon' => 'convert',
-                'description' => sprintf(
-                    'تم تحويل أمر شراء رقم **%s** إلى فاتورة شراء رقم **%s** للمنتج **%s** كمية **%s** بسعر **%s** للمورد **%s** وإذن مخزني رقم **%s** من خزينة **%s** - حالة الدفع: **%s** - حالة الاستلام: **%s**',
-                    $purchaseOrder->code,
-                    $purchaseInvoice->code,
-                    $product->name ?? '',
-                    $originalItem->quantity,
-                    $originalItem->unit_price,
-                    $supplier->trade_name ?? '',
-                    $warehousePermit->number ?? '',
-                    $mainTreasuryAccount->name,
-                    $this->getPaymentStatusText($payment_status),
+              'description' => sprintf(
+    'تم تحويل أمر شراء رقم  إلى فاتورة شراء رقم للمنتج كمية بسعر للمورد وإذن مخزني رقم **%s** من خزينة **%s** - حالة الدفع: **%s** - حالة الاستلام: **%s**',
+    $purchaseOrder->code,
+    $purchaseInvoice->code,
+    $product->name ?? '',
+    $originalItem->quantity,
+    $originalItem->unit_price,
+    $supplier->trade_name ?? '',
+    $warehousePermit->number ?? '',
+    $mainTreasuryAccount->name,
+    $this->getPaymentStatusText($payment_status),
+    // هنا ناقص آخر واحد 👈
+),
 
-                ),
                 'created_by' => auth()->id(),
             ]);
         }

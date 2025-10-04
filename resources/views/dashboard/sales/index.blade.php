@@ -214,7 +214,139 @@
         });
     @endphp
 
-@section('content')
+
+{{-- عرض الأخطاء --}}
+@if($errors->any())
+<div class="alert alert-danger alert-dismissible fade show m-3" role="alert" style="
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    border: none;
+    border-radius: 15px;
+    color: white;
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+    padding: 1.5rem;
+    animation: slideDown 0.5s ease-out;
+">
+    <h4 class="alert-heading" style="display: flex; align-items: center; gap: 10px;">
+        <i class="feather icon-alert-circle" style="font-size: 1.8rem;"></i>
+        <strong>حدث خطأ في تحميل البيانات!</strong>
+    </h4>
+    <hr style="border-color: rgba(255,255,255,0.3); margin: 1rem 0;">
+    @foreach($errors->all() as $error)
+        <p class="mb-2" style="font-size: 0.95rem; padding-right: 2rem; line-height: 1.6;">
+            <i class="feather icon-x-circle"></i> <strong>{{ $error }}</strong>
+        </p>
+    @endforeach
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="color: white; opacity: 1;">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@endif
+
+{{-- رسالة النجاح --}}
+@if(session('success'))
+<div class="alert alert-success alert-dismissible fade show m-3" role="alert" style="
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border: none;
+    border-radius: 15px;
+    color: white;
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+    padding: 1.5rem;
+    animation: slideDown 0.5s ease-out;
+">
+    <h5 style="display: flex; align-items: center; gap: 10px; margin: 0;">
+        <i class="feather icon-check-circle" style="font-size: 1.5rem;"></i>
+        <strong>{{ session('success') }}</strong>
+    </h5>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="color: white; opacity: 1;">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@endif
+
+
+{{-- عرض الفرع الحالي --}}
+<div class="m-3">
+    <div class="alert mb-0" style="
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        border: 2px solid #cbd5e0;
+        border-radius: 15px;
+        padding: 1rem 1.5rem;
+        animation: fadeIn 0.8s ease-out;
+    ">
+        <div class="d-flex align-items-center justify-content-between flex-wrap">
+            <div>
+                <strong style="color: #1a202c; font-size: 1.05rem;">
+                    <i class="feather icon-info" style="color: #667eea;"></i> الفرع المعروض:
+                </strong>
+                <span style="color: #667eea; font-weight: 700; font-size: 1.1rem;">
+                    @php
+                        $displayBranchId = request('branch_id');
+                        if ($displayBranchId === '0') {
+                            echo '🌍 جميع الفروع';
+                        } elseif ($displayBranchId) {
+                            $displayBranch = App\Models\Branch::find($displayBranchId);
+                            echo '🏢 ' . ($displayBranch->name ?? 'غير موجود');
+                        } else {
+                            if (auth()->user()->branch_id) {
+                                echo '🏢 ' . (auth()->user()->currentBranch->name ?? 'غير محدد');
+                            } elseif (auth()->user()->role === 'main') {
+                                echo '🌍 جميع الفروع';
+                            } else {
+                                echo 'غير محدد';
+                            }
+                        }
+                    @endphp
+                </span>
+            </div>
+            <div class="mt-2 mt-md-0">
+                <small style="color: #4a5568; font-weight: 500;">
+                    <i class="feather icon-calendar"></i> {{ \Carbon\Carbon::now()->translatedFormat('l، d F Y') }}
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#branchSelect:focus {
+    outline: none;
+    border-color: rgba(255,255,255,0.6);
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.2);
+}
+</style>
+
+<script>
+// تطبيق الفلتر تلقائياً عند تغيير القيمة
+document.addEventListener('DOMContentLoaded', function() {
+    const branchSelect = document.getElementById('branchSelect');
+    if (branchSelect) {
+        branchSelect.addEventListener('change', function() {
+            document.getElementById('branchFilterForm').submit();
+        });
+    }
+});
+</script>
+
     {{-- باقي محتوى الصفحة --}}
 
     <div class="card">
@@ -245,10 +377,8 @@
                                     <i class="feather icon-users text-primary font-medium-5"></i>
                                 </div>
                             </div> @if ($clientCountByBranch->count() > 0)
-                              @foreach ($clientCountByBranch as $branch)
-                            <h2 class="text-bold-700 mt-1">{{ $branch['count'] }}</h2>
-                            <p class="mb-0">العملاء</p>
-@endforeach
+    <h2 class="text-bold-700 mt-1">{{ $clientCountByBranch->sum('count') }}</h2>
+    <p class="mb-0">العملاء</p>
 @endif
                         </div>
                         <div class="card-content">

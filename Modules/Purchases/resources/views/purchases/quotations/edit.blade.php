@@ -5,8 +5,56 @@
 @stop
 
 @section('styles')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        .swal2-popup {
+            font-family: 'Tajawal', sans-serif;
+            direction: rtl;
+        }
+        .swal2-title {
+            font-weight: 600;
+        }
+        .swal2-html-container {
+            font-size: 1.1em;
+        }
+        .upload-area:hover {
+            background-color: #f8f9fa !important;
+            border-color: #007bff !important;
+        }
+        .item-row {
+            background-color: #fff;
+        }
+        .table th {
+            font-weight: 600;
+            color: #495057;
+        }
+        @media (max-width: 768px) {
+            .d-flex.gap-2 {
+                justify-content: center;
+            }
+            .table-responsive {
+                font-size: 14px;
+            }
+            .btn {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.875rem;
+            }
+        }
+        @media (max-width: 576px) {
+            .card {
+                margin: 0 10px !important;
+                max-width: calc(100% - 20px) !important;
+            }
+            .table-responsive {
+                font-size: 12px;
+            }
+            .btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -53,9 +101,9 @@
                             <label class="mb-0">الحقول التي عليها علامة <span style="color: red">*</span> الزامية</label>
                         </div>
                         <div class="d-flex gap-2 flex-wrap">
-                            <a href="{{ route('Quotations.index') }}" class="btn btn-outline-danger" id="cancelBtn">
+                            <button type="button" class="btn btn-outline-danger" id="cancelBtn">
                                 <i class="fa fa-ban me-1"></i>الغاء
-                            </a>
+                            </button>
                             <button type="submit" class="btn btn-outline-primary" id="submitBtn">
                                 <i class="fa fa-save me-1"></i>حفظ
                             </button>
@@ -136,7 +184,7 @@
                                         <span class="badge bg-secondary">1</span>
                                     </td>
                                     <td>
-                                        <select class="form-control item-select" name="items[0][product_id]" required>
+                                        <select class="form-control item-select" name="items[INDEX][product_id]" required>
                                             <option value="">اختر البند</option>
                                             @foreach ($products as $product)
                                                 <option value="{{ $product->id }}">{{ $product->name }}</option>
@@ -145,7 +193,7 @@
                                     </td>
                                     <td>
                                         <input type="number" class="form-control quantity-input" placeholder="الكمية"
-                                            name="items[0][quantity]" min="1" required>
+                                            name="items[INDEX][quantity]" min="1" required>
                                     </td>
                                     <td class="text-center align-middle">
                                         <button type="button" class="btn btn-danger btn-sm remove-row" title="حذف الصف">
@@ -165,7 +213,7 @@
                                             <option value="">اختر البند</option>
                                             @foreach ($products as $product)
                                                 <option value="{{ $product->id }}"
-                                                    {{ $item->product_id == $product->id ? 'selected' : '' }}>
+                                                    {{ old('items.'.$index.'.product_id', $item->product_id) == $product->id ? 'selected' : '' }}>
                                                     {{ $product->name }}
                                                 </option>
                                             @endforeach
@@ -199,7 +247,6 @@
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="row g-3">
-                        <!-- Notes Section -->
                         <div class="col-12">
                             <div class="form-group">
                                 <label for="notes" class="form-label">الملاحظات</label>
@@ -207,8 +254,6 @@
                                     placeholder="اكتب ملاحظاتك هنا...">{{ old('notes', $purchaseQuotation->notes) }}</textarea>
                             </div>
                         </div>
-
-                        <!-- Attachments Section -->
                         <div class="col-12">
                             <div class="form-group">
                                 <label for="attachments" class="form-label">المرفقات</label>
@@ -220,8 +265,7 @@
                                     </a>
                                 </div>
                                 @endif
-                                <input type="file" name="attachments" id="attachments" class="d-none"
-                                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                                <input type="file" name="attachments" id="attachments" class="d-none" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
                                 <div class="upload-area border-2 border-dashed rounded p-4 text-center position-relative bg-light"
                                     onclick="document.getElementById('attachments').click()" style="cursor: pointer;">
                                     <div class="d-flex flex-column align-items-center gap-2">
@@ -242,340 +286,311 @@
             </div>
         </form>
     </div>
+@endsection
 
-    <style>
-        .upload-area:hover {
-            background-color: #f8f9fa !important;
-            border-color: #007bff !important;
-        }
-
-        .item-row {
-            background-color: #fff;
-        }
-
-        .table th {
-            font-weight: 600;
-            color: #495057;
-        }
-
-        @media (max-width: 768px) {
-            .d-flex.gap-2 {
-                justify-content: center;
-            }
-
-            .table-responsive {
-                font-size: 14px;
-            }
-
-            .btn {
-                padding: 0.375rem 0.75rem;
-                font-size: 0.875rem;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .card {
-                margin: 0 10px !important;
-                max-width: calc(100% - 20px) !important;
-            }
-
-            .table-responsive {
-                font-size: 12px;
-            }
-
-            .btn {
-                padding: 0.25rem 0.5rem;
-                font-size: 0.8rem;
-            }
-        }
-    </style>
-
+@section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let rowIndex = {{ count($purchaseQuotation->items) }};
+    document.addEventListener('DOMContentLoaded', function () {
+        let rowIndex = {{ count($purchaseQuotation->items) }};
+        let allowSubmit = false;
 
-            // Add new row function
-            function addNewRow() {
-                const templateRow = document.getElementById('templateRow');
-                const newRow = templateRow.cloneNode(true);
+        // تفعيل Select2
+        $('.select2').select2({
+            dir: 'rtl',
+            placeholder: 'اختر الموردين',
+            allowClear: true
+        });
 
-                // Update the row
-                newRow.id = `row_${rowIndex}`;
-                newRow.style.display = '';
+        function addNewRow() {
+            const templateRow = document.getElementById('templateRow');
+            const newRow = templateRow.cloneNode(true);
 
-                // Update name attributes with current index
-                const inputs = newRow.querySelectorAll('input, select');
-                inputs.forEach(input => {
-                    if (input.name) {
-                        input.name = input.name.replace('[0]', `[${rowIndex}]`);
-                    }
-                });
+            newRow.id = `row_${rowIndex}`;
+            newRow.style.display = '';
+            newRow.removeAttribute('id');
 
-                // Add to table
-                document.getElementById('tableBody').appendChild(newRow);
-
-                // Add remove functionality
-                const removeBtn = newRow.querySelector('.remove-row');
-                removeBtn.addEventListener('click', function() {
-                    const visibleRows = document.querySelectorAll('#tableBody .item-row:not(#templateRow):not([style*="display: none"])');
-
-                    if (visibleRows.length <= 1) {
-                        Swal.fire({
-                            title: 'تحذير!',
-                            text: 'لا يمكن حذف آخر صف. يجب أن يكون هناك بند واحد على الأقل.',
-                            icon: 'warning',
-                            confirmButtonText: 'موافق'
-                        });
-                        return;
-                    }
-
-                    Swal.fire({
-                        title: 'هل أنت متأكد؟',
-                        text: "سيتم حذف هذا البند نهائياً!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#6c757d',
-                        confirmButtonText: 'نعم، احذف!',
-                        cancelButtonText: 'إلغاء'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            newRow.remove();
-                            updateRowNumbers();
-                            Swal.fire({
-                                title: 'تم الحذف!',
-                                text: 'تم حذف البند بنجاح.',
-                                icon: 'success',
-                                timer: 1500,
-                                showConfirmButton: false
-                            });
-                        }
-                    });
-                });
-
-                rowIndex++;
-                updateRowNumbers();
-            }
-
-            // Update row numbers
-            function updateRowNumbers() {
-                const rows = document.querySelectorAll('#tableBody .item-row:not(#templateRow)');
-                rows.forEach((row, index) => {
-                    if (row.style.display !== 'none') {
-                        const badge = row.querySelector('.badge');
-                        if (badge) {
-                            badge.textContent = index + 1;
-                        }
-                    }
-                });
-            }
-
-            // Add row button event
-            document.getElementById('addRowBtn').addEventListener('click', function() {
-                addNewRow();
-                Swal.fire({
-                    title: 'تم الإضافة!',
-                    text: 'تم إضافة بند جديد بنجاح.',
-                    icon: 'success',
-                    timer: 1000,
-                    showConfirmButton: false
-                });
-            });
-
-            // File input change event
-            document.getElementById('attachments').addEventListener('change', function(e) {
-                const selectedFile = document.getElementById('selectedFile');
-                if (e.target.files.length > 0) {
-                    selectedFile.textContent = `تم اختيار: ${e.target.files[0].name}`;
-                    selectedFile.style.display = 'block';
-
-                    Swal.fire({
-                        title: 'تم اختيار الملف!',
-                        text: `الملف: ${e.target.files[0].name}`,
-                        icon: 'info',
-                        timer: 1500,
-                        showConfirmButton: false
-                    });
-                } else {
-                    selectedFile.style.display = 'none';
+            const inputs = newRow.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                if (input.name) {
+                    input.name = input.name.replace('INDEX', rowIndex);
                 }
+                input.value = '';
+                input.removeAttribute('disabled');
             });
 
-            // Submit button click handler
-            document.getElementById('submitBtn').addEventListener('click', function(e) {
-                e.preventDefault();
-
-                // Validate form
-                if (!validateForm()) {
+            const removeBtn = newRow.querySelector('.remove-row');
+            removeBtn.addEventListener('click', function () {
+                const visibleRows = document.querySelectorAll('#tableBody tr.item-row:not(#templateRow)');
+                if (visibleRows.length <= 1) {
+                    Swal.fire({
+                        title: 'تحذير!',
+                        text: 'لا يمكن حذف آخر صف. يجب أن يكون هناك بند واحد على الأقل.',
+                        icon: 'warning',
+                        confirmButtonText: 'موافق'
+                    });
                     return;
                 }
 
-                // Show confirmation
                 Swal.fire({
-                    title: 'تأكيد التعديل',
-                    text: "هل أنت متأكد من تعديل عرض السعر؟",
-                    icon: 'question',
+                    title: 'هل أنت متأكد؟',
+                    text: "سيتم حذف هذا الصف نهائياً!",
+                    icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#28a745',
+                    confirmButtonColor: '#d33',
                     cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'نعم، احفظ التعديلات!',
+                    confirmButtonText: 'نعم، احذف!',
                     cancelButtonText: 'إلغاء'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Show loading
+                        newRow.remove();
+                        updateRowNumbers();
                         Swal.fire({
-                            title: 'جاري الحفظ...',
-                            text: 'يرجى الانتظار',
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
-                            showConfirmButton: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
+                            title: 'تم الحذف!',
+                            text: 'تم حذف الصف بنجاح.',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
                         });
-
-                        // Submit form directly
-                        setTimeout(() => {
-                            document.getElementById('quotationForm').submit();
-                        }, 800);
                     }
                 });
             });
 
-            // Validation function
-            function validateForm() {
-                // Check if at least one item row exists
-                const visibleRows = document.querySelectorAll('#tableBody .item-row:not(#templateRow):not([style*="display: none"])');
+            document.getElementById('tableBody').appendChild(newRow);
+            rowIndex++;
+            updateRowNumbers();
+        }
 
-                if (visibleRows.length === 0) {
-                    Swal.fire({
-                        title: 'خطأ!',
-                        text: 'يجب إضافة بند واحد على الأقل.',
-                        icon: 'error',
-                        confirmButtonText: 'موافق'
-                    });
-                    return false;
+        function updateRowNumbers() {
+            const rows = document.querySelectorAll('#tableBody tr.item-row:not(#templateRow)');
+            rows.forEach((row, index) => {
+                const badge = row.querySelector('.badge');
+                if (badge) {
+                    badge.textContent = index + 1;
                 }
+            });
+        }
 
-                // Check required main form fields
-                const title = document.getElementById('title').value.trim();
-                const orderDate = document.getElementById('order_date').value;
-                const supplierSelect = document.getElementById('supplier_id');
-                const selectedSuppliers = Array.from(supplierSelect.selectedOptions).map(option => option.value);
-
-                if (!title) {
-                    document.getElementById('title').focus();
-                    Swal.fire({
-                        title: 'خطأ!',
-                        text: 'يرجى إدخال مسمى عرض السعر.',
-                        icon: 'error',
-                        confirmButtonText: 'موافق'
-                    });
-                    return false;
-                }
-
-                if (!orderDate) {
-                    document.getElementById('order_date').focus();
-                    Swal.fire({
-                        title: 'خطأ!',
-                        text: 'يرجى إدخال تاريخ الطلب.',
-                        icon: 'error',
-                        confirmButtonText: 'موافق'
-                    });
-                    return false;
-                }
-
-                if (selectedSuppliers.length === 0) {
-                    supplierSelect.focus();
-                    Swal.fire({
-                        title: 'خطأ!',
-                        text: 'يرجى اختيار مورد واحد على الأقل.',
-                        icon: 'error',
-                        confirmButtonText: 'موافق'
-                    });
-                    return false;
-                }
-
-                // Check item rows
-                for (let i = 0; i < visibleRows.length; i++) {
-                    const row = visibleRows[i];
-                    const itemSelect = row.querySelector('select');
-                    const quantityInput = row.querySelector('.quantity-input');
-
-                    if (!itemSelect.value) {
-                        itemSelect.focus();
-                        Swal.fire({
-                            title: 'خطأ!',
-                            text: `يرجى اختيار البند في الصف رقم ${i + 1}.`,
-                            icon: 'error',
-                            confirmButtonText: 'موافق'
-                        });
-                        return false;
-                    }
-
-                    if (!quantityInput.value || quantityInput.value <= 0) {
-                        quantityInput.focus();
-                        Swal.fire({
-                            title: 'خطأ!',
-                            text: `يرجى إدخال كمية صحيحة في الصف رقم ${i + 1}.`,
-                            icon: 'error',
-                            confirmButtonText: 'موافق'
-                        });
-                        return false;
-                    }
-                }
-
-                return true;
+        function validateForm() {
+            const visibleRows = document.querySelectorAll('#tableBody tr.item-row:not(#templateRow)');
+            if (visibleRows.length === 0) {
+                Swal.fire({
+                    title: 'خطأ!',
+                    text: 'يجب إضافة بند واحد على الأقل.',
+                    icon: 'error',
+                    confirmButtonText: 'موافق'
+                });
+                return false;
             }
 
-            // Add remove functionality to existing rows
-            document.querySelectorAll('.remove-row').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const row = this.closest('tr');
-                    const visibleRows = document.querySelectorAll('#tableBody .item-row:not(#templateRow):not([style*="display: none"])');
+            const title = document.getElementById('title').value.trim();
+            const orderDate = document.getElementById('order_date').value;
+            const suppliers = $('#supplier_id').val();
 
-                    if (visibleRows.length <= 1) {
-                        Swal.fire({
-                            title: 'تحذير!',
-                            text: 'لا يمكن حذف آخر صف. يجب أن يكون هناك بند واحد على الأقل.',
-                            icon: 'warning',
-                            confirmButtonText: 'موافق'
-                        });
-                        return;
-                    }
-
-                    Swal.fire({
-                        title: 'هل أنت متأكد؟',
-                        text: "سيتم حذف هذا البند نهائياً!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#6c757d',
-                        confirmButtonText: 'نعم، احذف!',
-                        cancelButtonText: 'إلغاء'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            row.remove();
-                            updateRowNumbers();
-                            Swal.fire({
-                                title: 'تم الحذف!',
-                                text: 'تم حذف البند بنجاح.',
-                                icon: 'success',
-                                timer: 1500,
-                                showConfirmButton: false
-                            });
-                        }
-                    });
+            if (!title) {
+                document.getElementById('title').focus();
+                Swal.fire({
+                    title: 'خطأ!',
+                    text: 'يرجى إدخال مسمى العرض.',
+                    icon: 'error',
+                    confirmButtonText: 'موافق'
                 });
-            });
+                return false;
+            }
 
-            // Initialize select2
-            $('.select2').select2({
-                placeholder: "اختر الموردين",
-                allowClear: true,
-                dir: 'rtl'
+            if (!orderDate) {
+                document.getElementById('order_date').focus();
+                Swal.fire({
+                    title: 'خطأ!',
+                    text: 'يرجى إدخال تاريخ الطلب.',
+                    icon: 'error',
+                    confirmButtonText: 'موافق'
+                });
+                return false;
+            }
+
+            if (!suppliers || suppliers.length === 0) {
+                $('#supplier_id').focus();
+                Swal.fire({
+                    title: 'خطأ!',
+                    text: 'يرجى اختيار مورد واحد على الأقل.',
+                    icon: 'error',
+                    confirmButtonText: 'موافق'
+                });
+                return false;
+            }
+
+            for (let i = 0; i < visibleRows.length; i++) {
+                const row = visibleRows[i];
+                const productSelect = row.querySelector('select[name*="product_id"]');
+                const quantityInput = row.querySelector('input[name*="quantity"]');
+
+                if (!productSelect || !productSelect.value) {
+                    if (productSelect) productSelect.focus();
+                    Swal.fire({
+                        title: 'خطأ!',
+                        text: `يرجى اختيار البند في الصف رقم ${i + 1}.`,
+                        icon: 'error',
+                        confirmButtonText: 'موافق'
+                    });
+                    return false;
+                }
+
+                if (!quantityInput || !quantityInput.value || quantityInput.value <= 0) {
+                    if (quantityInput) quantityInput.focus();
+                    Swal.fire({
+                        title: 'خطأ!',
+                        text: `يرجى إدخال كمية صحيحة في الصف رقم ${i + 1}.`,
+                        icon: 'error',
+                        confirmButtonText: 'موافق'
+                    });
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        document.getElementById('addRowBtn').addEventListener('click', function () {
+            addNewRow();
+            Swal.fire({
+                title: 'تم الإضافة!',
+                text: 'تم إضافة صف جديد بنجاح.',
+                icon: 'success',
+                timer: 1000,
+                showConfirmButton: false
             });
         });
+
+        document.getElementById('attachments').addEventListener('change', function (e) {
+            const selectedFile = document.getElementById('selectedFile');
+            if (e.target.files.length > 0) {
+                selectedFile.textContent = `تم اختيار: ${e.target.files[0].name}`;
+                selectedFile.style.display = 'block';
+
+                Swal.fire({
+                    title: 'تم اختيار الملف!',
+                    text: `الملف: ${e.target.files[0].name}`,
+                    icon: 'info',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            } else {
+                selectedFile.style.display = 'none';
+            }
+        });
+
+        document.getElementById('submitBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+
+            if (!validateForm()) return;
+
+            const templateRow = document.getElementById('templateRow');
+            const templateInputs = templateRow.querySelectorAll('input, select');
+            templateInputs.forEach(input => {
+                input.setAttribute('disabled', 'disabled');
+            });
+
+            Swal.fire({
+                title: 'تأكيد التعديل',
+                text: "هل أنت متأكد من حفظ التعديلات؟",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'نعم، احفظ!',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'جاري الحفظ...',
+                        text: 'يرجى الانتظار',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    allowSubmit = true;
+                    setTimeout(() => {
+                        document.getElementById('quotationForm').submit();
+                    }, 800);
+                } else {
+                    templateInputs.forEach(input => {
+                        input.removeAttribute('disabled');
+                    });
+                }
+            });
+        });
+
+        document.getElementById('quotationForm').addEventListener('submit', function (e) {
+            if (!allowSubmit) {
+                e.preventDefault();
+            }
+        });
+
+        document.getElementById('cancelBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "سيتم إلغاء جميع التعديلات!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'نعم، إلغاء!',
+                cancelButtonText: 'العودة'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('Quotations.index') }}";
+                }
+            });
+        });
+
+        // إضافة وظيفة الحذف للصفوف الموجودة
+        document.querySelectorAll('.remove-row').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const row = this.closest('tr');
+                const visibleRows = document.querySelectorAll('#tableBody tr.item-row:not(#templateRow)');
+
+                if (visibleRows.length <= 1) {
+                    Swal.fire({
+                        title: 'تحذير!',
+                        text: 'لا يمكن حذف آخر صف. يجب أن يكون هناك بند واحد على الأقل.',
+                        icon: 'warning',
+                        confirmButtonText: 'موافق'
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'هل أنت متأكد؟',
+                    text: "سيتم حذف هذا الصف نهائياً!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'نعم، احذف!',
+                    cancelButtonText: 'إلغاء'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        row.remove();
+                        updateRowNumbers();
+                        Swal.fire({
+                            title: 'تم الحذف!',
+                            text: 'تم حذف الصف بنجاح.',
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                    }
+                });
+            });
+        });
+    });
     </script>
 @endsection

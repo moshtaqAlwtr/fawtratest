@@ -197,22 +197,10 @@ class AboFalehController extends Controller
 
 public function index(Request $request)
 {
-    $users = User::with([
-            'employee.expenses',
-        ])
-        ->withCount([
+    $users = User::withCount([
             'visits',
             'notes',
-            'payments',
-            'receipts',
-            'invoices as unpaid_invoices_count' => function ($q) {
-                $q->where('is_paid', false); // تصحيح الشرط هنا
-            },
         ])
-        ->withSum([
-            'payments as payments_sum',
-            'receipts as receipts_sum',
-        ], 'amount')
         ->whereIn('role', ['employee', 'manager'])
         ->get();
 
@@ -220,13 +208,43 @@ public function index(Request $request)
         // 1. حساب مجموع النفقات (Expenses)
         $user->expenses_sum = optional(optional($user->employee)->expenses)->sum('amount') ?? 0;
 
-        // 2. حساب مجموع الفواتير المؤجلة بدون مدفوعات
-        $user->unpaid_invoices_sum = $user->invoices()
-            ->where('is_paid', false)
-            ->whereDoesntHave('payments') // الفواتير بدون أي مدفوعات
-            ->sum('grand_total');
+        // 2. دمج سندات القبض والمدفوعات معاً
+        $receiptsSum = $user->receipts()->sum('amount') ?? 0;
+        $paymentsSum = $user->payments()->sum('amount') ?? 0;
+        $user->payments_receipts_sum = $receiptsSum + $paymentsSum;
+        $user->receipts_sum = $receiptsSum;
+        $user->payments_sum = $paymentsSum;
 
-        // 3. مجموع المدفوعات (Payments) - محسوب مسبقاً عبر withSum
+        // 3. جلب الفواتير المدفوعة (استبعاد التي لديها مرتجعات)
+        $paidInvoicesQuery = $user->invoices()
+            ->where('is_paid', true)
+            ->where(function($q) {
+                // استبعاد الفواتير الأصلية التي لديها مرتجعات
+                $q->whereNull('type')
+                  ->whereDoesntHave('referenceInvoice', function($subQ) {
+                      $subQ->where('type', 'return');
+                  });
+            })
+            ->orWhere(function($q) use ($user) {
+                // أو الفواتير من نوع return (المرتجعات نفسها)
+                $q->where('type', 'return')
+                  ->where('employee_id', $user->id); // تأكد من الربط بالموظف
+            });
+
+        $user->paid_invoices_count = $paidInvoicesQuery->count();
+        $user->paid_invoices_sum = $paidInvoicesQuery->sum('grand_total'); // ← هذا السطر كان ناقص
+
+        // 4. الفواتير غير المدفوعة (بدون مدفوعات) - استبعاد المرتجعات
+        $unpaidInvoicesQuery = $user->invoices()
+            ->where('is_paid', false)
+            ->whereDoesntHave('payments')
+            ->where(function($q) {
+                $q->whereNull('type')
+                  ->orWhere('type', '!=', 'return');
+            });
+
+        $user->unpaid_invoices_count = $unpaidInvoicesQuery->count();
+        $user->unpaid_invoices_sum = $unpaidInvoicesQuery->sum('grand_total');
     }
 
     return view('dashboard.abo_faleh.index', [
@@ -234,5 +252,4 @@ public function index(Request $request)
         'request' => $request,
     ]);
 }
-
 }

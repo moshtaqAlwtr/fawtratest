@@ -171,17 +171,17 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <select class="form-control select2" id="clientSelect" name="client_id"
-                                                    required onchange="showClientBalance(this)">
-                                                    <option value="">اختر العميل</option>
-                                                    @foreach ($clients as $c)
-                                                        <option value="{{ $c->id }}"
-                                                            data-balance="{{ $c->account->balance ?? 0 }}"
-                                                            data-name="{{ $c->trade_name }}"
-                                                            @if (isset($selectedClient) && $c->id == $selectedClient) selected @endif>
-                                                            {{ $c->trade_name }} - {{ $c->code }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
+    required onchange="showClientBalance(this)">
+    <option value="">اختر العميل</option>
+    @foreach ($clients as $c)
+        <option value="{{ $c->id }}"
+            data-balance="{{ $c->account->balance ?? 0 }}"
+            data-name="{{ $c->trade_name }}"
+            @if (isset($selectedClient) && $c->id == $selectedClient) selected @endif>
+            {{ $c->trade_name }} - {{ $c->code }}
+        </option>
+    @endforeach
+</select>
                                             </div>
                                             <div class="col-md-4">
                                                 <a href="{{ route('clients.create') }}" type="button"
@@ -195,7 +195,7 @@
                                         <div class="row" id="clientBalanceCard" style="display: none;">
                                             <div class="col-12">
                                                 <div class="card"
-                                                    style="background: #E8F5E8; border-radius: 8px; border: 1px solid #4CAF50;">
+                                                    style="background: #E3F2FD; border-radius: 8px; border: 1px solid #BBDEFB;">
                                                     <div class="card-body p-4">
                                                         <div class="row align-items-center">
                                                             <div class="col-8">
@@ -208,7 +208,7 @@
                                                                     <p class="mb-0"
                                                                         style="color: #666; font-size: 0.9rem;">
                                                                         <i class="fas fa-edit ml-1"
-                                                                            style="color: #4CAF50;"></i>
+                                                                            style="color: #2196F3;"></i>
                                                                         <span>تعديل البيانات</span>
                                                                     </p>
                                                                 </a>
@@ -217,7 +217,7 @@
                                                                 <div class="d-flex flex-column align-items-end">
                                                                     <span
                                                                         style="font-size: 1.8rem; font-weight: 700; color: #333;"
-                                                                        id="clientBalance"></span>
+                                                                        id="clientBalance">0.00</span>
                                                                     <small style="color: #666; margin-top: -5px;">ر.س
                                                                         SAR</small>
                                                                     <span id="balanceStatus"
@@ -751,29 +751,7 @@
                         </div>
                     @endif
 
-                    <div class="full-payment-fields mt-3" style="display: none;">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="payment_method">وسيلة الدفع</label>
-                                <select class="form-control" name="payment_method">
-                                    <option value="">اختر وسيلة الدفع</option>
-                                    <option value="cash">نقداً</option>
-                                    <option value="credit_card">بطاقة ائتمان</option>
-                                    <option value="bank_transfer">تحويل بنكي</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">رقم المعرف</label>
-                                <input type="text" class="form-control" name="reference_number">
-                            </div>
-                        </div>
-                        <div class="alert alert-info mt-2">
-                            <small>
-                                <i class="fa fa-info-circle"></i>
-                                عند اختيار "دفع كامل" سيتم تعيين المبلغ المدفوع تلقائياً لكامل المبلغ
-                            </small>
-                        </div>
-                    </div>
+
                 </div>
             </div>
 
@@ -807,23 +785,6 @@
                                 </div>
                             </div>
 
-                            {{-- <div class="advance-payment-fields mt-3" style="display: none;">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label for="advance_payment_method">وسيلة الدفع</label>
-                                        <select class="form-control" name="advance_payment_method">
-                                            <option value="">اختر وسيلة الدفع</option>
-                                            <option value="cash">نقداً</option>
-                                            <option value="credit_card">بطاقة ائتمان</option>
-                                            <option value="bank_transfer">تحويل بنكي</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">رقم المعرف</label>
-                                        <input type="text" class="form-control" name="advance_reference_number">
-                                    </div>
-                                </div>
-                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -950,36 +911,60 @@
 
         // دالة إظهار رصيد العميل
         window.showClientBalance = function(selectElement) {
-            const selectedOption = selectElement.options[selectElement.selectedIndex];
-            const balance = parseFloat(selectedOption.dataset.balance) || 0;
-            const clientName = selectedOption.text.split(' - ')[0];
+    const balanceCard = document.getElementById('clientBalanceCard');
 
-            const balanceCard = document.getElementById('clientBalanceCard');
-            const clientNameElement = document.getElementById('clientName');
-            const clientBalanceElement = document.getElementById('clientBalance');
-            const balanceStatusElement = document.getElementById('balanceStatus');
+    // التحقق من أن العميل تم اختياره فعلياً
+    if (!selectElement ||
+        !selectElement.value ||
+        selectElement.value === '' ||
+        selectElement.value === '0' ||
+        selectElement.selectedIndex === 0) {
+        if (balanceCard) {
+            balanceCard.style.display = 'none';
+        }
+        return;
+    }
 
-            if (selectElement.value && balanceCard) {
-                clientNameElement.textContent = clientName;
-                clientBalanceElement.textContent = balance.toFixed(2);
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    const clientName = selectedOption.text.split(' - ')[0];
+    const clientBalance = parseFloat(selectedOption.getAttribute('data-balance')) || 0;
 
-                // تحديد حالة الرصيد
-                if (balance > 0) {
-                    balanceStatusElement.textContent = 'رصيد دائن';
-                    balanceStatusElement.className = 'text-success';
-                } else if (balance < 0) {
-                    balanceStatusElement.textContent = 'رصيد مدين';
-                    balanceStatusElement.className = 'text-danger';
-                } else {
-                    balanceStatusElement.textContent = 'رصيد صفر';
-                    balanceStatusElement.className = 'text-warning';
-                }
+    const nameElement = document.getElementById('clientName');
+    const balanceElement = document.getElementById('clientBalance');
+    const statusElement = document.getElementById('balanceStatus');
 
-                balanceCard.style.display = 'block';
-            } else if (balanceCard) {
-                balanceCard.style.display = 'none';
-            }
-        };
+    if (nameElement) nameElement.textContent = clientName;
+    if (balanceElement) balanceElement.textContent = Math.abs(clientBalance).toFixed(2);
+
+    if (statusElement && balanceElement) {
+        if (clientBalance > 0) {
+            statusElement.textContent = 'دائن';
+            statusElement.style.color = '#4CAF50';
+            balanceElement.style.color = '#4CAF50';
+        } else if (clientBalance < 0) {
+            statusElement.textContent = 'مدين';
+            statusElement.style.color = '#f44336';
+            balanceElement.style.color = '#f44336';
+        } else {
+            statusElement.textContent = 'متوازن';
+            statusElement.style.color = '#FFC107';
+            balanceElement.style.color = '#FFC107';
+        }
+    }
+
+    // إظهار الكارد مع تأثير انيميشن
+    if (balanceCard) {
+        balanceCard.style.display = 'block';
+        balanceCard.style.opacity = '0';
+        balanceCard.style.transform = 'translateY(-20px)';
+
+        setTimeout(() => {
+            balanceCard.style.transition = 'all 0.3s ease';
+            balanceCard.style.opacity = '1';
+            balanceCard.style.transform = 'translateY(0)';
+        }, 10);
+    }
+};
 
         // دالة نسخ آخر فاتورة
         window.copyLastInvoice = function() {

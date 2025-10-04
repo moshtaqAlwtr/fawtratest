@@ -61,7 +61,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: 
+    background-image:
       radial-gradient(circle at 20% 30%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
       radial-gradient(circle at 80% 70%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
       radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.1) 0%, transparent 50%);
@@ -220,7 +220,7 @@
     transform: translateY(-5px) scale(1.02);
     background: rgba(255, 255, 255, 0.95);
     border-color: rgba(0, 0, 0, 0.15);
-    box-shadow: 
+    box-shadow:
       0 20px 40px rgba(0, 0, 0, 0.15),
       0 0 0 1px rgba(0, 0, 0, 0.05),
       inset 0 1px 0 rgba(255, 255, 255, 0.8);
@@ -274,50 +274,50 @@
   }
 
   /* ألوان الإحصائيات الإجمالية */
-  .total-visits { 
+  .total-visits {
     border-left: 4px solid #3b82f6;
   }
-  .total-visits .total-stat-icon { 
+  .total-visits .total-stat-icon {
     color: #3b82f6;
     background: rgba(59, 130, 246, 0.1);
   }
 
-  .total-payments { 
+  .total-payments {
     border-left: 4px solid #10b981;
   }
-  .total-payments .total-stat-icon { 
+  .total-payments .total-stat-icon {
     color: #10b981;
     background: rgba(16, 185, 129, 0.1);
   }
 
-  .total-receipts { 
-    border-left: 4px solid #8b5cf6;
+  .total-paid-invoices {
+    border-left: 4px solid #06b6d4;
   }
-  .total-receipts .total-stat-icon { 
-    color: #8b5cf6;
-    background: rgba(139, 92, 246, 0.1);
+  .total-paid-invoices .total-stat-icon {
+    color: #06b6d4;
+    background: rgba(6, 182, 212, 0.1);
   }
 
-  .total-unpaid { 
+  .total-unpaid {
     border-left: 4px solid #ef4444;
   }
-  .total-unpaid .total-stat-icon { 
+  .total-unpaid .total-stat-icon {
     color: #ef4444;
     background: rgba(239, 68, 68, 0.1);
   }
 
-  .total-expenses { 
+  .total-expenses {
     border-left: 4px solid #ec4899;
   }
-  .total-expenses .total-stat-icon { 
+  .total-expenses .total-stat-icon {
     color: #ec4899;
     background: rgba(236, 72, 153, 0.1);
   }
 
-  .total-notes { 
+  .total-notes {
     border-left: 4px solid #f59e0b;
   }
-  .total-notes .total-stat-icon { 
+  .total-notes .total-stat-icon {
     color: #f59e0b;
     background: rgba(245, 158, 11, 0.1);
   }
@@ -382,7 +382,7 @@
     transform: translateY(-8px) scale(1.02);
     background: rgba(255, 255, 255, 0.95);
     border-color: rgba(0, 0, 0, 0.15);
-    box-shadow: 
+    box-shadow:
       0 25px 50px rgba(0, 0, 0, 0.2),
       0 0 0 1px rgba(0, 0, 0, 0.05),
       inset 0 1px 0 rgba(255, 255, 255, 0.8);
@@ -496,9 +496,9 @@
   .stat-payments .stat-icon { color: #10b981; }
   .stat-payments .stat-value { color: #10b981; }
 
-  .stat-receipts { }
-  .stat-receipts .stat-icon { color: #8b5cf6; }
-  .stat-receipts .stat-value { color: #8b5cf6; }
+  .stat-paid-invoices { }
+  .stat-paid-invoices .stat-icon { color: #06b6d4; }
+  .stat-paid-invoices .stat-value { color: #06b6d4; }
 
   .stat-unpaid { }
   .stat-unpaid .stat-icon { color: #ef4444; }
@@ -524,23 +524,23 @@
     .employees-grid {
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     }
-    
+
     .total-stats-grid {
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1rem;
     }
-    
+
     .total-stat-item {
       padding: 1.5rem 1rem;
       gap: 1rem;
     }
-    
+
     .total-stat-icon {
       width: 60px;
       height: 60px;
       font-size: 2.5rem;
     }
-    
+
     .total-stat-value {
       font-size: 1.8rem;
     }
@@ -550,49 +550,49 @@
     .dashboard-title {
       font-size: 2.5rem;
     }
-    
+
     .dashboard-container {
       padding: 1rem 0;
     }
-    
+
     .total-stats-section {
       margin-bottom: 3rem;
     }
-    
+
     .total-stats-grid {
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
-    
+
     .total-stat-item {
       flex-direction: column;
       text-align: center;
       padding: 1.5rem 1rem;
       gap: 1rem;
     }
-    
+
     .total-stat-content {
       text-align: center;
     }
-    
+
     .employees-grid {
       grid-template-columns: 1fr;
       gap: 1.5rem;
       padding: 0 0.5rem;
     }
-    
+
     .card-header {
       padding: 1.5rem 1.5rem 1rem;
     }
-    
+
     .stats-grid {
       padding: 1rem 1.5rem 1.5rem;
       gap: 0.8rem;
     }
-    
+
     .stat-item {
       padding: 1.2rem 0.8rem;
     }
-    
+
     .stat-value {
       font-size: 1.5rem;
     }
@@ -602,24 +602,24 @@
     .dashboard-title {
       font-size: 2rem;
     }
-    
+
     .total-stats-grid {
       grid-template-columns: 1fr;
     }
-    
+
     .total-stat-item {
       flex-direction: row;
       text-align: right;
     }
-    
+
     .total-stat-content {
       text-align: right;
     }
-    
+
     .stats-grid {
       grid-template-columns: 1fr;
     }
-    
+
     .stat-full {
       grid-column: 1;
     }
@@ -653,7 +653,7 @@
 
 <div class="dashboard-container">
   <div class="container-fluid">
-    
+
     <div class="dashboard-header">
       <h1 class="dashboard-title arabic-text">لوحة التحكم التفاعلية</h1>
       <p class="dashboard-subtitle">Dashboard Analytics • Real-time Data</p>
@@ -662,7 +662,7 @@
     {{-- إجمالي الإحصائيات --}}
     <div class="total-stats-section">
       <div class="total-stats-grid">
-        
+
         <div class="total-stat-item total-visits">
           <div class="total-stat-icon">👥</div>
           <div class="total-stat-content">
@@ -674,16 +674,16 @@
         <div class="total-stat-item total-payments">
           <div class="total-stat-icon">💰</div>
           <div class="total-stat-content">
-            <div class="total-stat-value">{{ number_format($employees->sum('payments_sum') ?? 0) }} <span class="total-stat-currency">ر.س</span></div>
-            <div class="total-stat-title arabic-text">إجمالي المدفوعات</div>
+            <div class="total-stat-value">{{ number_format($employees->sum('payments_receipts_sum') ?? 0) }} <span class="total-stat-currency">ر.س</span></div>
+            <div class="total-stat-title arabic-text">إجمالي السندات والمدفوعات</div>
           </div>
         </div>
 
-        <div class="total-stat-item total-receipts">
-          <div class="total-stat-icon">📊</div>
+        <div class="total-stat-item total-paid-invoices">
+          <div class="total-stat-icon">✅</div>
           <div class="total-stat-content">
-            <div class="total-stat-value">{{ number_format($employees->sum('receipts_sum') ?? 0) }} <span class="total-stat-currency">ر.س</span></div>
-            <div class="total-stat-title arabic-text">إجمالي السندات</div>
+            <div class="total-stat-value">{{ number_format($employees->sum('paid_invoices_sum') ?? 0) }} <span class="total-stat-currency">ر.س</span></div>
+            <div class="total-stat-title arabic-text">إجمالي الفواتير المدفوعة</div>
           </div>
         </div>
 
@@ -718,7 +718,7 @@
       @foreach($employees as $index => $user)
         @php $emp = $user->employee; @endphp
         <div class="employee-card" style="animation-delay: {{ ($index + 1) * 0.15 }}s">
-          
+
           <div class="card-header">
             <h3 class="employee-name arabic-text" title="{{ $emp?->full_name ?? 'غير معروف' }}">
               {{ $emp->full_name ?? $user->name ?? 'غير معروف' }}
@@ -727,36 +727,36 @@
           </div>
 
           <div class="stats-grid">
-            
+
             <div class="stat-item stat-visits">
               <span class="stat-icon">👥</span>
               <div class="stat-title arabic-text">عدد الزيارات</div>
               <div class="stat-value">
-                {{ number_format($emp?->visits_count ?? $user->visits_count ?? 0) }}
+                {{ number_format($user->visits_count ?? 0) }}
               </div>
             </div>
 
             <div class="stat-item stat-payments">
               <span class="stat-icon">💰</span>
-              <div class="stat-title arabic-text">المدفوعات</div>
+              <div class="stat-title arabic-text">السندات والمدفوعات</div>
               <div class="stat-value">
-                {{ number_format($user->payments_sum ?? 0) }}
+                {{ number_format($user->payments_receipts_sum ?? 0) }}
                 <span class="stat-currency">ر.س</span>
               </div>
             </div>
 
-            <div class="stat-item stat-receipts">
-              <span class="stat-icon">📊</span>
-              <div class="stat-title arabic-text">السندات</div>
+            <div class="stat-item stat-paid-invoices">
+              <span class="stat-icon">✅</span>
+              <div class="stat-title arabic-text">الفواتير المدفوعة</div>
               <div class="stat-value">
-                {{ number_format($user->receipts_sum ?? 0) }}
+                {{ number_format($user->paid_invoices_sum ?? 0) }}
                 <span class="stat-currency">ر.س</span>
               </div>
             </div>
 
             <div class="stat-item stat-unpaid">
               <span class="stat-icon">⚠️</span>
-              <div class="stat-title arabic-text">الفواتير غير المدفوعة</div>
+              <div class="stat-title arabic-text">عدد الفواتير غير المدفوعة</div>
               <div class="stat-value">
                 {{ number_format($user->unpaid_invoices_count ?? 0) }}
               </div>
@@ -783,7 +783,7 @@
               <span class="stat-icon">💸</span>
               <div class="stat-title arabic-text">المصروفات</div>
               <div class="stat-value">
-                {{ number_format($emp?->expenses_sum ?? $user->expenses_sum ?? 0) }}
+                {{ number_format($user->expenses_sum ?? 0) }}
                 <span class="stat-currency">ر.س</span>
               </div>
             </div>

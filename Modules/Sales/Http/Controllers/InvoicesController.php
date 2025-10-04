@@ -391,81 +391,82 @@ public function index(Request $request)
      * تطبيق شروط البحث على الاستعلام
      */
 
-    public function create(Request $request)
-    {
-        // توليد رقم الفاتورة
-        $invoice_number = $this->generateInvoiceNumber();
+ public function create(Request $request)
+{
+    $invoice_number = $this->generateInvoiceNumber();
+    $items = Product::all();
+    $user = auth()->user();
 
-        // جلب جميع البيانات المطلوبة
-        $items = Product::all();
-
-        $user = auth()->user();
-
-       if ($user->role == 'employee' && optional($user->employee)->Job_role_id == 1) {
-    // موظف → عملاء نفس الفرع
-    $clients = Client::with('account')->where('branch_id', $user->branch_id)->get();
-} else {
-    // مدير أو موظف آخر → كل العملاء
-    $clients = Client::with('account')->get();
-}
-
-
-        $users = User::all();
-        $treasury = Treasury::all();
-
-        $user = auth()->user();
-        if ($user->employee_id !== null) {
-            if (auth()->user()->hasAnyPermission(['sales_view_all_invoices'])) {
-                $employees = Employee::all()->sortBy(function ($employee) use ($user) {
-                    return $employee->id === $user->employee_id ? 0 : 1;
-                })->values(); // ← إعادة فهرسة النتائج
-            } else {
-                $employees = Employee::where('id', $user->employee_id)->get();
-            }
-        } else {
-            $employees = Employee::all();
-        }
-
-
-
-        $price_lists = PriceList::orderBy('id', 'DESC')->paginate(10);
-        $price_sales = PriceListItems::all();
-
-        // تحديد نوع الفاتورة
-        $invoiceType = 'normal';
-
-        // جلب الإعدادات الضريبية
-        $taxs = TaxSitting::all();
-
-        // إعدادات الحساب
-        $account_setting = AccountSetting::where('user_id', auth()->user()->id)->first();
-
-        // معالجة العميل
-        $client_id = $request->client_id;
-        $client = null;
-
-        $Offer = Offer::all();
-
-        if ($client_id) {
-            $client = Client::find($client_id);
-        }
-
-        return view('sales::invoices.create', [
-            'clients' => $clients,
-            'account_setting' => $account_setting,
-            'price_lists' => $price_lists,
-            'taxs' => $taxs,
-            'treasury' => $treasury,
-            'users' => $users,
-            'items' => $items,
-            'invoice_number' => $invoice_number,
-            'invoiceType' => $invoiceType,
-            'employees' => $employees,
-            'client' => $client,
-            'client_id' => $client_id,
-        ]);
+    if ($user->role == 'employee' && optional($user->employee)->Job_role_id == 1) {
+        // موظف → عملاء نفس الفرع مع الحسابات
+        $clients = Client::with(['account' => function($query) {
+            $query->select('id', 'client_id', 'balance');
+        }])->where('branch_id', $user->branch_id)->get();
+    } else {
+        // مدير أو موظف آخر → كل العملاء مع الحسابات
+        $clients = Client::with(['account' => function($query) {
+            $query->select('id', 'client_id', 'balance');
+        }])->get();
     }
 
+    // إضافة الرصيد من وحدة الحسابات لكل عميل (نفس طريقة فواتير الشراء)
+    foreach ($clients as $client) {
+        if ($client->account) {
+            $client->account_balance = $client->account->balance;
+        } else {
+            // في حالة عدم وجود حساب، استخدم الرصيد المحسوب من نموذج العميل
+            $client->account_balance = $client->balance;
+        }
+    }
+
+    $users = User::all();
+    $treasury = Treasury::all();
+
+    if ($user->employee_id !== null) {
+        if (auth()->user()->hasAnyPermission(['sales_view_all_invoices'])) {
+            $employees = Employee::all()->sortBy(function ($employee) use ($user) {
+                return $employee->id === $user->employee_id ? 0 : 1;
+            })->values();
+        } else {
+            $employees = Employee::where('id', $user->employee_id)->get();
+        }
+    } else {
+        $employees = Employee::all();
+    }
+
+    $price_lists = PriceList::orderBy('id', 'DESC')->paginate(10);
+    $price_sales = PriceListItems::all();
+    $invoiceType = 'normal';
+    $taxs = TaxSitting::all();
+    $account_setting = AccountSetting::where('user_id', auth()->user()->id)->first();
+
+    $client_id = $request->client_id;
+    $client = null;
+    $selectedClient = null;
+
+    if ($client_id) {
+        $client = Client::with('account')->find($client_id);
+        $selectedClient = $client_id;
+    }
+
+    $Offer = Offer::all();
+
+    return view('sales::invoices.create', [
+        'clients' => $clients,
+        'account_setting' => $account_setting,
+        'price_lists' => $price_lists,
+        'taxs' => $taxs,
+        'treasury' => $treasury,
+        'users' => $users,
+        'items' => $items,
+        'invoice_number' => $invoice_number,
+        'invoiceType' => $invoiceType,
+        'employees' => $employees,
+        'client' => $client,
+        'selectedClient' => $selectedClient,
+        'salesSettings' => session('sales_settings', []) // تأكد من تمرير الإعدادات
+    ]);
+}
 
     public function getPrice(Request $request)
     {

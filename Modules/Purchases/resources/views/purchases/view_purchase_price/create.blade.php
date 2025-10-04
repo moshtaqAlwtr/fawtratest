@@ -162,7 +162,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <input type="text" class="form-control" id="purchase_price_number"
-                                                    name="purchase_price_number" value="{{ $purchasePriceNumber }}"
+                                                    name="code" value="{{ $purchasePriceNumber }}"
                                                     readonly>
                                             </div>
                                         </div>

@@ -13,6 +13,9 @@ class ClientEmployee extends Model
     {
         return $this->belongsTo(User::class, 'employee_id');
     }
-
+public function client()
+    {
+        return $this->belongsTo(Client::class, 'client_id');
+    }
 
 }

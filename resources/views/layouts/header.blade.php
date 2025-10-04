@@ -90,7 +90,7 @@
                         </div>
                     </li>
 
-                   @if ( auth()->user()->hasPermissionTo('branches'))
+                    @if (auth()->user()->hasPermissionTo('branches'))
                         <li class="dropdown dropdown-notification nav-item">
                             <a class="nav-link nav-link-label" href="#" data-toggle="dropdown">
                                 <i class="ficon feather icon-calendar"></i>
@@ -171,7 +171,7 @@
                     $userRole = Auth::user()->role;
                 @endphp
 
-                @if ( auth()->user()->hasPermissionTo('branches'))
+                @if (auth()->user()->hasPermissionTo('branches'))
                     <li class="dropdown dropdown-notification nav-item">
                         <a class="nav-link nav-link-label" href="#" data-toggle="dropdown">
                             <i class="ficon feather icon-bell"></i>
@@ -422,38 +422,29 @@
                     <div class="dropdown-menu dropdown-menu-right">
 
                         <div class="dropdown-divider"></div>
-
-                        <!-- 🔹 قائمة الفروع (إذا لم يكن الموظف) -->
                         @if (auth()->user()->role !== 'employee')
                             <span class="dropdown-item font-weight-bold">🔹 الفروع:</span>
 
                             @if (auth()->user()->role === 'main')
-                                <a class="dropdown-item branch-item {{ !auth()->user()->branch_id ? 'active' : '' }}"
+                                <a class="dropdown-item branch-item {{ !auth()->user()->branch_id ? 'active bg-light' : '' }}"
                                     href="{{ route('branch.switch', 0) }}">
                                     <i class="feather icon-globe"></i> جميع الفروع
                                     @if (!auth()->user()->branch_id)
-                                        <i class="feather icon-check text-success"></i>
+                                        <i class="feather icon-check text-success float-left"></i>
                                     @endif
                                 </a>
                             @endif
-@if(auth()->user()->branch_id)
-    <span class="badge badge-primary">
-        {{ auth()->user()->currentBranch()->name ?? 'بدون فرع' }}
-    </span>
-@else
-    <span class="badge badge-success">جميع الفروع</span>
-@endif
+
                             @foreach (App\Models\Branch::all() as $branch)
-                                <a class="dropdown-item branch-item {{ auth()->user()->branch_id == $branch->id ? 'active' : '' }}"
+                                <a class="dropdown-item branch-item {{ auth()->user()->branch_id == $branch->id ? 'active bg-light' : '' }}"
                                     href="{{ route('branch.switch', $branch->id) }}">
                                     <i class="feather icon-map-pin"></i> {{ $branch->name }}
                                     @if (auth()->user()->branch_id == $branch->id)
-                                        <i class="feather icon-check text-success"></i>
+                                        <i class="feather icon-check text-success float-left"></i>
                                     @endif
                                 </a>
                             @endforeach
                         @endif
-
                         <div class="dropdown-divider"></div>
 
                         <!-- زر تسجيل الخروج -->
@@ -641,4 +632,20 @@
             setInterval(fetchTodayVisits, 60000); // كل دقيقة
         });
     </script>
+<script>
+    document.querySelectorAll('.branch-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const href = this.getAttribute('href');
+            const branchName = this.textContent.trim();
+
+            fetch(href) // يستدعي الراوت لتحديث الفرع
+                .then(() => {
+                    document.querySelector('.user-status').innerHTML = 'متصل - ' + branchName;
+                });
+        });
+    });
+</script>
+
 @endsection

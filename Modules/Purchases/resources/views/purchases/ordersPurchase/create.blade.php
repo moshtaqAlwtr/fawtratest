@@ -6,6 +6,52 @@
 
 @section('styles')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .upload-area:hover {
+            background-color: #f8f9fa !important;
+            border-color: #007bff !important;
+        }
+
+        .product-row {
+            background-color: #fff;
+        }
+
+        .table th {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        @media (max-width: 768px) {
+            .d-flex.gap-2 {
+                justify-content: center;
+            }
+
+            .table-responsive {
+                font-size: 14px;
+            }
+
+            .btn {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card {
+                margin: 0 10px !important;
+                max-width: calc(100% - 20px) !important;
+            }
+
+            .table-responsive {
+                font-size: 12px;
+            }
+
+            .btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -71,7 +117,7 @@
                             <div class="form-group">
                                 <label for="title" class="form-label">مسمى <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="title" id="title" placeholder="مسمى"
-                                    required>
+                                    value="{{ old('title') }}" required>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6 col-12">
@@ -93,7 +139,8 @@
                         <div class="col-lg-4 col-md-6 col-12">
                             <div class="form-group">
                                 <label for="due_date" class="form-label">تاريخ الاستحقاق</label>
-                                <input type="date" id="due_date" class="form-control" name="due_date">
+                                <input type="date" id="due_date" class="form-control" name="due_date"
+                                    value="{{ old('due_date') }}">
                             </div>
                         </div>
                     </div>
@@ -123,7 +170,7 @@
                                         <span class="badge bg-secondary">1</span>
                                     </td>
                                     <td>
-                                        <select class="form-control item-select" name="items[0][product_id]" required>
+                                        <select class="form-control item-select" name="items[INDEX][product_id]" required>
                                             <option value="">اختر البند</option>
                                             @foreach ($products as $product)
                                                 <option value="{{ $product->id }}">{{ $product->name }}</option>
@@ -132,7 +179,7 @@
                                     </td>
                                     <td>
                                         <input type="number" class="form-control amount-input" placeholder="الكمية"
-                                            name="items[0][quantity]" min="1" required>
+                                            name="items[INDEX][quantity]" min="1" step="0.01" required>
                                     </td>
                                     <td class="text-center align-middle">
                                         <button type="button" class="btn btn-danger btn-sm remove-row" title="حذف الصف">
@@ -160,7 +207,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label for="notes" class="form-label">الملاحظات</label>
-                                <textarea class="form-control" name="notes" id="notes" rows="4" placeholder="اكتب ملاحظاتك هنا..."></textarea>
+                                <textarea class="form-control" name="notes" id="notes" rows="4" placeholder="اكتب ملاحظاتك هنا...">{{ old('notes') }}</textarea>
                             </div>
                         </div>
 
@@ -179,7 +226,7 @@
                                             <span>أو</span>
                                             <span class="text-primary">اختر من جهازك</span>
                                         </div>
-                                        <small class="text-muted">PDF, DOC, DOCX, JPG, PNG</small>
+                                        <small class="text-muted">PDF, DOC, DOCX, JPG, PNG (حد أقصى: 2MB)</small>
                                     </div>
                                     <div id="selectedFile" class="mt-2 text-success" style="display: none;"></div>
                                 </div>
@@ -191,93 +238,50 @@
 
         </form>
     </div>
+@endsection
 
-    <style>
-        .upload-area:hover {
-            background-color: #f8f9fa !important;
-            border-color: #007bff !important;
-        }
-
-        .product-row {
-            background-color: #fff;
-        }
-
-        .table th {
-            font-weight: 600;
-            color: #495057;
-        }
-
-        @media (max-width: 768px) {
-            .d-flex.gap-2 {
-                justify-content: center;
-            }
-
-            .table-responsive {
-                font-size: 14px;
-            }
-
-            .btn {
-                padding: 0.375rem 0.75rem;
-                font-size: 0.875rem;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .card {
-                margin: 0 10px !important;
-                max-width: calc(100% - 20px) !important;
-            }
-
-            .table-responsive {
-                font-size: 12px;
-            }
-
-            .btn {
-                padding: 0.25rem 0.5rem;
-                font-size: 0.8rem;
-            }
-        }
-    </style>
-
+@section('scripts')
     <script>
-        // تأكد من تحميل SweetAlert2
+        // تحقق من تحميل SweetAlert2
         if (typeof Swal === 'undefined') {
             console.error('SweetAlert2 is not loaded!');
-        } else {
-            console.log('SweetAlert2 loaded successfully');
         }
 
         document.addEventListener('DOMContentLoaded', function() {
             let rowIndex = 0;
+            let allowSubmit = false;
 
-            // Test if SweetAlert2 is working
-            console.log('DOM loaded, SweetAlert2:', typeof Swal);
-
-            // Add new row function
+            // ========================================
+            // إضافة صف جديد
+            // ========================================
             function addNewRow() {
                 const templateRow = document.getElementById('templateRow');
                 const newRow = templateRow.cloneNode(true);
 
-                // Update the row
+                // تعيين معرف جديد وإظهار الصف
                 newRow.id = `row_${rowIndex}`;
                 newRow.style.display = '';
+                newRow.classList.add('visible-row');
 
-                // Update name attributes with current index
+                // ✅ التعديل الرئيسي: استبدال INDEX برقم الصف
                 const inputs = newRow.querySelectorAll('input, select');
                 inputs.forEach(input => {
                     if (input.name) {
                         input.name = input.name.replace('INDEX', rowIndex);
                     }
+                    input.value = ''; // تفريغ القيم
+                    input.removeAttribute('disabled'); // التأكد من عدم التعطيل
                 });
 
-                // Add to table
+                // إضافة الصف إلى الجدول
                 document.getElementById('tableBody').appendChild(newRow);
 
-                // Add remove functionality
+                // ========================================
+                // زر حذف الصف
+                // ========================================
                 const removeBtn = newRow.querySelector('.remove-row');
                 removeBtn.addEventListener('click', function() {
-                    const visibleRows = document.querySelectorAll(
-                        '#tableBody .product-row:not(#templateRow):not([style*="display: none"])');
+                    const visibleRows = document.querySelectorAll('#tableBody .visible-row');
 
                     if (visibleRows.length <= 1) {
                         if (typeof Swal !== 'undefined') {
@@ -285,7 +289,8 @@
                                 title: 'تحذير!',
                                 text: 'لا يمكن حذف آخر صف. يجب أن يكون هناك منتج واحد على الأقل.',
                                 icon: 'warning',
-                                confirmButtonText: 'موافق'
+                                confirmButtonText: 'موافق',
+                                confirmButtonColor: '#f39c12'
                             });
                         } else {
                             alert('لا يمكن حذف آخر صف. يجب أن يكون هناك منتج واحد على الأقل.');
@@ -328,20 +333,22 @@
                 updateRowNumbers();
             }
 
-            // Update row numbers
+            // ========================================
+            // تحديث أرقام الصفوف
+            // ========================================
             function updateRowNumbers() {
-                const rows = document.querySelectorAll('#tableBody .product-row:not(#templateRow)');
+                const rows = document.querySelectorAll('#tableBody .visible-row');
                 rows.forEach((row, index) => {
-                    if (row.style.display !== 'none') {
-                        const badge = row.querySelector('.badge');
-                        if (badge) {
-                            badge.textContent = index + 1;
-                        }
+                    const badge = row.querySelector('.badge');
+                    if (badge) {
+                        badge.textContent = index + 1;
                     }
                 });
             }
 
-            // Add row button event
+            // ========================================
+            // زر إضافة صف
+            // ========================================
             document.getElementById('addRowBtn').addEventListener('click', function() {
                 addNewRow();
                 if (typeof Swal !== 'undefined') {
@@ -355,17 +362,25 @@
                 }
             });
 
-            // File input change event
+            // ========================================
+            // اختيار ملف
+            // ========================================
             document.getElementById('attachments').addEventListener('change', function(e) {
                 const selectedFile = document.getElementById('selectedFile');
                 if (e.target.files.length > 0) {
-                    selectedFile.textContent = `تم اختيار: ${e.target.files[0].name}`;
+                    const file = e.target.files[0];
+                    const fileSize = (file.size / 1024 / 1024).toFixed(2); // MB
+
+                    selectedFile.innerHTML = `
+                        <i class="fas fa-file-alt me-2"></i>
+                        <strong>${file.name}</strong> (${fileSize} MB)
+                    `;
                     selectedFile.style.display = 'block';
 
                     if (typeof Swal !== 'undefined') {
                         Swal.fire({
                             title: 'تم اختيار الملف!',
-                            text: `الملف: ${e.target.files[0].name}`,
+                            html: `<strong>${file.name}</strong><br><small>${fileSize} MB</small>`,
                             icon: 'info',
                             timer: 1500,
                             showConfirmButton: false
@@ -376,69 +391,11 @@
                 }
             });
 
-            // Submit button click handler
-            document.getElementById('submitBtn').addEventListener('click', function(e) {
-                e.preventDefault();
-                console.log('Submit button clicked'); // للتأكد من عمل الزر
-
-                // Validate form
-                if (!validateForm()) {
-                    return;
-                }
-
-                // Show confirmation
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        title: 'تأكيد الحفظ',
-                        text: "هل أنت متأكد من حفظ طلب الشراء؟",
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonColor: '#28a745',
-                        cancelButtonColor: '#6c757d',
-                        confirmButtonText: 'نعم، احفظ!',
-                        cancelButtonText: 'إلغاء'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Show loading
-                            Swal.fire({
-                                title: 'جاري الحفظ...',
-                                text: 'يرجى الانتظار',
-                                allowOutsideClick: false,
-                                allowEscapeKey: false,
-                                showConfirmButton: false,
-                                didOpen: () => {
-                                    Swal.showLoading();
-                                }
-                            });
-
-                            // Submit form directly
-                            setTimeout(() => {
-                                document.getElementById('purchaseOrderForm').submit();
-                            }, 800);
-                        }
-                    });
-                } else {
-                    // Fallback if SweetAlert2 is not available
-                    if (confirm('هل أنت متأكد من حفظ طلب الشراء؟')) {
-                        document.getElementById('purchaseOrderForm').submit();
-                    }
-                }
-            });
-
-            // Backup form submission handler
-            document.getElementById('purchaseOrderForm').addEventListener('submit', function(e) {
-                // Only prevent if submitted via button click
-                if (e.submitter && e.submitter.id === 'submitBtn') {
-                    e.preventDefault();
-                    return;
-                }
-            });
-
-            // Validation function
+            // ========================================
+            // التحقق من صحة النموذج
+            // ========================================
             function validateForm() {
-                // Check if at least one product row exists
-                const visibleRows = document.querySelectorAll(
-                    '#tableBody .product-row:not(#templateRow):not([style*="display: none"])');
+                const visibleRows = document.querySelectorAll('#tableBody .visible-row');
 
                 if (visibleRows.length === 0) {
                     if (typeof Swal !== 'undefined') {
@@ -446,7 +403,8 @@
                             title: 'خطأ!',
                             text: 'يجب إضافة منتج واحد على الأقل.',
                             icon: 'error',
-                            confirmButtonText: 'موافق'
+                            confirmButtonText: 'موافق',
+                            confirmButtonColor: '#d33'
                         });
                     } else {
                         alert('يجب إضافة منتج واحد على الأقل.');
@@ -454,7 +412,7 @@
                     return false;
                 }
 
-                // Check required main form fields
+                // التحقق من الحقول الرئيسية
                 const title = document.getElementById('title').value.trim();
                 const orderDate = document.getElementById('order_date').value;
 
@@ -465,7 +423,8 @@
                             title: 'خطأ!',
                             text: 'يرجى إدخال مسمى الطلب.',
                             icon: 'error',
-                            confirmButtonText: 'موافق'
+                            confirmButtonText: 'موافق',
+                            confirmButtonColor: '#d33'
                         });
                     } else {
                         alert('يرجى إدخال مسمى الطلب.');
@@ -480,7 +439,8 @@
                             title: 'خطأ!',
                             text: 'يرجى إدخال تاريخ الطلب.',
                             icon: 'error',
-                            confirmButtonText: 'موافق'
+                            confirmButtonText: 'موافق',
+                            confirmButtonColor: '#d33'
                         });
                     } else {
                         alert('يرجى إدخال تاريخ الطلب.');
@@ -488,20 +448,21 @@
                     return false;
                 }
 
-                // Check product rows
+                // التحقق من صفوف المنتجات
                 for (let i = 0; i < visibleRows.length; i++) {
                     const row = visibleRows[i];
-                    const productSelect = row.querySelector('select');
-                    const quantityInput = row.querySelector('input[type="number"]');
+                    const productSelect = row.querySelector('select[name*="product_id"]');
+                    const quantityInput = row.querySelector('input[name*="quantity"]');
 
-                    if (!productSelect.value) {
-                        productSelect.focus();
+                    if (!productSelect || !productSelect.value) {
+                        if (productSelect) productSelect.focus();
                         if (typeof Swal !== 'undefined') {
                             Swal.fire({
                                 title: 'خطأ!',
                                 text: `يرجى اختيار البند في الصف رقم ${i + 1}.`,
                                 icon: 'error',
-                                confirmButtonText: 'موافق'
+                                confirmButtonText: 'موافق',
+                                confirmButtonColor: '#d33'
                             });
                         } else {
                             alert(`يرجى اختيار البند في الصف رقم ${i + 1}.`);
@@ -509,14 +470,15 @@
                         return false;
                     }
 
-                    if (!quantityInput.value || quantityInput.value <= 0) {
-                        quantityInput.focus();
+                    if (!quantityInput || !quantityInput.value || quantityInput.value <= 0) {
+                        if (quantityInput) quantityInput.focus();
                         if (typeof Swal !== 'undefined') {
                             Swal.fire({
                                 title: 'خطأ!',
                                 text: `يرجى إدخال كمية صحيحة في الصف رقم ${i + 1}.`,
                                 icon: 'error',
-                                confirmButtonText: 'موافق'
+                                confirmButtonText: 'موافق',
+                                confirmButtonColor: '#d33'
                             });
                         } else {
                             alert(`يرجى إدخال كمية صحيحة في الصف رقم ${i + 1}.`);
@@ -528,7 +490,81 @@
                 return true;
             }
 
-            // Cancel button functionality
+            // ========================================
+            // زر الحفظ
+            // ========================================
+            document.getElementById('submitBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+
+                if (!validateForm()) {
+                    return;
+                }
+
+                // ✅ تعطيل حقول الـ Template قبل الإرسال
+                const templateRow = document.getElementById('templateRow');
+                const templateInputs = templateRow.querySelectorAll('input, select');
+                templateInputs.forEach(input => {
+                    input.setAttribute('disabled', 'disabled');
+                });
+
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        title: 'تأكيد الحفظ',
+                        text: "هل أنت متأكد من حفظ طلب الشراء؟",
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#28a745',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'نعم، احفظ!',
+                        cancelButtonText: 'إلغاء'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'جاري الحفظ...',
+                                text: 'يرجى الانتظار',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                showConfirmButton: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+
+                            allowSubmit = true;
+                            setTimeout(() => {
+                                document.getElementById('purchaseOrderForm').submit();
+                            }, 800);
+                        } else {
+                            // إعادة تفعيل الحقول إذا ألغى المستخدم
+                            templateInputs.forEach(input => {
+                                input.removeAttribute('disabled');
+                            });
+                        }
+                    });
+                } else {
+                    if (confirm('هل أنت متأكد من حفظ طلب الشراء؟')) {
+                        allowSubmit = true;
+                        document.getElementById('purchaseOrderForm').submit();
+                    } else {
+                        templateInputs.forEach(input => {
+                            input.removeAttribute('disabled');
+                        });
+                    }
+                }
+            });
+
+            // ========================================
+            // منع الإرسال التلقائي
+            // ========================================
+            document.getElementById('purchaseOrderForm').addEventListener('submit', function(e) {
+                if (!allowSubmit) {
+                    e.preventDefault();
+                }
+            });
+
+            // ========================================
+            // زر الإلغاء
+            // ========================================
             document.getElementById('cancelBtn').addEventListener('click', function(e) {
                 e.preventDefault();
 
@@ -554,19 +590,18 @@
                 }
             });
 
+            // ========================================
+            // إعادة تعيين النموذج
+            // ========================================
             function resetForm() {
-                // Reset form
                 document.getElementById('purchaseOrderForm').reset();
 
-                // Clear table rows except template
-                const rows = document.querySelectorAll('#tableBody .product-row:not(#templateRow)');
+                const rows = document.querySelectorAll('#tableBody .visible-row');
                 rows.forEach(row => row.remove());
 
-                // Reset row index and add first row
                 rowIndex = 0;
                 addNewRow();
 
-                // Hide selected file display
                 document.getElementById('selectedFile').style.display = 'none';
 
                 if (typeof Swal !== 'undefined') {
@@ -580,9 +615,10 @@
                 }
             }
 
-            // Initialize with first row
+            // ========================================
+            // تهيئة الصفحة بصف واحد
+            // ========================================
             addNewRow();
         });
     </script>
-
 @endsection

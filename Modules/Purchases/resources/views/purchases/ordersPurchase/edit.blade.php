@@ -71,28 +71,28 @@
                             <div class="form-group">
                                 <label for="title" class="form-label">مسمى <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="title" id="title" placeholder="مسمى"
-                                    value="{{ old('title', $purchaseOrder->title) }}" required>
+                                    value="{{ old('title', $purchaseOrder->title ?? '') }}" required>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6 col-12">
                             <div class="form-group">
                                 <label for="code" class="form-label">الكود</label>
                                 <input type="text" id="code" class="form-control" placeholder="الكود"
-                                    name="code" value="{{ old('code', $purchaseOrder->code) }}">
+                                    name="code" value="{{ old('code', $purchaseOrder->code ?? '') }}">
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6 col-12">
                             <div class="form-group">
                                 <label for="order_date" class="form-label">تاريخ الطلب <span class="text-danger">*</span></label>
                                 <input type="date" id="order_date" class="form-control" name="order_date"
-                                    value="{{ old('order_date', $purchaseOrder->order_date) }}" required>
+                                    value="{{ old('order_date', $purchaseOrder->order_date ?? '') }}" required>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6 col-12">
                             <div class="form-group">
                                 <label for="due_date" class="form-label">تاريخ الاستحقاق</label>
                                 <input type="date" id="due_date" class="form-control" name="due_date"
-                                    value="{{ old('due_date', $purchaseOrder->due_date) }}">
+                                    value="{{ old('due_date', $purchaseOrder->due_date ?? '') }}">
                             </div>
                         </div>
                     </div>
@@ -124,9 +124,11 @@
                                     <td>
                                         <select class="form-control item-select" name="items[0][product_id]" required>
                                             <option value="">اختر البند</option>
-                                            @foreach ($products as $product)
-                                                <option value="{{ $product->id }}">{{ $product->name }}</option>
-                                            @endforeach
+                                            @if(isset($products) && $products)
+                                                @foreach ($products as $product)
+                                                    <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                     </td>
                                     <td>
@@ -141,34 +143,64 @@
                                 </tr>
 
                                 <!-- Existing Products -->
-                                @foreach($purchaseOrder->items as $index => $item)
-                                <tr id="row_{{ $index }}" class="product-row">
-                                    <td class="text-center align-middle">
-                                        <span class="badge bg-secondary">{{ $index + 1 }}</span>
-                                    </td>
-                                    <td>
-                                        <select class="form-control item-select" name="items[{{ $index }}][product_id]" required>
-                                            <option value="">اختر البند</option>
-                                            @foreach ($products as $product)
-                                                <option value="{{ $product->id }}"
-                                                    {{ $item->product_id == $product->id ? 'selected' : '' }}>
-                                                    {{ $product->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control amount-input" placeholder="الكمية"
-                                            name="items[{{ $index }}][quantity]" min="1"
-                                            value="{{ old('items.'.$index.'.quantity', $item->quantity) }}" required>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <button type="button" class="btn btn-danger btn-sm remove-row" title="حذف الصف">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                @endforeach
+                                @if(isset($purchaseOrder->items) && $purchaseOrder->items && count($purchaseOrder->items) > 0)
+                                    @foreach($purchaseOrder->items as $index => $item)
+                                    <tr id="row_{{ $index }}" class="product-row">
+                                        <td class="text-center align-middle">
+                                            <span class="badge bg-secondary">{{ $index + 1 }}</span>
+                                        </td>
+                                        <td>
+                                            <select class="form-control item-select" name="items[{{ $index }}][product_id]" required>
+                                                <option value="">اختر البند</option>
+                                                @if(isset($products) && $products)
+                                                    @foreach ($products as $product)
+                                                        <option value="{{ $product->id }}"
+                                                            {{ ($item->product_id ?? '') == $product->id ? 'selected' : '' }}>
+                                                            {{ $product->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control amount-input" placeholder="الكمية"
+                                                name="items[{{ $index }}][quantity]" min="1"
+                                                value="{{ old('items.'.$index.'.quantity', $item->quantity ?? '') }}" required>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <button type="button" class="btn btn-danger btn-sm remove-row" title="حذف الصف">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                @else
+                                    <!-- Add one empty row if no items exist -->
+                                    <tr id="row_0" class="product-row">
+                                        <td class="text-center align-middle">
+                                            <span class="badge bg-secondary">1</span>
+                                        </td>
+                                        <td>
+                                            <select class="form-control item-select" name="items[0][product_id]" required>
+                                                <option value="">اختر البند</option>
+                                                @if(isset($products) && $products)
+                                                    @foreach ($products as $product)
+                                                        <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control amount-input" placeholder="الكمية"
+                                                name="items[0][quantity]" min="1" required>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <button type="button" class="btn btn-danger btn-sm remove-row" title="حذف الصف">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -190,7 +222,7 @@
                             <div class="form-group">
                                 <label for="notes" class="form-label">الملاحظات</label>
                                 <textarea class="form-control" name="notes" id="notes" rows="4"
-                                    placeholder="اكتب ملاحظاتك هنا...">{{ old('notes', $purchaseOrder->notes) }}</textarea>
+                                    placeholder="اكتب ملاحظاتك هنا...">{{ old('notes', $purchaseOrder->notes ?? '') }}</textarea>
                             </div>
                         </div>
 
@@ -198,7 +230,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label for="attachments" class="form-label">المرفقات</label>
-                                @if($purchaseOrder->attachments)
+                                @if(isset($purchaseOrder->attachments) && $purchaseOrder->attachments)
                                 <div class="mb-2">
                                     <span>المرفقات الحالية:</span>
                                     <a href="{{ asset('storage/'.$purchaseOrder->attachments) }}" target="_blank" class="text-primary">
@@ -277,7 +309,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            let rowIndex = {{ count($purchaseOrder->items) }};
+            let rowIndex = {{ isset($purchaseOrder->items) && $purchaseOrder->items ? count($purchaseOrder->items) : 1 }};
 
             // Add new row function
             function addNewRow() {

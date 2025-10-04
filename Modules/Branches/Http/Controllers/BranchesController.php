@@ -8,8 +8,10 @@ use App\Models\BranchSetting;
 use App\Models\Log as ModelsLog;
 use App\Models\BranchSettingBranch;
 use App\Models\Location;
-use Illuminate\Container\Attributes\Log;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 class BranchesController extends Controller
 {
@@ -71,7 +73,7 @@ class BranchesController extends Controller
                     'error' => $e->getMessage()
                 ], 500);
             }
-            
+
             return back()->with('error', 'حدث خطأ أثناء إحضار البيانات: ' . $e->getMessage());
         }
     }
@@ -79,22 +81,58 @@ class BranchesController extends Controller
 
     // عرض نموذج إضافة فرع جديد
 
-    public function switchBranch($branchId)
+ public function switchBranch($branchId)
 {
-    $user = auth()->user();
+    try {
+        $user = auth()->user();
 
-    // التحقق مما إذا كان المستخدم ليس موظفًا ويمكنه تغيير الفرع
-    if ($user->role !== 'employee') {
-        // تحديث branch_id في جدول المستخدم
-        $user->update(['branch_id' => $branchId]);
+        if (!$user) {
+            return redirect()->back()->with('error', 'يجب تسجيل الدخول أولاً');
+        }
 
-        // حفظ الفرع في الجلسة (لضمان بقاء المستخدم في الفرع المحدد)
-        session(['current_branch_id' => $branchId]);
+        // التحقق من الصلاحية
+        if ($user->role === 'employee') {
+            return redirect()->back()->with('error', 'غير مصرح لك بتغيير الفرع');
+        }
+
+        // إذا كان 0 = جميع الفروع
+        if ($branchId == 0) {
+            if ($user->role === 'main') {
+                $user->branch_id = null;
+                $user->save();
+
+                Log::info('تم التبديل لجميع الفروع', ['user_id' => $user->id]);
+
+                return redirect()->route('dashboard.sales.index')
+                    ->with('success', 'تم التبديل لعرض جميع الفروع بنجاح');
+            } else {
+                return redirect()->back()->with('error', 'غير مصرح لك بعرض جميع الفروع');
+            }
+        }
+
+        // التحقق من وجود الفرع
+        $branch = Branch::find($branchId);
+        if (!$branch) {
+            return redirect()->back()->with('error', 'الفرع غير موجود');
+        }
+
+        // تحديث الفرع
+        $user->branch_id = $branchId;
+        $user->save();
+
+        Log::info('تم تغيير الفرع', [
+            'user_id' => $user->id,
+            'new_branch_id' => $branchId,
+            'branch_name' => $branch->name
+        ]);
+
+       return redirect()->back()->with('success', 'تم تغيير الفرع بنجاح');
+
+    } catch (Exception $e) {
+        Log::error('خطأ في تبديل الفرع: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'حدث خطأ أثناء تبديل الفرع: ' . $e->getMessage());
     }
-
-    return redirect()->back();
 }
-
     // تخزين بيانات الفرع
 public function store(Request $request)
 {

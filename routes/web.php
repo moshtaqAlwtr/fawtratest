@@ -121,30 +121,36 @@ Route::group(
                 Route::get('/chart/details/{accountId}', [AccountsChartController::class, 'getAccountDetails'])->name('accounts.details');
                 Route::get('/{id}/children', [AccountsChartController::class, 'getChildren'])->name('accounts.children');
             });
-        Route::prefix('visits')
-            ->middleware(['auth'])
-            ->group(function () {
-                Route::post('/visits', [VisitController::class, 'storeEmployeeLocation'])->name('visits.storeEmployeeLocation');
-                Route::get('/visits/today', [VisitController::class, 'getTodayVisits'])
-                    ->middleware('auth')
-                    ->name('visits.today');
+        // إضافة هذه الـ routes الجديدة مع الـ routes الموجودة للـ visits
 
-                Route::get('/traffic-analysis', [VisitController::class, 'tracktaff'])->name('traffic.analysis');
-                Route::post('/get-weeks-data', [VisitController::class, 'getWeeksData'])->name('get.weeks.data');
-                Route::post('/get-traffic-data', [VisitController::class, 'getTrafficData'])->name('get.traffic.data');
+        Route::prefix('visits')->group(function () {
+            Route::post('/visits', [VisitController::class, 'storeEmployeeLocation'])->name('visits.storeEmployeeLocation');
+            Route::get('/visits/today', [VisitController::class, 'getTodayVisits'])
+                ->middleware('auth')
+                ->name('visits.today');
 
-                Route::post('/visits/location-enhanced', [VisitController::class, 'storeLocationEnhanced'])->name('visits.storeLocationEnhanced');
+            Route::get('/traffic-analysis', [VisitController::class, 'tracktaff'])->name('traffic.analysis');
+            Route::post('/get-weeks-data', [VisitController::class, 'getWeeksData'])->name('get.weeks.data');
+            Route::post('/get-traffic-data', [VisitController::class, 'getTrafficData'])->name('get.traffic.data');
 
-                Route::post('/visits/location-enhanced', [VisitController::class, 'storeLocationEnhanced'])->name('visits.storeLocationEnhanced');
+            Route::post('/visits/location-enhanced', [VisitController::class, 'storeLocationEnhanced'])->name('visits.storeLocationEnhanced');
 
-                Route::get('/tracktaff', [VisitController::class, 'tracktaff'])->name('visits.tracktaff');
+            Route::post('/visits/location-enhanced', [VisitController::class, 'storeLocationEnhanced'])->name('visits.storeLocationEnhanced');
 
-                // إضافة هذا المسار للانصراف التلقائي
-                Route::get('/process-auto-departures', [VisitController::class, 'checkAndProcessAutoDepartures'])->name('visits.processAutoDepartures');
-                Route::get('/send-daily-report', [VisitController::class, 'sendDailyReport']);
-                // إضافة مسار للانصراف اليدوي
-                Route::post('/manual-departure/{visitId}', [VisitController::class, 'manualDeparture'])->name('visits.manualDeparture');
-            });
+            Route::get('/tracktaff', [VisitController::class, 'tracktaff'])->name('visits.tracktaff');
+
+            // إضافة هذا المسار للانصراف التلقائي
+            Route::get('/process-auto-departures', [VisitController::class, 'checkAndProcessAutoDepartures'])->name('visits.processAutoDepartures');
+            Route::get('/send-daily-report', [VisitController::class, 'sendDailyReport']);
+            // إضافة مسار للانصراف اليدوي
+            Route::post('/manual-departure/{visitId}', [VisitController::class, 'manualDeparture'])->name('visits.manualDeparture');
+            // Routes جديدة للتحسين
+            Route::post('/clear-visits-data', [VisitController::class, 'clearVisitsData'])->name('visits.clearData');
+            Route::post('/clear-cache', function() {
+                cache()->forget('traffic_analytics_' . date('Y-m-d-H'));
+                return response()->json(['success' => true]);
+            })->name('visits.clearCache');
+        });
 
         Route::prefix('logs')
             ->middleware(['auth'])

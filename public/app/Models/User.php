@@ -64,10 +64,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->role === 'manager';
     }
-    public function currentBranch()
-    {
-        return Branch::find($this->branch_id);
-    }
+public function currentBranch()
+{
+    return $this->belongsTo(Branch::class, 'branch_id');
+}
     // في نموذج User
 public function clientVisits()
 {

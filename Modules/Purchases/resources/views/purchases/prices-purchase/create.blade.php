@@ -232,11 +232,14 @@
             // إضافة صف جديد
             $('.add-row-button-deduction').on('click', function() {
                 let template = $('#newRow2').clone();
-                template.removeAttr('id').show();
+                template.removeAttr('id');
+                template.css('display', ''); // إظهار الصف
+                template.css('background-color', '#fff7d6');
 
                 // تحديث أسماء الحقول بالرقم الجديد
-                template.find('.item-select').attr('name', `product_details[${rowCounter}][product_id]`);
-                template.find('.amount-input').attr('name', `product_details[${rowCounter}][quantity]`);
+                let templateHtml = template.html();
+                templateHtml = templateHtml.replace(/__index__/g, rowCounter);
+                template.html(templateHtml);
 
                 // إضافة الصف للجدول
                 $(this).closest('.table-responsive').find('table tbody').append(template);

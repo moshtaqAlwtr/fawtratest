@@ -131,79 +131,100 @@ class OrdersPurchaseController extends Controller
         return view('purchases::purchases.ordersPurchase.create', compact('employees', 'products', 'code'));
     }
 
-    public function store(Request $request)
-    {
-        try {
-            // التحقق من البيانات المدخلة
-            $validatedData = $request->validate([
-                'title' => 'required|string|max:255',
+   public function store(Request $request)
+{
+    try {
+        // طباعة البيانات للتحقق
+        Log::info('Request items:', $request->items);
 
-                'code' => 'required|string|max:50|unique:purchase_orders',
+        // التحقق من البيانات المدخلة
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'code' => 'required|string|max:50|unique:purchase_orders',
+            'order_date' => 'required|date',
+            'due_date' => 'nullable|date|after_or_equal:order_date',
+            'notes' => 'nullable|string',
+            'attachments' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+            'items' => 'required|array|min:1',
+            'items.*.product_id' => 'required|exists:products,id',
+            'items.*.quantity' => 'required|numeric|min:1',
+        ]);
 
-                'order_date' => 'required|date',
-                'due_date' => 'nullable|date|after_or_equal:order_date',
-                'notes' => 'nullable|string',
-                'attachments' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
-                'items' => 'required|array|min:1',
-                'items.*.product_id' => 'required|exists:products,id',
-                'items.*.quantity' => 'required|numeric|min:1',
-            ]);
+        DB::beginTransaction();
 
-            DB::beginTransaction();
+        // إنشاء طلب الشراء
+        $purchaseOrder = PurchaseOrder::create([
+            'title' => $validatedData['title'],
+            'code' => $validatedData['code'],
+            'order_date' => $validatedData['order_date'],
+            'due_date' => $validatedData['due_date'] ?? null,
+            'notes' => $validatedData['notes'] ?? null,
+            'status' => 'Under Review',
+            'created_by' => auth()->id(),
+            'updated_by' => auth()->id(),
+        ]);
 
-            // إنشاء طلب الشراء
-            $purchaseOrder = PurchaseOrder::create([
-                'title' => $validatedData['title'],
-                'code' => $validatedData['code'] ?? $this->generatePurchaseOrderCode(),
-                'order_date' => $validatedData['order_date'],
-                'due_date' => $validatedData['due_date'] ?? null,
-                'notes' => $validatedData['notes'] ?? null,
+        // معالجة المرفقات
+        if ($request->hasFile('attachments')) {
+            $file = $request->file('attachments');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('purchase_orders/attachments', $fileName, 'public');
+            $purchaseOrder->update(['attachments' => $filePath]);
+        }
 
-                'created_by' => auth()->id(),
-                'updated_by' => auth()->id(),
-            ]);
+        // معالجة العناصر (items) - استخدام InvoiceItem
+        if (isset($validatedData['items']) && is_array($validatedData['items'])) {
+            foreach ($validatedData['items'] as $itemData) {
+                $product = Product::find($itemData['product_id']);
 
-            // معالجة المرفقات
-            if ($request->hasFile('attachments')) {
-                $file = $request->file('attachments');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $filePath = $file->storeAs('purchase_orders/attachments', $fileName, 'public');
-                $purchaseOrder->update(['attachments' => $filePath]);
-            }
-
-            // معالجة العناصر (items)
-            foreach ($validatedData['items'] as $item) {
-                $product = Product::find($item['product_id']);
-                // إنشاء عنصر الفاتورة
+                // إنشاء عنصر في جدول invoice_items
                 InvoiceItem::create([
-                    'purchase_order_id' => $purchaseOrder->id,
-                    'product_id' => $item['product_id'],
-                    'item' => $product->name ?? 'Product ' . $item['product_id'],
-                    'description' => $item['description'] ?? null,
-                    'quantity' => $item['quantity'],
-                    // أو أي نوع آخر تريده
+                    'purchase_order_id' => $purchaseOrder->id, // تأكد من وجود هذا العمود
+                    'invoice_id' => null, // أو يمكن حذف هذا السطر إذا كان nullable
+                    'product_id' => $itemData['product_id'],
+                    'item' => $product->name ?? 'منتج غير معروف',
+                    'description' => $itemData['description'] ?? null,
+                    'quantity' => $itemData['quantity'],
+                    'unit_price' => 0, // أو قيمة افتراضية
+                    'discount' => 0,
+                    'tax' => 0,
+                    'total' => 0,
                 ]);
             }
-            ModelsLog::create([
-                'type' => 'OrdersPurchases',
-                'type_id' => $purchaseOrder->id, // ID النشاط المرتبط
-                'type_log' => 'log', // نوع النشاط
-
-                'description' => 'تم انشاء طلب شراء **' . $validatedData['code'] . '**', // النص المنسق
-                'created_by' => auth()->id(), // ID المستخدم الحالي
-            ]);
-
-            DB::commit();
-
-            return redirect()->route('OrdersPurchases.show', $purchaseOrder->id)->withInput()->with('success', 'تم إنشاء طلب الشراء بنجاح.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()
-                ->withInput()
-                ->with('error', 'حدث خطأ أثناء إنشاء طلب الشراء: ' . $e->getMessage());
         }
-    }
 
+        // إنشاء السجل
+        ModelsLog::create([
+            'type' => 'OrdersPurchases',
+            'type_id' => $purchaseOrder->id,
+            'type_log' => 'create',
+            'description' => 'تم إنشاء طلب شراء **' . $validatedData['code'] . '** بعدد ' . count($validatedData['items']) . ' عناصر',
+            'created_by' => auth()->id(),
+        ]);
+
+        DB::commit();
+
+        return redirect()
+            ->route('OrdersPurchases.show', $purchaseOrder->id)
+            ->with('success', 'تم إنشاء طلب الشراء بنجاح مع ' . count($validatedData['items']) . ' عناصر.');
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        DB::rollBack();
+        return back()
+            ->withInput()
+            ->withErrors($e->errors())
+            ->with('error', 'يرجى التحقق من البيانات المدخلة.');
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error('خطأ في إنشاء طلب الشراء: ' . $e->getMessage());
+        Log::error($e->getTraceAsString());
+
+        return back()
+            ->withInput()
+            ->with('error', 'حدث خطأ أثناء إنشاء طلب الشراء: ' . $e->getMessage());
+    }
+}
     private function generatePurchaseOrderCode()
     {
         $latest = PurchaseOrder::orderBy('id', 'desc')->first();
@@ -213,9 +234,6 @@ class OrdersPurchaseController extends Controller
 
     public function edit($id)
     {
-        if (!PurchaseInvoiceSetting::isSettingActive('manual_quote_orders')) {
-            return redirect()->route('OrdersPurchases.index')->with('error', 'عذراً، ميزة طلبات الشراء يدوي غير مفعلة حالياً.');
-        }
         $purchaseOrder = PurchaseOrder::with('productDetails')->findOrFail($id);
 
         // السماح بالتعديل فقط إذا كانت الحالة "تحت المعالجة"
